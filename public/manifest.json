@@ -1,0 +1,16 @@
+{
+  "name": "NOVA TOOLS",
+  "short_name": "NOVA TOOLS",
+  "description": "Fast, clean, and private browser-based utilities for everyday tasks.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
