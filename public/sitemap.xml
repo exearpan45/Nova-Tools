@@ -31,12 +31,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://novatools.net/privacy</loc>
-    <lastmod>2026-09-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
-  </url>
-  <url>
     <loc>https://novatools.net/cookie-policy</loc>
     <lastmod>2026-09-22</lastmod>
     <changefreq>monthly</changefreq>
@@ -139,7 +133,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://novatools.net/tools/base64-tool</loc>
+    <loc>https://novatools.net/tools/base64</loc>
     <lastmod>2026-09-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

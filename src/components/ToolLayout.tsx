@@ -3,7 +3,7 @@ import { ToolDefinition } from '../types';
 import { TOOLS_DATA } from '../data/toolsData';
 import { AdSlot } from './AdSlot';
 import { ToolIcon } from './ToolIcon';
-import { ArrowLeft, ChevronRight, HelpCircle, BookOpen, ShieldCheck, Heart, Share2 } from 'lucide-react';
+import { ChevronRight, HelpCircle, BookOpen, ShieldCheck, Heart, Share2, ListOrdered, Sparkles, Lock, FileCode } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 import { isToolFavorite, toggleFavoriteToolSlug } from '../utils/storage';
 import { copyToClipboard } from '../utils/clipboard';
@@ -33,7 +33,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
   };
 
   const handleShare = async () => {
-    const toolUrl = `${window.location.origin}/tools/${tool.slug}`;
+    const toolUrl = `https://novatools.net/tools/${tool.slug}`;
     if (navigator.share) {
       try {
         await navigator.share({
@@ -43,7 +43,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
         });
         return;
       } catch {
-        // User cancelled or share failed, fallback to copy
+        // Fallback to clipboard
       }
     }
 
@@ -56,9 +56,9 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
   const relatedTools = TOOLS_DATA.filter((t) => tool.relatedSlugs.includes(t.slug));
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8">
       {/* Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400 mb-6">
+      <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
         <button
           onClick={() => onNavigate('/')}
           className="hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"
@@ -79,8 +79,8 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
       </nav>
 
       {/* Tool Header */}
-      <header className="mb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
+      <header className="space-y-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
               <ToolIcon name={tool.icon} className="w-4 h-4" />
@@ -128,44 +128,117 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
       </header>
 
       {/* PRIMARY TOOL INTERFACE */}
-      <main id={`tool-interface-${tool.slug}`} className="mb-6">
+      <main id={`tool-interface-${tool.slug}`} className="space-y-2">
         <div className="bg-white dark:bg-[#18181b] border border-neutral-200/90 dark:border-neutral-800/90 rounded-xl p-4 sm:p-6 shadow-2xs">
           {children}
         </div>
-        <div className="mt-2.5 flex items-center justify-between text-[11px] text-neutral-400 dark:text-neutral-500 px-1">
+        <div className="flex items-center justify-between text-[11px] text-neutral-500 dark:text-neutral-400 px-1">
           <span className="flex items-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-500 flex-shrink-0" />
-            <span>100% Client-Side: Your input never leaves your browser.</span>
+            <span>100% Client-Side: Processed entirely on your device.</span>
           </span>
           <button
             onClick={() => onNavigate('/privacy-policy')}
-            className="hover:underline hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors cursor-pointer"
+            className="hover:underline hover:text-neutral-800 dark:hover:text-neutral-200 transition-colors cursor-pointer"
           >
             Privacy details
           </button>
         </div>
       </main>
 
-      {/* Unobtrusive Ad Placement below tool */}
+      {/* Ad Placement Slot (ready for non-intrusive AdSense) */}
       <AdSlot id="tool-bottom-ad" />
+
+      {/* What it does */}
+      {tool.whatItDoes && tool.whatItDoes.length > 0 && (
+        <section className="space-y-3 p-5 rounded-xl border border-neutral-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#18181b]">
+          <div className="flex items-center gap-2 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+            <BookOpen className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            <h2>What it does</h2>
+          </div>
+          <div className="space-y-2 text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
+            {tool.whatItDoes.map((paragraph, idx) => (
+              <p key={idx}>{paragraph}</p>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* How to use */}
+      {tool.howToUse && tool.howToUse.length > 0 && (
+        <section className="space-y-3 p-5 rounded-xl border border-neutral-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#18181b]">
+          <div className="flex items-center gap-2 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+            <ListOrdered className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            <h2>How to use</h2>
+          </div>
+          <ol className="space-y-2 text-xs sm:text-sm text-neutral-600 dark:text-neutral-300">
+            {tool.howToUse.map((step, idx) => (
+              <li key={idx} className="flex items-start gap-2.5">
+                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs font-semibold flex items-center justify-center mt-0.5">
+                  {idx + 1}
+                </span>
+                <span className="leading-relaxed">{step}</span>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      {/* Practical Example */}
+      {tool.example && (
+        <section className="space-y-3 p-5 rounded-xl border border-neutral-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#18181b]">
+          <div className="flex items-center gap-2 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+            <Sparkles className="w-4 h-4 text-amber-500" />
+            <h2>Example</h2>
+          </div>
+          <div className="rounded-lg bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200/70 dark:border-neutral-800/70 p-4 space-y-2 text-xs font-mono">
+            <div>
+              <span className="text-neutral-400 select-none">Input: </span>
+              <span className="text-neutral-800 dark:text-neutral-200">{tool.example.input}</span>
+            </div>
+            <div>
+              <span className="text-neutral-400 select-none">Output: </span>
+              <span className="text-emerald-700 dark:text-emerald-400 font-semibold">{tool.example.output}</span>
+            </div>
+            {tool.example.note && (
+              <div className="pt-2 text-[11px] font-sans text-neutral-500 dark:text-neutral-400 border-t border-neutral-200/50 dark:border-neutral-800/50">
+                {tool.example.note}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* How it works */}
       {tool.howItWorks && (
-        <section className="mb-8 p-5 rounded-xl border border-neutral-200/70 dark:border-neutral-800/70 bg-white dark:bg-[#18181b]">
-          <div className="flex items-center gap-2 mb-2 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-            <BookOpen className="w-4 h-4 text-neutral-500" />
+        <section className="space-y-3 p-5 rounded-xl border border-neutral-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#18181b]">
+          <div className="flex items-center gap-2 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+            <FileCode className="w-4 h-4 text-neutral-500" />
             <h2>How it works</h2>
           </div>
-          <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+          <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
             {tool.howItWorks}
+          </p>
+        </section>
+      )}
+
+      {/* Privacy Information */}
+      {tool.privacyInfo && (
+        <section className="space-y-3 p-5 rounded-xl border border-neutral-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#18181b]">
+          <div className="flex items-center gap-2 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+            <Lock className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <h2>Privacy & Data Handling</h2>
+          </div>
+          <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
+            {tool.privacyInfo}
           </p>
         </section>
       )}
 
       {/* Related Tools */}
       {relatedTools.length > 0 && (
-        <section className="mb-8">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 mb-3">
+        <section className="space-y-3">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
             Related Tools
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -194,8 +267,8 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
 
       {/* Frequently Asked Questions */}
       {tool.faqs && tool.faqs.length > 0 && (
-        <section className="mb-10">
-          <div className="flex items-center gap-2 mb-3 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+        <section className="space-y-3 pb-4">
+          <div className="flex items-center gap-2 text-sm font-semibold text-neutral-900 dark:text-neutral-100">
             <HelpCircle className="w-4 h-4 text-neutral-500" />
             <h2>Frequently Asked Questions</h2>
           </div>

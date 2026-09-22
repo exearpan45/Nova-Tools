@@ -21,7 +21,6 @@ const STATIC_ROUTES: SitemapRoute[] = [
   { path: '/about', changefreq: 'monthly', priority: 0.5 },
   { path: '/contact', changefreq: 'monthly', priority: 0.5 },
   { path: '/privacy-policy', changefreq: 'monthly', priority: 0.5 },
-  { path: '/privacy', changefreq: 'monthly', priority: 0.4 },
   { path: '/cookie-policy', changefreq: 'monthly', priority: 0.4 },
   { path: '/terms', changefreq: 'monthly', priority: 0.4 },
   { path: '/disclaimer', changefreq: 'monthly', priority: 0.4 },

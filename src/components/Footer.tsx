@@ -59,6 +59,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               Terms
             </button>
             <button
+              id="footer-link-cookies"
+              onClick={() => onNavigate('/cookie-policy')}
+              className="hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"
+            >
+              Cookies
+            </button>
+            <button
               id="footer-link-disclaimer"
               onClick={() => onNavigate('/disclaimer')}
               className="hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"

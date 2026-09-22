@@ -279,78 +279,30 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSearch }) 
         )}
       </section>
 
-      {/* Privacy Guarantee Section */}
-      <section id="privacy-guarantee-section" className="pt-6 border-t border-neutral-200/80 dark:border-neutral-800">
-        <div className="rounded-2xl border border-neutral-200/90 dark:border-neutral-800/90 bg-neutral-50/50 dark:bg-[#18181b]/50 p-6 sm:p-8 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 text-[11px] font-medium">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span>Zero Data Harvesting</span>
-              </div>
-              <h2 className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-neutral-100 tracking-tight">
-                Built with a strict Privacy-First Architecture
-              </h2>
-              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-xl">
-                Unlike web utilities that log keystrokes, send data to remote servers, or force logins, NOVA TOOLS computes everything in your browser.
-              </p>
-            </div>
+      {/* Short NOVA TOOLS introduction */}
+      <section id="about-intro-section" className="pt-6 border-t border-neutral-200/80 dark:border-neutral-800">
+        <div className="rounded-xl border border-neutral-200/90 dark:border-neutral-800/90 bg-white dark:bg-[#18181b] p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+          <div className="space-y-2 max-w-2xl">
+            <h2 className="text-base font-semibold text-neutral-900 dark:text-neutral-100 tracking-tight">
+              About NOVA TOOLS
+            </h2>
+            <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              NOVA TOOLS is a collection of simple browser-based utilities for calculations, conversions, text processing, developer tasks and everyday digital work. The tools are designed to be quick to use, easy to understand and, where practical, processed directly in your browser.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 flex-shrink-0 w-full sm:w-auto">
+            <button
+              onClick={() => onNavigate('/about')}
+              className="px-3.5 py-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800/80 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-xs font-medium transition-colors text-center cursor-pointer"
+            >
+              Learn More
+            </button>
             <button
               onClick={() => onNavigate('/privacy-policy')}
-              className="self-start sm:self-center px-3.5 py-2 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 text-xs font-medium transition-colors whitespace-nowrap cursor-pointer"
+              className="px-3.5 py-2 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 text-xs font-medium transition-colors text-center cursor-pointer"
             >
-              Read Full Privacy Policy
+              Privacy Policy
             </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-            <div className="space-y-1.5 p-3.5 rounded-xl bg-white dark:bg-[#121214] border border-neutral-200/70 dark:border-neutral-800/70">
-              <div className="w-7 h-7 rounded-md bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-2">
-                <Cpu className="w-4 h-4" />
-              </div>
-              <h3 className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
-                100% In-Browser CPU
-              </h3>
-              <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
-                Calculations, string conversions, QR encoding, and JSON parsing execute strictly on your device.
-              </p>
-            </div>
-
-            <div className="space-y-1.5 p-3.5 rounded-xl bg-white dark:bg-[#121214] border border-neutral-200/70 dark:border-neutral-800/70">
-              <div className="w-7 h-7 rounded-md bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-2">
-                <EyeOff className="w-4 h-4" />
-              </div>
-              <h3 className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
-                Zero Input Logging
-              </h3>
-              <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
-                Your passwords, birth dates, text, and encoded payloads never touch remote databases or APIs.
-              </p>
-            </div>
-
-            <div className="space-y-1.5 p-3.5 rounded-xl bg-white dark:bg-[#121214] border border-neutral-200/70 dark:border-neutral-800/70">
-              <div className="w-7 h-7 rounded-md bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-2">
-                <Lock className="w-4 h-4" />
-              </div>
-              <h3 className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
-                No Accounts Required
-              </h3>
-              <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
-                Instant utility access without entering emails, creating passwords, or submitting phone numbers.
-              </p>
-            </div>
-
-            <div className="space-y-1.5 p-3.5 rounded-xl bg-white dark:bg-[#121214] border border-neutral-200/70 dark:border-neutral-800/70">
-              <div className="w-7 h-7 rounded-md bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-2">
-                <ShieldCheck className="w-4 h-4" />
-              </div>
-              <h3 className="text-xs font-semibold text-neutral-900 dark:text-neutral-100">
-                Web Crypto Standards
-              </h3>
-              <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
-                Passwords leverage the operating system entropy pool via the W3C Web Cryptography standard.
-              </p>
-            </div>
           </div>
         </div>
       </section>

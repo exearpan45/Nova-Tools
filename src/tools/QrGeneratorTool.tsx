@@ -125,9 +125,9 @@ export const QrGeneratorTool: React.FC = () => {
               onChange={(e) => setContent(e.target.value)}
               placeholder={
                 type === 'URL'
-                  ? 'https://example.com'
+                  ? 'https://novatools.net'
                   : type === 'Email'
-                  ? 'name@example.com'
+                  ? 'contact@novatools.net'
                   : '+1 555 0199'
               }
               className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -142,7 +142,12 @@ export const QrGeneratorTool: React.FC = () => {
         {/* QR Preview & Actions */}
         <div className="flex flex-col items-center p-4 border border-neutral-200 dark:border-neutral-800 rounded-xl bg-neutral-50 dark:bg-neutral-900/60 w-full sm:w-auto">
           <div className="p-3 bg-white rounded-lg shadow-2xs">
-            <canvas ref={canvasRef} className="block w-48 h-48 sm:w-56 sm:h-56" />
+            <canvas
+              ref={canvasRef}
+              role="img"
+              aria-label="Generated QR Code preview"
+              className="block w-48 h-48 sm:w-56 sm:h-56"
+            />
           </div>
 
           <div className="flex items-center gap-2 mt-4 w-full">

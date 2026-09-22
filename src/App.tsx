@@ -13,6 +13,9 @@ import { usePWA } from './hooks/usePWA';
 import { recordRecentToolSlug } from './utils/storage';
 import { isToolInMaintenance } from './config/features';
 import { verifyToolRegistry } from './utils/toolHealth';
+import { updatePageSeo } from './utils/seo';
+import { Share2 } from 'lucide-react';
+import { copyToClipboard } from './utils/clipboard';
 
 // Tool Components
 import { CalculatorTool } from './tools/CalculatorTool';
@@ -46,6 +49,7 @@ const TOOL_COMPONENTS: Record<string, React.ReactNode> = {
   'character-counter': <CharacterCounterTool />,
   'case-converter': <CaseConverterTool />,
   'json-formatter': <JsonFormatterTool />,
+  base64: <Base64Tool />,
   'base64-tool': <Base64Tool />
 };
 
@@ -54,7 +58,38 @@ export default function App() {
     return window.location.pathname || '/';
   });
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
+  const [shareFeedback, setShareFeedback] = useState<string | null>(null);
   const { isOnline, canInstall, hasUpdate, installApp } = usePWA();
+
+  const handleShareCurrentPage = async () => {
+    const fullUrl = window.location.href;
+    const currentToolSlug = currentPath.startsWith('/tools/') ? currentPath.replace('/tools/', '') : null;
+    const tool = currentToolSlug ? TOOLS_DATA.find((t) => t.slug === currentToolSlug) : null;
+    
+    const title = tool ? `${tool.name} — NOVA TOOLS` : document.title || 'NOVA TOOLS';
+    const text = tool ? (tool.seoDescription || tool.description) : 'Free, fast, simple browser tools for everyday tasks.';
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title,
+          text,
+          url: fullUrl
+        });
+        return;
+      } catch (err: any) {
+        // If aborted by user, exit quietly; otherwise fallback to clipboard
+        if (err?.name === 'AbortError') return;
+      }
+    }
+
+    // Fallback to clipboard
+    const copied = await copyToClipboard(fullUrl);
+    if (copied) {
+      setShareFeedback('Link copied!');
+      setTimeout(() => setShareFeedback(null), 2000);
+    }
+  };
 
   // Internal Tool Health Check (Item 31)
   useEffect(() => {
@@ -102,51 +137,69 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Update Page Title and Scroll on Route Change
+  // Update Page Title, Canonical, Meta, and Scroll on Route Change
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    let title = 'NOVA TOOLS | Free Fast Browser Utilities';
-    let metaDesc = 'Simple, fast browser utilities for everyday tasks. 100% free, client-side, and private.';
+    let title = 'NOVA TOOLS — Simple tools. Done well.';
+    let metaDesc = 'Free, fast, simple tools for everyday tasks. Calculations, conversions, text tools, developer utilities and more.';
+    let canonicalPath = '/';
+    let activeTool = undefined;
 
     if (currentPath === '/') {
-      title = 'NOVA TOOLS | Free Fast Browser Utilities';
+      title = 'NOVA TOOLS — Simple tools. Done well.';
+      metaDesc = 'Free, fast, simple tools for everyday tasks. Calculations, conversions, text tools, developer utilities and more.';
+      canonicalPath = '/';
     } else if (currentPath === '/tools') {
-      title = 'All Tools - NOVA TOOLS';
-      metaDesc = 'Browse the complete collection of free, client-side tools and utilities on NOVA TOOLS.';
+      title = 'All Tools — NOVA TOOLS';
+      metaDesc = 'Browse the complete collection of free, fast, client-side tools and browser utilities on NOVA TOOLS.';
+      canonicalPath = '/tools';
     } else if (currentPath.startsWith('/tools/')) {
-      const slug = currentPath.replace('/tools/', '');
+      const rawSlug = currentPath.replace('/tools/', '');
+      const slug = rawSlug === 'base64-tool' ? 'base64' : rawSlug;
       recordRecentToolSlug(slug);
       const tool = TOOLS_DATA.find((t) => t.slug === slug);
       if (tool) {
-        title = `${tool.name} - NOVA TOOLS`;
-        metaDesc = tool.description;
+        activeTool = tool;
+        title = tool.seoTitle ? `${tool.seoTitle} — NOVA TOOLS` : `${tool.name} — NOVA TOOLS`;
+        metaDesc = tool.seoDescription || tool.description;
+        canonicalPath = `/tools/${tool.slug}`;
+      } else {
+        title = 'Tool Not Found — NOVA TOOLS';
+        canonicalPath = currentPath;
       }
     } else if (currentPath === '/about') {
-      title = 'About Us - NOVA TOOLS';
+      title = 'About — NOVA TOOLS';
       metaDesc = 'Learn about NOVA TOOLS, created by Arpan Goswami to provide fast, privacy-focused browser utilities.';
+      canonicalPath = '/about';
     } else if (currentPath === '/contact') {
-      title = 'Contact - NOVA TOOLS';
-      metaDesc = 'Contact the NOVA TOOLS team with suggestions, feedback, or bug reports.';
+      title = 'Contact Us — NOVA TOOLS';
+      metaDesc = 'Contact NOVA TOOLS for bug reports, feedback, tool suggestions, or general inquiries.';
+      canonicalPath = '/contact';
     } else if (currentPath === '/privacy' || currentPath === '/privacy-policy') {
-      title = 'Privacy Policy - NOVA TOOLS';
+      title = 'Privacy Policy — NOVA TOOLS';
       metaDesc = 'Our strict privacy commitment: zero tracking, all calculations happen locally in your browser.';
+      canonicalPath = '/privacy-policy';
     } else if (currentPath === '/cookie-policy') {
-      title = 'Cookie Policy - NOVA TOOLS';
-      metaDesc = 'Information regarding cookies and local browser storage on NOVA TOOLS.';
+      title = 'Cookie Policy — NOVA TOOLS';
+      metaDesc = 'Information regarding cookies, local storage, and service worker caching on NOVA TOOLS.';
+      canonicalPath = '/cookie-policy';
     } else if (currentPath === '/terms') {
-      title = 'Terms of Service - NOVA TOOLS';
-      metaDesc = 'Terms of service and fair usage guidelines for NOVA TOOLS.';
+      title = 'Terms of Service — NOVA TOOLS';
+      metaDesc = 'Terms of service, intellectual property, and usage guidelines for NOVA TOOLS.';
+      canonicalPath = '/terms';
     } else if (currentPath === '/disclaimer') {
-      title = 'Disclaimer - NOVA TOOLS';
-      metaDesc = 'Informational and medical disclaimers for NOVA TOOLS utilities.';
+      title = 'Disclaimer — NOVA TOOLS';
+      metaDesc = 'Informational and medical screening disclaimers for NOVA TOOLS utilities.';
+      canonicalPath = '/disclaimer';
     }
 
-    document.title = title;
-    const descMeta = document.querySelector('meta[name="description"]');
-    if (descMeta) {
-      descMeta.setAttribute('content', metaDesc);
-    }
+    updatePageSeo({
+      title,
+      description: metaDesc,
+      canonicalPath,
+      tool: activeTool
+    });
   }, [currentPath]);
 
   // Navigate function with HTML5 pushState
@@ -167,7 +220,8 @@ export default function App() {
     }
 
     if (currentPath.startsWith('/tools/')) {
-      const slug = currentPath.replace('/tools/', '');
+      const rawSlug = currentPath.replace('/tools/', '');
+      const slug = rawSlug === 'base64-tool' ? 'base64' : rawSlug;
       const tool = TOOLS_DATA.find((t) => t.slug === slug);
 
       if (tool) {
@@ -301,7 +355,7 @@ export default function App() {
           {hasUpdate && (
             <div
               id="pwa-update-banner"
-              className="fixed bottom-4 left-4 z-50 flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 text-xs shadow-lg border border-neutral-700/60 dark:border-neutral-200"
+              className="fixed bottom-4 left-4 z-50 flex items-center gap-2.5 px-3 py-2 rounded-lg bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 text-xs shadow-lg border border-neutral-700/60 dark:border-neutral-200"
             >
               <span>New version available —</span>
               <button
@@ -310,6 +364,17 @@ export default function App() {
                 className="font-semibold underline hover:opacity-80 cursor-pointer"
               >
                 Refresh
+              </button>
+              <span className="text-neutral-500 dark:text-neutral-400">|</span>
+              <button
+                type="button"
+                id="pwa-share-tool-btn"
+                onClick={handleShareCurrentPage}
+                className="inline-flex items-center gap-1 font-medium hover:opacity-80 transition-opacity cursor-pointer text-blue-400 dark:text-blue-600"
+                title="Share current tool URL"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+                <span>{shareFeedback || 'Share'}</span>
               </button>
             </div>
           )}

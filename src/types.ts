@@ -10,6 +10,12 @@ export interface FAQItem {
   answer: string;
 }
 
+export interface ToolExample {
+  input: string;
+  output: string;
+  note?: string;
+}
+
 export interface ToolDefinition {
   id: string;
   slug: string;
@@ -19,7 +25,13 @@ export interface ToolDefinition {
   keywords: string[];
   icon: string;
   popular?: boolean;
+  seoTitle?: string;
+  seoDescription?: string;
+  whatItDoes: string[];
+  howToUse: string[];
+  example: ToolExample;
   howItWorks: string;
+  privacyInfo: string;
   faqs: FAQItem[];
   relatedSlugs: string[];
 }
