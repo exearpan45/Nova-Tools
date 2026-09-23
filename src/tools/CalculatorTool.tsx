@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { RotateCcw, Delete, History, Trash2 } from 'lucide-react';
+import { addScratchpadItem } from '../utils/scratchpad';
 
 // Safe mathematical expression evaluator without eval()
 function safeEvaluateMath(expression: string): { result?: number; error?: string } {
@@ -163,6 +164,7 @@ export const CalculatorTool: React.FC = () => {
       setHistory((prev) => [{ expr: expression, result: resStr }, ...prev.slice(0, 19)]);
       setExpression(resStr);
       setErrorMessage(null);
+      addScratchpadItem('calculator', resStr, expression);
     }
   }, [expression]);
 
@@ -240,7 +242,10 @@ export const CalculatorTool: React.FC = () => {
               expression ? 'Calculating...' : 'Ready'
             )}
           </div>
-          <div className="text-2xl sm:text-3xl font-mono font-medium tracking-tight text-neutral-900 dark:text-neutral-100 overflow-x-auto whitespace-nowrap py-1">
+          <div
+            data-action="output"
+            className="text-2xl sm:text-3xl font-mono font-medium tracking-tight text-neutral-900 dark:text-neutral-100 overflow-x-auto whitespace-nowrap py-1"
+          >
             {expression || '0'}
           </div>
           <div className="flex justify-between items-center mt-2 pt-2 border-t border-neutral-200/50 dark:border-neutral-800 text-xs text-neutral-400">
@@ -274,6 +279,7 @@ export const CalculatorTool: React.FC = () => {
               <button
                 key={index}
                 onClick={btn.action}
+                data-action={btn.type === 'equals' ? 'primary' : btn.type === 'clear' ? 'reset' : undefined}
                 className={`h-12 rounded-lg border text-base font-mono flex items-center justify-center transition-colors cursor-pointer select-none active:scale-95 ${colorClasses}`}
               >
                 {btn.label}

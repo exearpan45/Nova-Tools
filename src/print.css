@@ -1,0 +1,186 @@
+/* ==========================================================================
+   NOVA TOOLS - Dedicated Print Stylesheet (print.css)
+   Clean, paper-optimized printing for all tools, utilities, and calculators.
+   ========================================================================== */
+
+@media print {
+  /* 1. Page Configuration & Margins */
+  @page {
+    size: letter portrait;
+    margin: 15mm 15mm 15mm 15mm;
+  }
+
+  /* 2. Global Document Cleanliness */
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #111111 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #111111 !important;
+    font-size: 11pt !important;
+    line-height: 1.5 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 3. Hide Non-Essential Elements */
+  nav,
+  header.sticky,
+  footer,
+  aside,
+  #ad-container,
+  #tool-bottom-ad,
+  .adsbygoogle,
+  [data-no-print="true"],
+  .no-print,
+  #pwa-update-banner,
+  #pwa-offline-indicator,
+  #pwa-install-banner,
+  #scroll-progress-bar,
+  #search-modal-backdrop,
+  #search-modal-container,
+  .toast-container,
+  button[data-action="reset"],
+  button[data-action="primary"],
+  button:not(.print-keep) {
+    display: none !important;
+  }
+
+  /* 4. Layout Container Optimization */
+  main,
+  .flex-1 {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 5. Tool Layout Header & Meta */
+  .tool-print-header {
+    border-bottom: 2pt solid #2563eb !important;
+    padding-bottom: 8pt !important;
+    margin-bottom: 14pt !important;
+  }
+
+  .print-clean,
+  .tool-card-box {
+    border: 1pt solid #d1d5db !important;
+    border-radius: 6pt !important;
+    padding: 12pt !important;
+    margin-bottom: 12pt !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* 6. Form Inputs & Textareas Formatted as Clean Paper Sheets */
+  input,
+  textarea,
+  select {
+    border: 1pt solid #9ca3af !important;
+    border-radius: 4pt !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 10pt !important;
+    padding: 6pt !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    resize: none !important;
+    overflow: visible !important;
+  }
+
+  textarea {
+    min-height: auto !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+  }
+
+  /* 7. Typography & Result Accents */
+  h1 {
+    font-size: 18pt !important;
+    font-weight: 700 !important;
+    color: #000000 !important;
+    margin-bottom: 4pt !important;
+  }
+
+  h2 {
+    font-size: 13pt !important;
+    font-weight: 600 !important;
+    margin-top: 10pt !important;
+    margin-bottom: 6pt !important;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  h3 {
+    font-size: 11pt !important;
+    font-weight: 600 !important;
+    margin-bottom: 4pt !important;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  p, li {
+    font-size: 10pt !important;
+    line-height: 1.45 !important;
+    color: #374151 !important;
+  }
+
+  /* 8. Code & Mono formatting */
+  pre,
+  code,
+  kbd,
+  .font-mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+    font-size: 9.5pt !important;
+    color: #111827 !important;
+  }
+
+  /* 9. Grid and Responsive Adjustments for Paper */
+  .grid {
+    display: grid !important;
+    gap: 8pt !important;
+  }
+
+  /* Keep metric cards clear and bordered */
+  .grid > div {
+    border: 1pt solid #e5e7eb !important;
+    padding: 8pt !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* 10. Links Handling */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    color: #6b7280;
+  }
+
+  /* Avoid printing local javascript pseudo-links */
+  a[href^="javascript:"]::after,
+  a[href^="#"]::after {
+    content: "" !important;
+  }
+
+  /* 11. Print Watermark & Footer Verification */
+  .print-footer-notice {
+    display: block !important;
+    margin-top: 20pt;
+    padding-top: 8pt;
+    border-top: 1pt dashed #d1d5db;
+    font-size: 8pt;
+    color: #6b7280 !important;
+    text-align: center;
+  }
+}

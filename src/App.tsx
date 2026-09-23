@@ -33,6 +33,11 @@ import { CharacterCounterTool } from './tools/CharacterCounterTool';
 import { CaseConverterTool } from './tools/CaseConverterTool';
 import { JsonFormatterTool } from './tools/JsonFormatterTool';
 import { Base64Tool } from './tools/Base64Tool';
+import { DiscountCalculatorTool } from './tools/DiscountCalculatorTool';
+import { UuidGeneratorTool } from './tools/UuidGeneratorTool';
+import { TimestampConverterTool } from './tools/TimestampConverterTool';
+import { TextSorterTool } from './tools/TextSorterTool';
+import { UrlEncoderTool } from './tools/UrlEncoderTool';
 
 const TOOL_COMPONENTS: Record<string, React.ReactNode> = {
   calculator: <CalculatorTool />,
@@ -50,7 +55,12 @@ const TOOL_COMPONENTS: Record<string, React.ReactNode> = {
   'case-converter': <CaseConverterTool />,
   'json-formatter': <JsonFormatterTool />,
   base64: <Base64Tool />,
-  'base64-tool': <Base64Tool />
+  'base64-tool': <Base64Tool />,
+  'discount-calculator': <DiscountCalculatorTool />,
+  'uuid-generator': <UuidGeneratorTool />,
+  'timestamp-converter': <TimestampConverterTool />,
+  'text-sorter': <TextSorterTool />,
+  'url-encoder': <UrlEncoderTool />
 };
 
 export default function App() {

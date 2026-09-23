@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { Copy, Check, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Copy, Check, Trash2, CheckCircle2, AlertCircle, Download, FileJson } from 'lucide-react';
+import { copyToClipboard } from '../utils/clipboard';
+import { useToast } from '../context/ToastContext';
+import { addScratchpadItem } from '../utils/scratchpad';
 
 export const JsonFormatterTool: React.FC = () => {
+  const { showToast } = useToast();
   const [jsonInput, setJsonInput] = useState<string>(
     '{\n  "product": "NOVA TOOLS",\n  "status": "production",\n  "features": ["fast", "clean", "browser-based"],\n  "year": 2026\n}'
   );
@@ -11,6 +15,7 @@ export const JsonFormatterTool: React.FC = () => {
     message?: string;
   } | null>(null);
   const [copied, setCopied] = useState<boolean>(false);
+  const [copiedAll, setCopiedAll] = useState<boolean>(false);
 
   const getIndent = () => {
     if (indentSize === '4') return 4;
@@ -28,11 +33,14 @@ export const JsonFormatterTool: React.FC = () => {
       const formatted = JSON.stringify(parsed, null, getIndent());
       setJsonInput(formatted);
       setValidationStatus({ valid: true, message: 'Valid JSON formatted successfully.' });
+      showToast('JSON formatted successfully', 'success');
+      addScratchpadItem('json-formatter', formatted.slice(0, 100) + '...', 'Formatted JSON');
     } catch (err: any) {
       setValidationStatus({
         valid: false,
         message: err.message || 'Invalid JSON syntax'
       });
+      showToast('Invalid JSON syntax', 'error');
     }
   };
 
@@ -46,11 +54,14 @@ export const JsonFormatterTool: React.FC = () => {
       const minified = JSON.stringify(parsed);
       setJsonInput(minified);
       setValidationStatus({ valid: true, message: 'Valid JSON minified successfully.' });
+      showToast('JSON minified to a single line', 'success');
+      addScratchpadItem('json-formatter', minified.slice(0, 100) + '...', 'Minified JSON');
     } catch (err: any) {
       setValidationStatus({
         valid: false,
         message: err.message || 'Invalid JSON syntax'
       });
+      showToast('Invalid JSON syntax', 'error');
     }
   };
 
@@ -62,24 +73,53 @@ export const JsonFormatterTool: React.FC = () => {
     try {
       JSON.parse(jsonInput);
       setValidationStatus({ valid: true, message: 'JSON syntax is 100% valid.' });
+      showToast('JSON syntax is valid', 'success');
     } catch (err: any) {
       setValidationStatus({
         valid: false,
         message: err.message || 'Invalid JSON syntax'
       });
+      showToast('Invalid JSON syntax', 'error');
     }
   };
 
-  const handleCopy = () => {
+  const handleCopyAll = async () => {
+    if (!jsonInput.trim()) return;
+    const ok = await copyToClipboard(jsonInput);
+    if (ok) {
+      setCopiedAll(true);
+      setTimeout(() => setCopiedAll(false), 2000);
+      showToast('Copied all JSON content to clipboard', 'success');
+      addScratchpadItem('json-formatter', jsonInput.slice(0, 80) + '...', 'Complete JSON');
+    }
+  };
+
+  const handleCopy = async () => {
     if (!jsonInput) return;
-    navigator.clipboard.writeText(jsonInput);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    const ok = await copyToClipboard(jsonInput);
+    if (ok) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      showToast('JSON copied to clipboard', 'success');
+    }
+  };
+
+  const handleDownload = () => {
+    if (!jsonInput.trim()) return;
+    const blob = new Blob([jsonInput], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `data-${Date.now()}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+    showToast('Downloaded JSON file', 'success');
   };
 
   const handleClear = () => {
     setJsonInput('');
     setValidationStatus(null);
+    showToast('JSON editor cleared', 'info');
   };
 
   return (
@@ -124,19 +164,36 @@ export const JsonFormatterTool: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
+          {jsonInput && (
+            <>
+              <button
+                type="button"
+                data-action="primary"
+                onClick={handleCopyAll}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs shadow-xs transition-colors cursor-pointer"
+                title="Copy all formatted or minified JSON results"
+              >
+                {copiedAll ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                <span>{copiedAll ? 'All JSON Copied' : 'Copy All Results'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDownload}
+                className="p-1.5 rounded-lg text-neutral-500 hover:text-neutral-800 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+                title="Download formatted JSON file"
+              >
+                <Download className="w-4 h-4" />
+              </button>
+            </>
+          )}
+
           <button
             type="button"
-            onClick={handleCopy}
-            className="flex items-center gap-1 text-xs text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white px-2.5 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 cursor-pointer"
-          >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copied ? 'Copied' : 'Copy'}</span>
-          </button>
-          <button
-            type="button"
+            data-action="reset"
             onClick={handleClear}
             className="text-xs text-neutral-400 hover:text-red-500 p-1.5 rounded cursor-pointer"
-            title="Clear editor"
+            title="Clear editor (Esc)"
           >
             <Trash2 className="w-4 h-4" />
           </button>

@@ -15,6 +15,11 @@ import {
   CaseSensitive,
   Braces,
   Binary,
+  Tag,
+  Fingerprint,
+  Timer,
+  ListFilter,
+  Link2,
   Wrench
 } from 'lucide-react';
 
@@ -55,6 +60,16 @@ export const ToolIcon: React.FC<ToolIconProps> = ({ name, className = 'w-5 h-5' 
       return <Braces className={className} />;
     case 'Binary':
       return <Binary className={className} />;
+    case 'Tag':
+      return <Tag className={className} />;
+    case 'Fingerprint':
+      return <Fingerprint className={className} />;
+    case 'Timer':
+      return <Timer className={className} />;
+    case 'ListFilter':
+      return <ListFilter className={className} />;
+    case 'Link2':
+      return <Link2 className={className} />;
     default:
       return <Wrench className={className} />;
   }

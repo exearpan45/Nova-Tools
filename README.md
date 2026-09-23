@@ -1,114 +1,179 @@
-# NOVA TOOLS
+# NOVA TOOLS — Production Documentation
 
-> Simple tools. Done well. Built with care.
+> **Simple tools. Done well.**  
+> Free, fast tools for everyday tasks.
 
-**NOVA TOOLS** ([novatools.net](https://novatools.net)) is a clean, fast, and private collection of free browser-based utilities created by **Arpan Goswami**.
-
-All utilities run 100% client-side within the browser's JavaScript engine. No calculations, passwords, texts, or files are ever sent to remote servers or stored in databases.
-
----
-
-## Sitemap Generation
-
-A root script (`generate-sitemap.ts`) automatically discovers all core static pages and dynamic utility routes defined in the application (`src/data/toolsData.ts`), creating an SEO-compliant `public/sitemap.xml` file.
-
-### How to Run the Sitemap Generator
-
-Before deploying or whenever new tools or static routes are added, generate the updated sitemap using one of the following commands:
-
-#### Option 1: Using the npm script (Recommended)
-```bash
-npm run sitemap
-```
-
-#### Option 2: Running the root script directly with tsx
-```bash
-npx tsx generate-sitemap.ts
-```
-
-#### Option 3: Automated via production build
-The production build script automatically runs the sitemap generator before compiling Vite assets:
-```bash
-npm run build
-```
+* **Domain:** [https://novatools.net/](https://novatools.net/)
+* **Creator:** Arpan Goswami
+* **Copyright:** © 2026 Copyright Arpan Goswami. All rights reserved.
 
 ---
 
-## Pre-Deployment Checklist
+## 1. Overview & Architecture
 
-Before deploying NOVA TOOLS to production (Cloud Run, Vercel, Netlify, or static CDN):
+NOVA TOOLS is a clean, modern, and private collection of browser-based utilities. All tools execute **100% client-side** in the user's browser:
+* No calculations, passwords, text, or file data are ever transmitted to external servers.
+* No accounts, tracking cookies, or mandatory sign-ins.
+* User preferences (Theme, Favorites, Recent tools, 5-Star Ratings) are saved solely in the browser's `localStorage`.
 
-1. **Generate the Sitemap**:
-   ```bash
-   npm run sitemap
-   ```
-   This ensures `public/sitemap.xml` includes all latest routes with today's date in `<lastmod>`.
-
-2. **Verify robots.txt**:
-   Confirm that `public/robots.txt` references the live sitemap URL:
-   ```txt
-   User-agent: *
-   Allow: /
-
-   Sitemap: https://novatools.net/sitemap.xml
-   Host: https://novatools.net
-   ```
-
-3. **Validate Code & Types**:
-   ```bash
-   npm run lint
-   ```
-
-4. **Build Production Assets**:
-   ```bash
-   npm run build
-   ```
+### Technology Stack
+* **Framework:** React 19 + TypeScript
+* **Bundler & Dev Server:** Vite 8
+* **Styling:** Tailwind CSS (modern `@import "tailwindcss";`)
+* **Icons:** Lucide React
+* **PWA:** Web App Manifest + Service Worker caching for offline readiness
 
 ---
 
-## Routes Indexed in the Sitemap
-
-The generator automatically indexes:
-
-* **Core Static Pages**:
-  * `/` (Homepage — Daily, Priority 1.0)
-  * `/tools` (Directory — Daily, Priority 0.9)
-  * `/about` (About page — Monthly, Priority 0.5)
-  * `/contact` (Contact page — Monthly, Priority 0.5)
-  * `/privacy-policy` & `/privacy` (Privacy Policy — Monthly, Priority 0.5/0.4)
-  * `/cookie-policy` (Cookie Policy — Monthly, Priority 0.4)
-  * `/terms` (Terms of Service — Monthly, Priority 0.4)
-  * `/disclaimer` (Disclaimer — Monthly, Priority 0.4)
-* **Dynamic Tool Pages** (Weekly, Priority 0.9 for popular tools, 0.8 for standard tools):
-  * `/tools/calculator`
-  * `/tools/word-counter`
-  * `/tools/qr-generator`
-  * `/tools/password-generator`
-  * `/tools/unit-converter`
-  * `/tools/temperature-converter`
-  * `/tools/percentage-calculator`
-  * `/tools/age-calculator`
-  * `/tools/bmi-calculator`
-  * `/tools/json-formatter`
-  * `/tools/base64`
-  * ...and all additional tools declared in `src/data/toolsData.ts`.
-
----
-
-## Development
+## 2. Project Setup & Local Development
 
 ### Prerequisites
 * Node.js 18+ or 20+
+* npm 9+
 
-### Start Local Development Server
+### Installation
+```bash
+npm install
+```
+
+### Start Development Server
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) to view the application in the browser.
+The server runs at `http://localhost:3000`.
+
+### Type Checking & Linting
+```bash
+npm run lint
+```
+
+### Production Build
+```bash
+npm run build
+```
+This automatically executes `tsx generate-sitemap.ts` followed by `vite build`. Output assets are placed in the `dist` directory.
+
+### Local Production Preview
+```bash
+npm run preview
+```
 
 ---
 
-## License & Copyright
+## 3. Deployment (Cloudflare Pages & Custom Domain)
 
-© 2026 Copyright **Arpan Goswami**. All rights reserved.
-Domain: [novatools.net](https://novatools.net)
+NOVA TOOLS is optimized for static hosting on **Cloudflare Pages** (or any static hosting platform) with custom domain support:
+
+* **Production Domain:** `https://novatools.net/`
+* **Build Command:** `npm run build`
+* **Build Output Directory:** `dist`
+* **Root Directory:** `/`
+* **SPA Routing Fallback:** The file `public/_redirects` contains:
+  ```text
+  /*    /index.html   200
+  ```
+  This ensures direct navigation and refreshing of deep routes (such as `https://novatools.net/tools/calculator`) returns `index.html` with status 200 rather than a 404 error.
+
+---
+
+## 4. Centralized Tool Registry & Adding a Tool
+
+NOVA TOOLS uses **ONE centralized registry** in `src/data/toolsData.ts`. Adding a new utility requires just two clear steps:
+
+### Step 1: Create the Tool Component
+Create your tool component in `src/tools/` (e.g. `src/tools/DiscountCalculatorTool.tsx`). Ensure it uses clean state, clear user feedback, and safe evaluation (no `eval()` or `new Function()`).
+
+### Step 2: Register in `src/data/toolsData.ts`
+Add the tool's definition to the `TOOLS_DATA` array:
+```ts
+{
+  id: 'discount-calculator',
+  name: 'Discount Calculator',
+  slug: 'discount-calculator',
+  category: 'Calculators',
+  description: 'Calculate sale prices, percentage discounts, and final savings instantly.',
+  keywords: ['discount', 'sale', 'percentage off', 'price calculator'],
+  icon: 'Percent',
+  whatItDoes: 'Computes your exact final price, total money saved, and tax adjustments.',
+  howToUse: [
+    'Enter the original retail price.',
+    'Enter the discount percentage or fixed amount off.',
+    'View the discounted price and total savings immediately.'
+  ],
+  example: 'Original: $80, Discount: 25% → Final Price: $60 (You save $20).',
+  howItWorks: 'Uses client-side proportional arithmetic: savings = (price * discount) / 100.',
+  privacyNote: 'All price entries remain private in your browser.',
+  relatedToolSlugs: ['calculator', 'percentage-calculator'],
+  faq: [
+    { question: 'Does this save my prices?', answer: 'No. Everything stays in your browser.' }
+  ],
+  popular: false,
+  status: 'active'
+}
+```
+And map it in `src/tools/index.ts`.
+
+### Automatic Propagation
+Once registered, the tool automatically appears in:
+1. The global Command Search (`Ctrl+K` / `/`)
+2. The `/tools` catalog with category filtering and sorting
+3. Related tool recommendations on sister tools
+4. Dynamic SEO metadata (canonical, title, meta description, schema JSON-LD)
+5. XML Sitemap (`sitemap.xml`) generated during `npm run build`
+
+---
+
+## 5. SEO & Search Console Readiness
+
+* **Canonical URLs:** All routes have dynamic canonical tags pointing to `https://novatools.net/` or `https://novatools.net/tools/{slug}`.
+* **Open Graph & Twitter Cards:** Complete `og:title`, `og:description`, `og:image` (1200x630 banner), and `twitter:card`.
+* **Structured Data:** Schema.org `WebApplication` structured data embedded in `index.html`.
+* **Robots.txt:** Clean `public/robots.txt` allowing all legitimate crawlers and pointing to `https://novatools.net/sitemap.xml`.
+* **Sitemap:** Automated generation via `generate-sitemap.ts` (`npm run sitemap`).
+
+### Google Search Console Verification
+1. Add `novatools.net` as a Domain property in Google Search Console.
+2. Verify via DNS TXT record at your domain registrar/DNS provider.
+3. Submit sitemap URL: `https://novatools.net/sitemap.xml`.
+
+---
+
+## 6. Progressive Web App (PWA) & Offline Readiness
+
+* **Manifest:** `public/manifest.json` configured with `name`, `short_name`, `theme_color`, and standalone display.
+* **Icons:** Includes SVG vector icon (`favicon.svg`) plus high-resolution raster icons:
+  * `favicon-16x16.png`
+  * `favicon-32x32.png`
+  * `apple-touch-icon.png` (180x180)
+  * `pwa-192x192.png` (192x192)
+  * `pwa-512x512.png` (512x512)
+* **Service Worker:** `public/sw.js` caches application shells and assets for instant load and offline resilience.
+
+---
+
+## 7. Google AdSense Integration
+
+* **Configuration:** Centralized in `src/config/features.ts` (`ADSENSE_CLIENT_ID = 'ca-pub-3171742470969015'`).
+* **Non-Intrusive Layout:** Ads are managed via the `<AdSlot />` component (`src/components/AdSlot.tsx`).
+* **Guidelines Enforced:**
+  * Fixed reserved container heights to prevent Cumulative Layout Shift (CLS).
+  * Placed strictly below the tool interface to ensure calculations and controls are never blocked.
+  * Clearly labeled with subtle "Advertisement" tag.
+
+---
+
+## 8. Troubleshooting & FAQ
+
+* **Q: Route returns 404 when refreshed on Cloudflare Pages?**  
+  *A:* Ensure `public/_redirects` is deployed with `/* /index.html 200`.
+* **Q: A calculation produces weird decimals like 0.30000000000000004?**  
+  *A:* Tools use `Math.round((val + Number.EPSILON) * 1e8) / 1e8` for standard float precision normalization.
+* **Q: How to clear saved user data?**  
+  *A:* Click "Clear history" in Recently Used, reset ratings via the star rating reset button, or clear browser storage for `novatools.net`.
+
+---
+
+## 9. Copyright & License
+
+© 2026 Copyright **Arpan Goswami**. All rights reserved.  
+Official website: [https://novatools.net/](https://novatools.net/)

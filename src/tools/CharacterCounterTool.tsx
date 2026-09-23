@@ -1,9 +1,14 @@
 import React, { useState, useMemo } from 'react';
-import { Copy, Trash2, Check } from 'lucide-react';
+import { Copy, Trash2, Check, Download, FileText } from 'lucide-react';
+import { copyToClipboard } from '../utils/clipboard';
+import { useToast } from '../context/ToastContext';
+import { addScratchpadItem } from '../utils/scratchpad';
 
 export const CharacterCounterTool: React.FC = () => {
+  const { showToast } = useToast();
   const [text, setText] = useState<string>('Simple tools. Done well. Built with care.');
   const [copied, setCopied] = useState<boolean>(false);
+  const [copiedAll, setCopiedAll] = useState<boolean>(false);
 
   const breakdown = useMemo(() => {
     const totalChars = text.length;
@@ -25,11 +30,58 @@ export const CharacterCounterTool: React.FC = () => {
     };
   }, [text]);
 
-  const handleCopy = () => {
+  const fullReport = useMemo(() => {
+    return [
+      `--- CHARACTER ANALYSIS BREAKDOWN ---`,
+      `Total Characters: ${breakdown.totalChars.toLocaleString()}`,
+      `Letters: ${breakdown.letters.toLocaleString()}`,
+      `Digits: ${breakdown.digits.toLocaleString()}`,
+      `Spaces & Whitespace: ${breakdown.spaces.toLocaleString()}`,
+      `Symbols & Punctuation: ${breakdown.symbols.toLocaleString()}`,
+      `Words: ${breakdown.words.toLocaleString()}`,
+      `Lines: ${breakdown.lines.toLocaleString()}`,
+      `\n--- SOURCE TEXT ---`,
+      text
+    ].join('\n');
+  }, [breakdown, text]);
+
+  const handleCopyText = async () => {
     if (!text) return;
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    const ok = await copyToClipboard(text);
+    if (ok) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      showToast('Text copied to clipboard', 'success');
+      addScratchpadItem('character-counter', text.slice(0, 80));
+    }
+  };
+
+  const handleCopyAllResults = async () => {
+    if (!text) return;
+    const ok = await copyToClipboard(fullReport);
+    if (ok) {
+      setCopiedAll(true);
+      setTimeout(() => setCopiedAll(false), 2000);
+      showToast('All character metrics and text copied to clipboard', 'success');
+      addScratchpadItem('character-counter', `${breakdown.totalChars} characters breakdown`, 'Character Report');
+    }
+  };
+
+  const handleDownload = () => {
+    if (!text) return;
+    const blob = new Blob([fullReport], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `character-count-report-${Date.now()}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+    showToast('Downloaded character count report', 'success');
+  };
+
+  const handleClear = () => {
+    setText('');
+    showToast('Input cleared', 'info');
   };
 
   return (
@@ -79,7 +131,7 @@ export const CharacterCounterTool: React.FC = () => {
 
       {/* Text Area */}
       <div>
-        <div className="flex justify-between items-center mb-2">
+        <div className="flex flex-wrap justify-between items-center gap-2 mb-2">
           <label htmlFor="char-counter-area" className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
             Enter or paste text
           </label>
@@ -87,16 +139,40 @@ export const CharacterCounterTool: React.FC = () => {
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                onClick={handleCopy}
-                className="text-xs text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 flex items-center gap-1 cursor-pointer py-1 px-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                data-action="primary"
+                onClick={handleCopyAllResults}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs shadow-xs transition-colors cursor-pointer"
+                title="Copy all character statistics and text"
               >
-                {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copied ? 'Copied' : 'Copy'}</span>
+                {copiedAll ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                <span>{copiedAll ? 'All Results Copied' : 'Copy All Results'}</span>
               </button>
+
               <button
                 type="button"
-                onClick={() => setText('')}
-                className="text-xs text-neutral-400 hover:text-red-500 flex items-center gap-1 cursor-pointer py-1 px-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                onClick={handleCopyText}
+                className="text-xs text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white flex items-center gap-1 cursor-pointer py-1.5 px-2.5 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                title="Copy text only"
+              >
+                {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <FileText className="w-3.5 h-3.5" />}
+                <span>{copied ? 'Copied' : 'Copy Text'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDownload}
+                className="p-1.5 rounded-lg text-neutral-500 hover:text-neutral-800 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+                title="Download full character report"
+              >
+                <Download className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                data-action="reset"
+                onClick={handleClear}
+                className="text-xs text-neutral-400 hover:text-red-500 flex items-center gap-1 cursor-pointer py-1.5 px-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                title="Clear input (Esc)"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span>Clear</span>
@@ -107,6 +183,7 @@ export const CharacterCounterTool: React.FC = () => {
 
         <textarea
           id="char-counter-area"
+          data-action="output"
           rows={8}
           value={text}
           onChange={(e) => setText(e.target.value)}

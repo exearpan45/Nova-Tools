@@ -6,7 +6,7 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   return (
-    <footer className="w-full border-t border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#121214] mt-auto transition-colors">
+    <footer className="w-full border-t border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#121214] mt-auto transition-colors no-print">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           {/* Brand & Slogan */}

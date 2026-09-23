@@ -3,14 +3,14 @@ import { Search, ArrowUpDown } from 'lucide-react';
 import { TOOLS_DATA, TOOL_CATEGORIES } from '../data/toolsData';
 import { ToolCard } from '../components/ToolCard';
 import { ToolCategory } from '../types';
-import { getFavoriteToolSlugs, toggleFavoriteToolSlug } from '../utils/storage';
+import { getFavoriteToolSlugs, toggleFavoriteToolSlug, getAllToolRatings } from '../utils/storage';
 import { useToast } from '../context/ToastContext';
 
 interface ToolsPageProps {
   onNavigate: (path: string) => void;
 }
 
-type SortOption = 'popular' | 'alpha' | 'category';
+type SortOption = 'popular' | 'alpha' | 'category' | 'rating';
 
 export const ToolsPage: React.FC<ToolsPageProps> = ({ onNavigate }) => {
   const { showToast } = useToast();
@@ -18,9 +18,11 @@ export const ToolsPage: React.FC<ToolsPageProps> = ({ onNavigate }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [sortBy, setSortBy] = useState<SortOption>('popular');
   const [favoriteSlugs, setFavoriteSlugs] = useState<string[]>([]);
+  const [ratings, setRatings] = useState<Record<string, number>>({});
 
   useEffect(() => {
     setFavoriteSlugs(getFavoriteToolSlugs());
+    setRatings(getAllToolRatings());
   }, []);
 
   const handleToggleFavorite = (slug: string) => {
@@ -47,6 +49,12 @@ export const ToolsPage: React.FC<ToolsPageProps> = ({ onNavigate }) => {
     }
     if (sortBy === 'category') {
       return a.category.localeCompare(b.category) || a.name.localeCompare(b.name);
+    }
+    if (sortBy === 'rating') {
+      const scoreA = ratings[a.slug] || 0;
+      const scoreB = ratings[b.slug] || 0;
+      if (scoreA !== scoreB) return scoreB - scoreA;
+      return a.name.localeCompare(b.name);
     }
     // 'popular'
     if (a.popular && !b.popular) return -1;
@@ -97,6 +105,7 @@ export const ToolsPage: React.FC<ToolsPageProps> = ({ onNavigate }) => {
             className="text-xs bg-white dark:bg-[#18181b] border border-neutral-300 dark:border-neutral-700 rounded-lg px-2.5 py-1.5 text-neutral-800 dark:text-neutral-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
           >
             <option value="popular">Popular first</option>
+            <option value="rating">Highest Rated</option>
             <option value="alpha">A–Z</option>
             <option value="category">Category</option>
           </select>
@@ -131,6 +140,7 @@ export const ToolsPage: React.FC<ToolsPageProps> = ({ onNavigate }) => {
               onClick={() => onNavigate(`/tools/${tool.slug}`)}
               isFavorite={favoriteSlugs.includes(tool.slug)}
               onToggleFavorite={handleToggleFavorite}
+              rating={ratings[tool.slug] || 0}
             />
           ))}
         </div>

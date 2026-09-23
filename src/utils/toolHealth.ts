@@ -67,6 +67,49 @@ export function runMathToolTests(): { passed: boolean; testCount: number; failur
   const mToKm = 1500 / 1000;
   if (mToKm !== 1.5) failures.push(`Length conversion failed: expected 1.5, got ${mToKm}`);
 
+  // Test 5: Discount Calculator
+  testCount++;
+  const originalPrice = 80;
+  const pctDiscount = 25;
+  const savingsPct = (originalPrice * pctDiscount) / 100;
+  const discountedPrice = originalPrice - savingsPct;
+  if (savingsPct !== 20 || discountedPrice !== 60) {
+    failures.push(`Discount percent test failed: savings=${savingsPct}, price=${discountedPrice}`);
+  }
+
+  testCount++;
+  const taxPct = 8;
+  const taxAmount = (discountedPrice * taxPct) / 100;
+  const finalPriceWithTax = Math.round((discountedPrice + taxAmount) * 100) / 100;
+  if (finalPriceWithTax !== 64.80) {
+    failures.push(`Discount with tax failed: expected 64.8, got ${finalPriceWithTax}`);
+  }
+
+  // Test 6: UUID v4 Format
+  testCount++;
+  const uuidSample = 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
+  const uuidV4Regex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if (!uuidV4Regex.test(uuidSample)) {
+    failures.push(`UUID v4 regex validation failed on standard sample`);
+  }
+
+  // Test 7: URL encode & decode round-trip
+  testCount++;
+  const rawUrlText = 'simple tools & fast=true?';
+  const encoded = encodeURIComponent(rawUrlText);
+  const decoded = decodeURIComponent(encoded);
+  if (decoded !== rawUrlText) {
+    failures.push(`URL encode/decode round trip failed`);
+  }
+
+  // Test 8: Text Sorter deduplication & sorting
+  testCount++;
+  const linesToSort = ['Banana', 'Apple', 'Apple', 'Cherry'];
+  const uniqueLines = Array.from(new Set(linesToSort)).sort();
+  if (uniqueLines.length !== 3 || uniqueLines[0] !== 'Apple' || uniqueLines[2] !== 'Cherry') {
+    failures.push(`Text sorter deduplication & sorting test failed`);
+  }
+
   return {
     passed: failures.length === 0,
     testCount,

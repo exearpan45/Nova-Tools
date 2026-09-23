@@ -1,13 +1,14 @@
 import React from 'react';
 import { ToolDefinition } from '../types';
 import { ToolIcon } from './ToolIcon';
-import { ArrowRight, Heart } from 'lucide-react';
+import { ArrowRight, Heart, Star } from 'lucide-react';
 
 interface ToolCardProps {
   tool: ToolDefinition;
   onClick: () => void;
   isFavorite?: boolean;
   onToggleFavorite?: (slug: string) => void;
+  rating?: number;
 }
 
 export const ToolCard: React.FC<ToolCardProps> = ({
@@ -15,6 +16,7 @@ export const ToolCard: React.FC<ToolCardProps> = ({
   onClick,
   isFavorite = false,
   onToggleFavorite,
+  rating = 0,
 }) => {
   return (
     <div
@@ -35,6 +37,15 @@ export const ToolCard: React.FC<ToolCardProps> = ({
           <ToolIcon name={tool.icon} className="w-4 h-4" />
         </div>
         <div className="flex items-center gap-1.5">
+          {rating > 0 && (
+            <span
+              title={`You rated this ${rating}/5 stars`}
+              className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 text-[10px] font-semibold text-amber-700 dark:text-amber-300"
+            >
+              <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+              <span>{rating}</span>
+            </span>
+          )}
           {onToggleFavorite && (
             <button
               type="button"
@@ -69,3 +80,4 @@ export const ToolCard: React.FC<ToolCardProps> = ({
     </div>
   );
 };
+

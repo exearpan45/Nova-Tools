@@ -681,6 +681,212 @@ export const TOOLS_DATA: ToolDefinition[] = [
       }
     ],
     relatedSlugs: ['json-formatter', 'password-generator', 'qr-generator']
+  },
+  {
+    id: 'discount-calculator',
+    slug: 'discount-calculator',
+    name: 'Discount Calculator',
+    description: 'Calculate sale prices, percentage discounts, money saved, and sales tax instantly.',
+    category: 'Calculators',
+    keywords: ['discount', 'sale', 'percentage off', 'price calculator', 'tax', 'savings', 'clearance'],
+    icon: 'Tag',
+    popular: true,
+    seoTitle: 'Free Discount Calculator - Calculate Sale Price & Money Saved',
+    seoDescription: 'Calculate final discounted prices, fixed dollar savings, and sales tax adjustments quickly in your browser. 100% private with instant calculation.',
+    whatItDoes: [
+      'Computes the exact final price of an item after applying a percentage discount (e.g. 25% off) or a fixed dollar discount (e.g. $10 off).',
+      'Calculates the total amount of money you save and the effective percentage savings.',
+      'Includes optional sales tax calculation to see your true out-of-pocket register cost.'
+    ],
+    howToUse: [
+      'Enter the original price of the item before discount.',
+      'Select whether the discount is a percentage (% Off) or fixed dollar amount ($ Off).',
+      'Enter the discount amount or tap a quick preset button (e.g. 20%, 50%).',
+      'Optionally add local sales tax to calculate the final register price.'
+    ],
+    example: {
+      input: 'Original Price: $80.00, Discount: 25% Off, Sales Tax: 8%',
+      output: 'Final Price: $64.80 (You save $20.00, Tax: $4.80)',
+      note: 'Calculates discounted subtotal ($60.00) first, then adds 8% sales tax ($4.80).'
+    },
+    howItWorks: 'Uses client-side proportional arithmetic: savings = (price * discount) / 100. Price after discount = price - savings. Final price = price after discount + (price after discount * tax / 100). Deterministic float rounding prevents floating-point inaccuracies.',
+    privacyInfo: 'All price entries and calculations remain 100% private in local browser memory. No figures are ever stored on servers or logged.',
+    faqs: [
+      {
+        question: 'How do I calculate multiple discounts (stacked discounts)?',
+        answer: 'You can calculate the first discount, then enter the resulting "Price Before Tax" as your new original price for the second discount.'
+      },
+      {
+        question: 'Does this support fixed dollar discounts?',
+        answer: 'Yes. Simply toggle the "$ Off" button next to the discount input.'
+      }
+    ],
+    relatedSlugs: ['percentage-calculator', 'calculator', 'bmi-calculator']
+  },
+  {
+    id: 'uuid-generator',
+    slug: 'uuid-generator',
+    name: 'UUID Generator',
+    description: 'Generate bulk cryptographically secure Version 4 UUIDs (GUIDs) in your browser.',
+    category: 'Generators',
+    keywords: ['uuid', 'guid', 'uuid v4', 'unique identifier', 'random id', 'generator', 'hash'],
+    icon: 'Fingerprint',
+    popular: true,
+    seoTitle: 'Free UUID / GUID Generator - Fast Bulk Version 4 UUIDs',
+    seoDescription: 'Generate cryptographically random UUID v4 identifiers instantly in your browser. Bulk generation, custom formatting, and one-click copy.',
+    whatItDoes: [
+      'Generates standard RFC 4122 Version 4 Universally Unique Identifiers (UUIDs) / Globally Unique Identifiers (GUIDs).',
+      'Supports bulk generation up to 50 UUIDs at a time with instant one-click copy and text file export.',
+      'Offers flexible formatting: uppercase/lowercase toggle, optional hyphens, and brace enclosing.'
+    ],
+    howToUse: [
+      'Select the desired quantity of UUIDs (1, 5, 10, 25, or 50).',
+      'Toggle formatting options such as Uppercase, Hyphens, or Enclosing Braces.',
+      'Click "Regenerate" or press Enter to generate fresh random identifiers.',
+      'Click individual copy icons or "Copy All" to copy the full list to your clipboard.'
+    ],
+    example: {
+      input: 'Format: Standard Lowercase with Hyphens',
+      output: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+      note: 'Cryptographically generated with 122 bits of high-entropy randomness.'
+    },
+    howItWorks: 'Uses the browser\'s native crypto.randomUUID() API or crypto.getRandomValues() CSPRNG. It enforces Version 4 (0100 in high bits of octet 7) and Variant 10 (10 in high bits of octet 9) conforming strictly to RFC 4122.',
+    privacyInfo: 'All UUIDs are generated locally on your device CPU. No generated identifiers are transmitted to any server or recorded.',
+    faqs: [
+      {
+        question: 'Are these UUIDs collision-proof?',
+        answer: 'Yes. With 122 bits of entropy, the probability of generating a duplicate Version 4 UUID across billions of generated keys is astronomically close to zero.'
+      },
+      {
+        question: 'What is the difference between UUID and GUID?',
+        answer: 'GUID (Globally Unique Identifier) is Microsoft\'s term for standard RFC 4122 UUIDs. They are structurally identical.'
+      }
+    ],
+    relatedSlugs: ['password-generator', 'qr-generator', 'base64']
+  },
+  {
+    id: 'timestamp-converter',
+    slug: 'timestamp-converter',
+    name: 'Timestamp Converter',
+    description: 'Convert Unix epoch timestamps to human dates and dates back to timestamps with live clock.',
+    category: 'Converters',
+    keywords: ['timestamp', 'unix time', 'epoch', 'epoch converter', 'date to timestamp', 'time converter', 'iso 8601'],
+    icon: 'Timer',
+    popular: false,
+    seoTitle: 'Unix Timestamp Converter - Epoch to Human Date & Time',
+    seoDescription: 'Convert Unix epoch timestamps (seconds & milliseconds) to human-readable dates and formats. Includes live ticking epoch clock and UTC conversion.',
+    whatItDoes: [
+      'Displays a live ticking Unix epoch clock in seconds with pause and resume controls.',
+      'Converts Unix epoch numbers (both 10-digit seconds and 13-digit milliseconds) into UTC, Local, ISO 8601, and human relative times.',
+      'Converts human calendar dates and times back into exact epoch seconds and milliseconds.'
+    ],
+    howToUse: [
+      'To convert a timestamp: Paste the epoch number in seconds or milliseconds into the input.',
+      'View formatted UTC, Local, and relative time breakdowns automatically.',
+      'To convert a date: Select date & time from the calendar picker to obtain epoch seconds and milliseconds.',
+      'Use "Set to Now" to synchronize with current time.'
+    ],
+    example: {
+      input: 'Timestamp: 1774345200',
+      output: 'UTC: Mon, 23 Mar 2026 09:40:00 GMT | ISO: 2026-03-23T09:40:00.000Z',
+      note: 'Auto-detects whether the input is in seconds or milliseconds based on digit count.'
+    },
+    howItWorks: 'Uses the browser\'s JavaScript Date engine with epoch mathematics (time in milliseconds since midnight UTC on January 1, 1970). UTC strings and local timezone offsets are computed deterministically.',
+    privacyInfo: 'All timestamp conversions run entirely on your local machine. No dates, times, or timestamps leave your browser.',
+    faqs: [
+      {
+        question: 'Does this support milliseconds?',
+        answer: 'Yes. The converter automatically detects 10-digit inputs as seconds and 13-digit inputs as milliseconds.'
+      },
+      {
+        question: 'What is Unix Epoch time?',
+        answer: 'Unix epoch time is the number of seconds that have elapsed since January 1, 1970 (UTC), excluding leap seconds.'
+      }
+    ],
+    relatedSlugs: ['time-converter', 'age-calculator', 'date-difference']
+  },
+  {
+    id: 'text-sorter',
+    slug: 'text-sorter',
+    name: 'Text Sorter',
+    description: 'Sort lists alphabetically, by length, or natural order, and remove duplicate lines.',
+    category: 'Text Tools',
+    keywords: ['sort', 'text sorter', 'alphabetize', 'remove duplicates', 'deduplicate', 'sort lines', 'natural sort'],
+    icon: 'ListFilter',
+    popular: false,
+    seoTitle: 'Free Text Sorter & Line Cleaner - Alphabetize & Remove Duplicates',
+    seoDescription: 'Sort lists of text alphabetically (A-Z, Z-A), by character length, or natural numerical order. Remove duplicate and blank lines in one click.',
+    whatItDoes: [
+      'Sorts multi-line text lists alphabetically (A to Z, Z to A), by line length, or in natural numerical order (1, 2, 10).',
+      'Removes duplicate lines while preserving unique list items.',
+      'Cleans text by trimming leading/trailing whitespace and filtering out empty lines.',
+      'Displays real-time statistics: total lines, unique lines, duplicates count, and characters.'
+    ],
+    howToUse: [
+      'Paste or type your lines of text into the input area.',
+      'Click your desired sorting mode (e.g., A → Z, Natural Sort, Shortest First).',
+      'Click "Remove Duplicates" or "Trim Spaces" to clean up list items.',
+      'Click "Copy" or "Download" to export your processed list.'
+    ],
+    example: {
+      input: 'Banana\nApple\n10. Mango\n2. Grape\nApple',
+      output: 'Apple\nBanana\n2. Grape\n10. Mango',
+      note: 'Deduplicated duplicate "Apple" and sorted numerically using natural sort.'
+    },
+    howItWorks: 'Splits text by newline regex (\\r?\\n), maps items through JavaScript Intl.Collator with numeric collation enabled for natural order, and utilizes ES6 Set collections for O(N) deduplication.',
+    privacyInfo: 'All text sorting and line manipulation happen locally inside your browser. No text is ever transmitted over the network.',
+    faqs: [
+      {
+        question: 'What is natural sort?',
+        answer: 'Natural sort orders numbers logically (e.g. 1, 2, 10) instead of ASCII character order (1, 10, 2).'
+      },
+      {
+        question: 'Can I reverse the lines in a list?',
+        answer: 'Yes. Click "Reverse Lines" to invert the list from bottom to top.'
+      }
+    ],
+    relatedSlugs: ['word-counter', 'character-counter', 'case-converter']
+  },
+  {
+    id: 'url-encoder',
+    slug: 'url-encoder',
+    name: 'URL Encoder & Decoder',
+    description: 'Safely encode and decode URLs and inspect query parameters in an organized table.',
+    category: 'Developer Tools',
+    keywords: ['url encode', 'url decode', 'uri encoder', 'uricomponent', 'percent encoding', 'query string', 'developer'],
+    icon: 'Link2',
+    popular: false,
+    seoTitle: 'Free URL Encoder & Decoder - Percent-Encoding & Query Inspector',
+    seoDescription: 'Encode and decode URLs and URI components with full Unicode support. Includes interactive query parameter breakdown table. 100% client-side.',
+    whatItDoes: [
+      'Converts special characters into percent-encoded equivalents (%20, %2F, etc.) and decodes percent-encoded URLs back into readable text.',
+      'Supports both URI Component mode (encodes all delimiters) and Full URI mode (preserves protocol and path).',
+      'Automatically parses query strings and displays an interactive table of query parameter keys and values with individual copy actions.'
+    ],
+    howToUse: [
+      'Choose "Encode" or "Decode" mode.',
+      'Select "Component" for query parameters or "Full URI" for full website addresses.',
+      'Paste your URL or text string into the input box.',
+      'View the processed output instantly, inspect parsed query parameters below, and copy with one click.'
+    ],
+    example: {
+      input: 'https://novatools.net/search?query=hello world&category=tools',
+      output: 'https://novatools.net/search?query=hello%20world&category=tools',
+      note: 'Spaces percent-encoded to %20 while structural URL components are preserved.'
+    },
+    howItWorks: 'Uses browser-native encodeURIComponent, decodeURIComponent, encodeURI, and decodeURI functions along with standard URLSearchParams for query string decomposition.',
+    privacyInfo: 'All URL encoding, decoding, and parsing happen locally on your device. No URLs, tokens, or query strings are sent to any remote server.',
+    faqs: [
+      {
+        question: 'When should I use "Component" vs "Full URI"?',
+        answer: 'Use "Component" when encoding a specific parameter value or text string containing delimiters like & or =. Use "Full URI" when encoding an entire web address so http:// and / slashes are preserved.'
+      },
+      {
+        question: 'Does this tool support international characters?',
+        answer: 'Yes. All non-ASCII characters and UTF-8 multi-byte characters are encoded into standard percent-encoded octets.'
+      }
+    ],
+    relatedSlugs: ['base64', 'json-formatter', 'uuid-generator']
   }
 ];
 

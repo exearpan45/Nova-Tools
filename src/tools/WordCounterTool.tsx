@@ -1,11 +1,16 @@
 import React, { useState, useMemo } from 'react';
-import { Copy, Trash2, Check } from 'lucide-react';
+import { Copy, Trash2, Check, Download, FileText } from 'lucide-react';
+import { copyToClipboard } from '../utils/clipboard';
+import { useToast } from '../context/ToastContext';
+import { addScratchpadItem } from '../utils/scratchpad';
 
 export const WordCounterTool: React.FC = () => {
+  const { showToast } = useToast();
   const [text, setText] = useState<string>(
     'NOVA TOOLS provides clean, fast, and lightweight browser utilities. Everything works locally in your browser with zero bloat and complete privacy.'
   );
   const [copied, setCopied] = useState<boolean>(false);
+  const [copiedSummary, setCopiedSummary] = useState<boolean>(false);
 
   const stats = useMemo(() => {
     const trimmed = text.trim();
@@ -48,15 +53,58 @@ export const WordCounterTool: React.FC = () => {
     };
   }, [text]);
 
-  const handleCopy = () => {
+  const formattedResultsReport = useMemo(() => {
+    return [
+      `--- WORD COUNTER ANALYSIS REPORT ---`,
+      `Words: ${stats.words.toLocaleString()}`,
+      `Characters (with spaces): ${stats.chars.toLocaleString()}`,
+      `Characters (no spaces): ${stats.charsNoSpaces.toLocaleString()}`,
+      `Sentences: ${stats.sentences.toLocaleString()}`,
+      `Paragraphs: ${stats.paragraphs.toLocaleString()}`,
+      `Estimated Reading Time: ${stats.readingTime}`,
+      `Estimated Speaking Time: ${stats.speakingTime}`,
+      `\n--- PROCESSED TEXT CONTENT ---`,
+      text
+    ].join('\n');
+  }, [stats, text]);
+
+  const handleCopyText = async () => {
     if (!text) return;
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    const ok = await copyToClipboard(text);
+    if (ok) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      showToast('Text copied to clipboard', 'success');
+      addScratchpadItem('word-counter', `${stats.words} words, ${stats.chars} chars`);
+    }
+  };
+
+  const handleCopyAllResults = async () => {
+    if (!text) return;
+    const ok = await copyToClipboard(formattedResultsReport);
+    if (ok) {
+      setCopiedSummary(true);
+      setTimeout(() => setCopiedSummary(false), 2000);
+      showToast('All results & metrics copied to clipboard', 'success');
+      addScratchpadItem('word-counter', `${stats.words} words report`, 'Analysis Report');
+    }
+  };
+
+  const handleDownload = () => {
+    if (!text) return;
+    const blob = new Blob([formattedResultsReport], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `word-count-report-${Date.now()}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+    showToast('Downloaded text & analysis report', 'success');
   };
 
   const handleClear = () => {
     setText('');
+    showToast('Input cleared', 'info');
   };
 
   return (
@@ -108,7 +156,7 @@ export const WordCounterTool: React.FC = () => {
 
       {/* Text Area */}
       <div>
-        <div className="flex justify-between items-center mb-2">
+        <div className="flex flex-wrap justify-between items-center gap-2 mb-2">
           <label htmlFor="word-counter-area" className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
             Input Text
           </label>
@@ -117,16 +165,40 @@ export const WordCounterTool: React.FC = () => {
               <>
                 <button
                   type="button"
-                  onClick={handleCopy}
-                  className="text-xs text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 flex items-center gap-1 cursor-pointer py-1 px-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                  data-action="primary"
+                  onClick={handleCopyAllResults}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs shadow-xs transition-colors cursor-pointer"
+                  title="Copy all analysis metrics (words, chars, reading time) and text"
                 >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copied ? 'Copied' : 'Copy'}</span>
+                  {copiedSummary ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedSummary ? 'All Results Copied' : 'Copy All Results'}</span>
                 </button>
+
                 <button
                   type="button"
+                  onClick={handleCopyText}
+                  className="text-xs text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 flex items-center gap-1 cursor-pointer py-1.5 px-2.5 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                  title="Copy raw text only"
+                >
+                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <FileText className="w-3.5 h-3.5" />}
+                  <span>{copied ? 'Copied' : 'Copy Text'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleDownload}
+                  className="p-1.5 rounded-lg text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+                  title="Download analysis report"
+                >
+                  <Download className="w-4 h-4" />
+                </button>
+
+                <button
+                  type="button"
+                  data-action="reset"
                   onClick={handleClear}
-                  className="text-xs text-neutral-400 hover:text-red-500 flex items-center gap-1 cursor-pointer py-1 px-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                  className="text-xs text-neutral-400 hover:text-red-500 flex items-center gap-1 cursor-pointer py-1.5 px-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                  title="Clear input (Esc)"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Clear</span>
@@ -138,6 +210,7 @@ export const WordCounterTool: React.FC = () => {
 
         <textarea
           id="word-counter-area"
+          data-action="output"
           rows={9}
           value={text}
           onChange={(e) => setText(e.target.value)}

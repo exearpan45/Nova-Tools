@@ -8,7 +8,10 @@ export interface FeatureFlags {
   enableRecentTools: boolean;
   enableFavoriteTools: boolean;
   enableSorting: boolean;
+  enableToolRating: boolean;
 }
+
+export const ADSENSE_CLIENT_ID = 'ca-pub-3171742470969015';
 
 export const FEATURE_FLAGS: FeatureFlags = {
   enablePWA: true,
@@ -18,6 +21,7 @@ export const FEATURE_FLAGS: FeatureFlags = {
   enableRecentTools: true,
   enableFavoriteTools: true,
   enableSorting: true,
+  enableToolRating: true,
 };
 
 /**

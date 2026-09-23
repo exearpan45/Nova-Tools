@@ -3,7 +3,7 @@ import { Search, ArrowRight, Sparkles, ShieldCheck, Cpu, EyeOff, Lock, Heart, Cl
 import { TOOLS_DATA, TOOL_CATEGORIES } from '../data/toolsData';
 import { ToolCard } from '../components/ToolCard';
 import { ToolDefinition, ToolCategory } from '../types';
-import { getRecentToolSlugs, clearRecentTools, getFavoriteToolSlugs, toggleFavoriteToolSlug } from '../utils/storage';
+import { getRecentToolSlugs, clearRecentTools, getFavoriteToolSlugs, toggleFavoriteToolSlug, getAllToolRatings } from '../utils/storage';
 import { useToast } from '../context/ToastContext';
 
 interface HomePageProps {
@@ -17,10 +17,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSearch }) 
   const [inlineQuery, setInlineQuery] = useState<string>('');
   const [recentSlugs, setRecentSlugs] = useState<string[]>([]);
   const [favoriteSlugs, setFavoriteSlugs] = useState<string[]>([]);
+  const [ratings, setRatings] = useState<Record<string, number>>({});
 
   useEffect(() => {
     setRecentSlugs(getRecentToolSlugs());
     setFavoriteSlugs(getFavoriteToolSlugs());
+    setRatings(getAllToolRatings());
   }, []);
 
   const handleToggleFavorite = (slug: string) => {
@@ -145,6 +147,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSearch }) 
                 onClick={() => onNavigate(`/tools/${tool.slug}`)}
                 isFavorite={true}
                 onToggleFavorite={handleToggleFavorite}
+                rating={ratings[tool.slug] || 0}
               />
             ))}
           </div>
@@ -178,6 +181,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSearch }) 
                 onClick={() => onNavigate(`/tools/${tool.slug}`)}
                 isFavorite={favoriteSlugs.includes(tool.slug)}
                 onToggleFavorite={handleToggleFavorite}
+                rating={ratings[tool.slug] || 0}
               />
             ))}
           </div>
@@ -208,6 +212,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSearch }) 
                 onClick={() => onNavigate(`/tools/${tool.slug}`)}
                 isFavorite={favoriteSlugs.includes(tool.slug)}
                 onToggleFavorite={handleToggleFavorite}
+                rating={ratings[tool.slug] || 0}
               />
             ))}
           </div>
@@ -255,6 +260,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSearch }) 
                 onClick={() => onNavigate(`/tools/${tool.slug}`)}
                 isFavorite={favoriteSlugs.includes(tool.slug)}
                 onToggleFavorite={handleToggleFavorite}
+                rating={ratings[tool.slug] || 0}
               />
             ))}
           </div>

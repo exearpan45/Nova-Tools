@@ -92,3 +92,52 @@ export function savePreference<T>(key: string, value: T): void {
     // Ignore storage quota errors
   }
 }
+
+// 5-Star Tool Ratings (Persists in user's localStorage)
+const RATINGS_KEY = 'nova-tools-ratings';
+
+export function getToolRating(slug: string): number {
+  try {
+    const raw = localStorage.getItem(RATINGS_KEY);
+    if (!raw) return 0;
+    const parsed = JSON.parse(raw);
+    const score = Number(parsed[slug]);
+    return score >= 1 && score <= 5 ? score : 0;
+  } catch {
+    return 0;
+  }
+}
+
+export function setToolRating(
+  slug: string,
+  rating: number
+): { rating: number; allRatings: Record<string, number> } {
+  try {
+    const raw = localStorage.getItem(RATINGS_KEY);
+    const current: Record<string, number> = raw ? JSON.parse(raw) : {};
+    const validRating = Math.max(0, Math.min(5, Math.round(rating)));
+
+    if (validRating === 0) {
+      delete current[slug];
+    } else {
+      current[slug] = validRating;
+    }
+
+    localStorage.setItem(RATINGS_KEY, JSON.stringify(current));
+    return { rating: validRating, allRatings: current };
+  } catch {
+    return { rating: 0, allRatings: {} };
+  }
+}
+
+export function getAllToolRatings(): Record<string, number> {
+  try {
+    const raw = localStorage.getItem(RATINGS_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return typeof parsed === 'object' && parsed !== null ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
