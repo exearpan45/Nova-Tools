@@ -63,9 +63,24 @@ const TOOL_COMPONENTS: Record<string, React.ReactNode> = {
   'url-encoder': <UrlEncoderTool />
 };
 
+const APP_BASE_PATH = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+function toAppPath(pathname: string): string {
+  if (APP_BASE_PATH && pathname.startsWith(APP_BASE_PATH)) {
+    const stripped = pathname.slice(APP_BASE_PATH.length);
+    return stripped || '/';
+  }
+  return pathname || '/';
+}
+
+function toBrowserPath(path: string): string {
+  const normalized = path.startsWith('/') ? path : `/${path}`;
+  return APP_BASE_PATH ? `${APP_BASE_PATH}${normalized === '/' ? '/' : normalized}` : normalized;
+}
+
 export default function App() {
   const [currentPath, setCurrentPath] = useState<string>(() => {
-    return window.location.pathname || '/';
+    return toAppPath(window.location.pathname);
   });
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [shareFeedback, setShareFeedback] = useState<string | null>(null);
@@ -141,7 +156,7 @@ export default function App() {
   // Sync route on popstate (browser back/forward)
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentPath(window.location.pathname || '/');
+      setCurrentPath(toAppPath(window.location.pathname));
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -215,7 +230,7 @@ export default function App() {
   // Navigate function with HTML5 pushState
   const handleNavigate = (path: string) => {
     if (path === currentPath) return;
-    window.history.pushState({}, '', path);
+    window.history.pushState({}, '', toBrowserPath(path));
     setCurrentPath(path);
   };
 
