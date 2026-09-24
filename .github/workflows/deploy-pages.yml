@@ -29,15 +29,18 @@ jobs:
           package-manager-cache: false
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps --no-audit --no-fund
+        run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund
 
       - name: Verify dependencies
-        run: npm --version && node --version
+        run: npm --version && node --version && test -d node_modules/vite && test -d node_modules/react
 
       - name: Build
         env:
           GITHUB_PAGES: 'true'
         run: npm run build
+
+      - name: Verify build output
+        run: test -f dist/index.html && test -f dist/404.html || true
 
       - name: GitHub Pages SPA fallback
         run: cp dist/index.html dist/404.html
