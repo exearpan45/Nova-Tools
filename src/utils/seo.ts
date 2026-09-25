@@ -7,7 +7,7 @@ interface RouteSeoOptions {
   tool?: ToolDefinition;
 }
 
-const BASE_URL = 'https://novatools.net';
+const BASE_URL = 'https://novatools.2bd.net';
 
 /**
  * Updates DOM head elements (title, meta description, canonical, OG tags, Twitter tags, JSON-LD)
