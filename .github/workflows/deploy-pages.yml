@@ -45,8 +45,14 @@ jobs:
           mkdir -p dist
           cp public/sitemap.xml dist/sitemap.xml
           test -f dist/sitemap.xml
+          grep -q 'https://novatools.2bd.net/' dist/sitemap.xml
           if grep -q 'https://novatools.net/' dist/sitemap.xml; then
             echo "ERROR: old novatools.net URLs found in deployed sitemap"
+            exit 1
+          fi
+          if grep -RIl 'https://novatools.net/' dist public >/tmp/old-domain-files.txt 2>/dev/null; then
+            echo "ERROR: old novatools.net URL found in deployable files:"
+            cat /tmp/old-domain-files.txt
             exit 1
           fi
 
