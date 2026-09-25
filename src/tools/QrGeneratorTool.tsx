@@ -6,7 +6,7 @@ type QrType = 'URL' | 'Text' | 'Email' | 'Phone';
 
 export const QrGeneratorTool: React.FC = () => {
   const [type, setType] = useState<QrType>('URL');
-  const [content, setContent] = useState<string>('https://novatools.net');
+  const [content, setContent] = useState<string>('https://novatools.2bd.net');
   const [copied, setCopied] = useState<boolean>(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -15,7 +15,7 @@ export const QrGeneratorTool: React.FC = () => {
 
     let payload = content.trim();
     if (!payload) {
-      payload = 'https://novatools.net';
+      payload = 'https://novatools.2bd.net';
     }
 
     if (type === 'Email' && !payload.startsWith('mailto:')) {
@@ -59,7 +59,7 @@ export const QrGeneratorTool: React.FC = () => {
 
   const handleReset = () => {
     setType('URL');
-    setContent('https://novatools.net');
+    setContent('https://novatools.2bd.net');
   };
 
   return (
@@ -73,7 +73,7 @@ export const QrGeneratorTool: React.FC = () => {
               type="button"
               onClick={() => {
                 setType(t);
-                if (t === 'URL') setContent('https://novatools.net');
+                if (t === 'URL') setContent('https://novatools.2bd.net');
                 else if (t === 'Text') setContent('Hello from NOVA TOOLS');
                 else if (t === 'Email') setContent('hello@novatools.net');
                 else if (t === 'Phone') setContent('+1234567890');
@@ -125,7 +125,7 @@ export const QrGeneratorTool: React.FC = () => {
               onChange={(e) => setContent(e.target.value)}
               placeholder={
                 type === 'URL'
-                  ? 'https://novatools.net'
+                  ? 'https://novatools.2bd.net'
                   : type === 'Email'
                   ? 'contact@novatools.net'
                   : '+1 555 0199'
