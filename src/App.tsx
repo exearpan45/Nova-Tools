@@ -343,7 +343,7 @@ export default function App() {
   return (
     <ErrorBoundary>
       <ToastProvider>
-        <div className="min-h-screen flex flex-col bg-white dark:bg-[#121214] text-neutral-900 dark:text-neutral-100 font-sans selection:bg-blue-500 selection:text-white transition-colors duration-150">
+        <div className="min-h-screen flex flex-col bg-white dark:bg-[#121214] text-neutral-900 dark:text-neutral-100 font-sans selection:bg-blue-500 selection:text-white">
           {/* Top Navigation */}
           <Navbar
             currentPath={currentPath}
@@ -356,7 +356,9 @@ export default function App() {
 
           {/* Main Content Area */}
           <main className="flex-1">
-            {renderContent()}
+            <div key={currentPath} className="animate-page-enter">
+              {renderContent()}
+            </div>
           </main>
 
           {/* Site Footer */}

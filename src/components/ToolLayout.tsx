@@ -369,7 +369,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
 
       {/* PRIMARY TOOL INTERFACE */}
       <main id={`tool-interface-${tool.slug}`} className="space-y-3">
-        <div className="bg-white dark:bg-[#18181b] border border-neutral-200/90 dark:border-neutral-800/90 rounded-xl p-4 sm:p-6 shadow-2xs print-clean">
+        <div className="bg-white dark:bg-[#18181b] border border-neutral-200/90 dark:border-neutral-800/90 rounded-xl p-4 sm:p-6 shadow-2xs print-clean animate-tool-enter">
           {children}
         </div>
 

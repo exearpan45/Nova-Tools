@@ -11,11 +11,7 @@ function generateSingleUuid(uppercase: boolean, withHyphens: boolean, withBraces
   } else {
     // Cryptographic fallback using crypto.getRandomValues
     const buf = new Uint8Array(16);
-    if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
-      crypto.getRandomValues(buf);
-    } else {
-      for (let i = 0; i < 16; i++) buf[i] = Math.floor(Math.random() * 256);
-    }
+    window.crypto.getRandomValues(buf);
     buf[6] = (buf[6] & 0x0f) | 0x40; // Version 4
     buf[8] = (buf[8] & 0x3f) | 0x80; // Variant 10
     const hex = Array.from(buf, (b) => b.toString(16).padStart(2, '0')).join('');
@@ -188,7 +184,7 @@ export const UuidGeneratorTool: React.FC = () => {
       </div>
 
       {/* UUID List Display */}
-      <div className="bg-white dark:bg-[#18181b] rounded-2xl border border-neutral-200/90 dark:border-neutral-800/90 overflow-hidden">
+      <div className="bg-white dark:bg-[#18181b] rounded-2xl border border-neutral-200/90 dark:border-neutral-800/90 overflow-hidden animate-result-in">
         <div className="flex items-center justify-between px-4 py-3 bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800">
           <span className="text-xs font-semibold text-neutral-600 dark:text-neutral-400 flex items-center gap-1.5">
             <Fingerprint className="w-3.5 h-3.5 text-blue-500" />

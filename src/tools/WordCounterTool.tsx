@@ -110,7 +110,7 @@ export const WordCounterTool: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Metrics Row */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 animate-result-in">
         <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50/60 dark:bg-neutral-900/40 text-center">
           <div className="text-xl sm:text-2xl font-mono font-semibold text-neutral-900 dark:text-neutral-100">
             {stats.words.toLocaleString()}

@@ -1,6 +1,8 @@
 // Tool Health & Automated Calculation Verification
 
 import { TOOLS_DATA } from '../data/toolsData';
+import { safeEvaluateMath } from '../tools/CalculatorTool';
+import { CATEGORY_UNITS } from '../tools/UnitConverterTool';
 
 export interface HealthCheckResult {
   passed: boolean;
@@ -33,27 +35,68 @@ export function runMathToolTests(): { passed: boolean; testCount: number; failur
   const failures: string[] = [];
   let testCount = 0;
 
-  // Test 1: Percentage calculations
+  // 1. Calculator Mathematical Verification
   testCount++;
-  const p1 = (15 / 100) * 200; // 15% of 200 = 30
-  if (p1 !== 30) failures.push(`Percentage normal test failed: expected 30, got ${p1}`);
+  const calc1 = safeEvaluateMath('2 + 3 * 4');
+  if (calc1.result !== 14) failures.push(`Calculator precedence failed: expected 14, got ${calc1.result}`);
 
   testCount++;
-  const pZero = (0 / 100) * 50; // 0% of 50 = 0
-  if (pZero !== 0) failures.push(`Percentage zero test failed: expected 0, got ${pZero}`);
+  const calc2 = safeEvaluateMath('(2 + 3) * 4');
+  if (calc2.result !== 20) failures.push(`Calculator parentheses failed: expected 20, got ${calc2.result}`);
 
   testCount++;
-  const pChange = ((150 - 100) / 100) * 100; // 100 to 150 = +50%
-  if (pChange !== 50) failures.push(`Percentage change test failed: expected 50, got ${pChange}`);
+  const calc3 = safeEvaluateMath('10 / 2');
+  if (calc3.result !== 5) failures.push(`Calculator division failed: expected 5, got ${calc3.result}`);
 
-  // Test 2: BMI calculations
+  testCount++;
+  const calc4 = safeEvaluateMath('0 / 10');
+  if (calc4.result !== 0) failures.push(`Calculator 0 / 10 failed: expected 0, got ${calc4.result}`);
+
+  testCount++;
+  const calc5 = safeEvaluateMath('-5 * -4');
+  if (calc5.result !== 20) failures.push(`Calculator negative multiplication failed: expected 20, got ${calc5.result}`);
+
+  testCount++;
+  const calc6 = safeEvaluateMath('0.1 + 0.2');
+  if (calc6.result !== 0.3) failures.push(`Calculator floating point failed: expected 0.3, got ${calc6.result}`);
+
+  testCount++;
+  const calc7 = safeEvaluateMath('200 * 15%');
+  if (calc7.result !== 30) failures.push(`Calculator percentage failed: expected 30, got ${calc7.result}`);
+
+  testCount++;
+  const calc8 = safeEvaluateMath('10 mod 3');
+  if (calc8.result !== 1) failures.push(`Calculator modulo failed: expected 1, got ${calc8.result}`);
+
+  testCount++;
+  const calcZeroDiv = safeEvaluateMath('10 / 0');
+  if (!calcZeroDiv.error) failures.push(`Calculator divide-by-zero check failed: should have errored`);
+
+  // 2. Percentage Formulas Verification
+  testCount++;
+  const p1 = (20 / 100) * 500; // 20% of 500 = 100
+  if (p1 !== 100) failures.push(`Percentage formula 1 failed: expected 100, got ${p1}`);
+
+  testCount++;
+  const pInc = ((600 - 500) / 500) * 100; // 500 to 600 = +20%
+  if (pInc !== 20) failures.push(`Percentage increase failed: expected 20, got ${pInc}`);
+
+  testCount++;
+  const pDec = ((600 - 500) / 600) * 100; // 600 to 500 = -16.6666...%
+  if (Math.abs(pDec - 16.6666666667) > 0.0001) failures.push(`Percentage decrease failed: got ${pDec}`);
+
+  testCount++;
+  const pOrig = 100 / (20 / 100); // 100 is 20% of 500
+  if (pOrig !== 500) failures.push(`Percentage original value failed: expected 500, got ${pOrig}`);
+
+  // 3. BMI Verification
   testCount++;
   // BMI = weight(kg) / (height(m)^2). E.g. 70kg, 1.75m -> 70 / 3.0625 = 22.857
   const bmi = 70 / Math.pow(1.75, 2);
   const bmiRounded = Math.round(bmi * 10) / 10;
   if (bmiRounded !== 22.9) failures.push(`BMI calculation failed: expected 22.9, got ${bmiRounded}`);
 
-  // Test 3: Temperature conversion
+  // 4. Temperature Conversion Verification
   testCount++;
   const fFromC = (100 * 9) / 5 + 32; // 100C = 212F
   if (fFromC !== 212) failures.push(`Temperature conversion failed: expected 212, got ${fFromC}`);
@@ -62,30 +105,56 @@ export function runMathToolTests(): { passed: boolean; testCount: number; failur
   const cFromF = ((32 - 32) * 5) / 9; // 32F = 0C
   if (cFromF !== 0) failures.push(`Temperature zero test failed: expected 0, got ${cFromF}`);
 
-  // Test 4: Length conversion
   testCount++;
-  const mToKm = 1500 / 1000;
-  if (mToKm !== 1.5) failures.push(`Length conversion failed: expected 1.5, got ${mToKm}`);
+  const kFromC = 0 + 273.15; // 0C = 273.15K
+  if (kFromC !== 273.15) failures.push(`Temperature Kelvin failed: expected 273.15, got ${kFromC}`);
 
-  // Test 5: Discount Calculator
   testCount++;
-  const originalPrice = 80;
-  const pctDiscount = 25;
-  const savingsPct = (originalPrice * pctDiscount) / 100;
-  const discountedPrice = originalPrice - savingsPct;
-  if (savingsPct !== 20 || discountedPrice !== 60) {
-    failures.push(`Discount percent test failed: savings=${savingsPct}, price=${discountedPrice}`);
+  const cFromK = 0 - 273.15; // 0K = -273.15C
+  if (cFromK !== -273.15) failures.push(`Absolute zero test failed: expected -273.15, got ${cFromK}`);
+
+  // 5. Unit Converter Categories & Factor Integrity
+  testCount++;
+  const requiredCategories = ['Length', 'Mass / Weight', 'Area', 'Volume', 'Speed', 'Pressure', 'Energy', 'Power', 'Digital Storage', 'Time'];
+  for (const cat of requiredCategories) {
+    if (!CATEGORY_UNITS[cat as keyof typeof CATEGORY_UNITS]) {
+      failures.push(`Missing unit conversion category: ${cat}`);
+    }
   }
 
+  // Length roundtrip: m -> ft -> m
   testCount++;
+  const mDef = CATEGORY_UNITS.Length.find((u) => u.id === 'm')!;
+  const ftDef = CATEGORY_UNITS.Length.find((u) => u.id === 'ft')!;
+  const testDist = 100;
+  const feetVal = ftDef.fromBase(mDef.toBase(testDist));
+  const roundtripDist = mDef.fromBase(ftDef.toBase(feetVal));
+  if (Math.abs(roundtripDist - testDist) > 1e-9) {
+    failures.push(`Length round-trip failed: started with ${testDist}, got ${roundtripDist}`);
+  }
+
+  // 6. Discount Calculator Verification
+  testCount++;
+  const origPrice = 80;
+  const discountPct = 25;
+  const discAmount = (origPrice * discountPct) / 100;
+  const priceAfterDisc = origPrice - discAmount;
   const taxPct = 8;
-  const taxAmount = (discountedPrice * taxPct) / 100;
-  const finalPriceWithTax = Math.round((discountedPrice + taxAmount) * 100) / 100;
-  if (finalPriceWithTax !== 64.80) {
-    failures.push(`Discount with tax failed: expected 64.8, got ${finalPriceWithTax}`);
+  const taxAmount = (priceAfterDisc * taxPct) / 100;
+  const finalPrice = Math.round((priceAfterDisc + taxAmount) * 100) / 100;
+  if (discAmount !== 20 || priceAfterDisc !== 60 || finalPrice !== 64.8) {
+    failures.push(`Discount calculation failed: disc=${discAmount}, price=${priceAfterDisc}, final=${finalPrice}`);
   }
 
-  // Test 6: UUID v4 Format
+  // 7. Digital Storage Binary vs Decimal Verification
+  testCount++;
+  const oneGiBInBytes = 1024 ** 3; // 1,073,741,824
+  const oneGBInBytes = 1000 ** 3;  // 1,000,000,000
+  if (oneGiBInBytes !== 1073741824 || oneGBInBytes !== 1000000000) {
+    failures.push(`Storage constants mismatch: GiB=${oneGiBInBytes}, GB=${oneGBInBytes}`);
+  }
+
+  // 8. UUID v4 Format Verification
   testCount++;
   const uuidSample = 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
   const uuidV4Regex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -93,7 +162,7 @@ export function runMathToolTests(): { passed: boolean; testCount: number; failur
     failures.push(`UUID v4 regex validation failed on standard sample`);
   }
 
-  // Test 7: URL encode & decode round-trip
+  // 9. URL encode & decode round-trip
   testCount++;
   const rawUrlText = 'simple tools & fast=true?';
   const encoded = encodeURIComponent(rawUrlText);
@@ -102,7 +171,7 @@ export function runMathToolTests(): { passed: boolean; testCount: number; failur
     failures.push(`URL encode/decode round trip failed`);
   }
 
-  // Test 8: Text Sorter deduplication & sorting
+  // 10. Text Sorter deduplication & sorting
   testCount++;
   const linesToSort = ['Banana', 'Apple', 'Apple', 'Cherry'];
   const uniqueLines = Array.from(new Set(linesToSort)).sort();

@@ -193,7 +193,7 @@ export const CaseConverterTool: React.FC = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 animate-result-in">
           {cases.map((c) => (
             <div
               key={c.id}
