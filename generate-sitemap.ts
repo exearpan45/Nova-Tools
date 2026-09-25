@@ -6,7 +6,7 @@ import { TOOLS_DATA } from './src/data/toolsData';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const BASE_URL = 'https://novatools.net';
+const BASE_URL = 'https://novatools.2bd.net';
 
 interface SitemapRoute {
   path: string;
