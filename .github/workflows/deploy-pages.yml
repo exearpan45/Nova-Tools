@@ -13,7 +13,9 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  # Queue deployments instead of cancelling an in-progress run when commits arrive quickly.
+  # This keeps every push independently traceable and avoids false 'cancelled' runs.
+  cancel-in-progress: false
 
 jobs:
   build:
