@@ -521,7 +521,7 @@ export const TOOLS_DATA: ToolDefinition[] = [
       'Copy the verified text with one click.'
     ],
     example: {
-      input: '"NOVA TOOLS v1.1 is now live! Visit novatools.net for clean, fast utilities."',
+      input: '"NOVA TOOLS v1.1 is now live! Visit novatools.2bd.net for clean, fast utilities."',
       output: '75 total characters | 58 letters | 2 numbers | 10 spaces | 5 symbols | 1 line',
       note: 'Leaves 205 characters remaining for a standard 280-character post.'
     },
