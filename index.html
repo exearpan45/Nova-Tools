@@ -49,7 +49,7 @@
     <!-- Pre-paint Theme Initialization: Eliminates Light/Dark Flash Before Render -->
     <script id="nova-critical-theme-script">
       (function() {
-        function applyInitialTheme() {
+        var applyTheme = function() {
           try {
             var saved = localStorage.getItem('novatools_theme');
             var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -71,14 +71,12 @@
               metaThemeColor.setAttribute('content', isDark ? '#121214' : '#ffffff');
             }
           } catch (e) {}
-        }
+        };
 
-        // Apply immediately during HTML parsing
-        applyInitialTheme();
-
-        // Enforce with requestAnimationFrame if available before first layout/paint pass
-        if (typeof window !== 'undefined' && 'requestAnimationFrame' in window) {
-          window.requestAnimationFrame(applyInitialTheme);
+        if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+          window.requestAnimationFrame(applyTheme);
+        } else {
+          applyTheme();
         }
       })();
     </script>
