@@ -15,15 +15,27 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSearch }) 
   const { showToast } = useToast();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [inlineQuery, setInlineQuery] = useState<string>('');
-  const [recentSlugs, setRecentSlugs] = useState<string[]>([]);
-  const [favoriteSlugs, setFavoriteSlugs] = useState<string[]>([]);
-  const [ratings, setRatings] = useState<Record<string, number>>({});
-
-  useEffect(() => {
-    setRecentSlugs(getRecentToolSlugs());
-    setFavoriteSlugs(getFavoriteToolSlugs());
-    setRatings(getAllToolRatings());
-  }, []);
+  const [recentSlugs, setRecentSlugs] = useState<string[]>(() => {
+    try {
+      return getRecentToolSlugs();
+    } catch {
+      return [];
+    }
+  });
+  const [favoriteSlugs, setFavoriteSlugs] = useState<string[]>(() => {
+    try {
+      return getFavoriteToolSlugs();
+    } catch {
+      return [];
+    }
+  });
+  const [ratings, setRatings] = useState<Record<string, number>>(() => {
+    try {
+      return getAllToolRatings();
+    } catch {
+      return {};
+    }
+  });
 
   const handleToggleFavorite = (slug: string) => {
     const { isFavorite, favorites } = toggleFavoriteToolSlug(slug);

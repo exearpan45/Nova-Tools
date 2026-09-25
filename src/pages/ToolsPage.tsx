@@ -17,13 +17,20 @@ export const ToolsPage: React.FC<ToolsPageProps> = ({ onNavigate }) => {
   const [search, setSearch] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [sortBy, setSortBy] = useState<SortOption>('popular');
-  const [favoriteSlugs, setFavoriteSlugs] = useState<string[]>([]);
-  const [ratings, setRatings] = useState<Record<string, number>>({});
-
-  useEffect(() => {
-    setFavoriteSlugs(getFavoriteToolSlugs());
-    setRatings(getAllToolRatings());
-  }, []);
+  const [favoriteSlugs, setFavoriteSlugs] = useState<string[]>(() => {
+    try {
+      return getFavoriteToolSlugs();
+    } catch {
+      return [];
+    }
+  });
+  const [ratings, setRatings] = useState<Record<string, number>>(() => {
+    try {
+      return getAllToolRatings();
+    } catch {
+      return {};
+    }
+  });
 
   const handleToggleFavorite = (slug: string) => {
     const { isFavorite, favorites } = toggleFavoriteToolSlug(slug);
