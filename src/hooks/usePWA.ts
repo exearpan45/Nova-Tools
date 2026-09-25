@@ -24,25 +24,33 @@ export function usePWA() {
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
-    // Register service worker if supported
-    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then((reg) => {
-          reg.addEventListener('updatefound', () => {
-            const newWorker = reg.installing;
-            if (newWorker) {
-              newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  setHasUpdate(true);
-                }
-              });
-            }
-          });
-        })
-        .catch(() => {
-          // SW registration failed, ignore silently
+    // Manage service worker: unregister in dev to prevent hard-refresh failures; register in prod
+    if ('serviceWorker' in navigator) {
+      if (import.meta.env.DEV) {
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+          for (const registration of registrations) {
+            registration.unregister();
+          }
         });
+      } else if (import.meta.env.PROD) {
+        navigator.serviceWorker
+          .register('/sw.js')
+          .then((reg) => {
+            reg.addEventListener('updatefound', () => {
+              const newWorker = reg.installing;
+              if (newWorker) {
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    setHasUpdate(true);
+                  }
+                });
+              }
+            });
+          })
+          .catch(() => {
+            // SW registration failed, ignore silently
+          });
+      }
     }
 
     return () => {

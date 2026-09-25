@@ -47,29 +47,39 @@
     </style>
 
     <!-- Pre-paint Theme Initialization: Eliminates Light/Dark Flash Before Render -->
-    <script>
+    <script id="nova-critical-theme-script">
       (function() {
-        try {
-          var saved = localStorage.getItem('novatools_theme');
-          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var isDark = saved ? (saved === 'dark') : prefersDark;
-          var docEl = document.documentElement;
-          if (isDark) {
-            docEl.classList.add('dark');
-            docEl.classList.remove('light');
-            docEl.style.backgroundColor = '#121214';
-            docEl.style.colorScheme = 'dark';
-          } else {
-            docEl.classList.remove('dark');
-            docEl.classList.add('light');
-            docEl.style.backgroundColor = '#ffffff';
-            docEl.style.colorScheme = 'light';
-          }
-          var metaThemeColor = document.querySelector('meta[name="theme-color"]');
-          if (metaThemeColor) {
-            metaThemeColor.setAttribute('content', isDark ? '#121214' : '#ffffff');
-          }
-        } catch (e) {}
+        function applyInitialTheme() {
+          try {
+            var saved = localStorage.getItem('novatools_theme');
+            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var isDark = saved ? (saved === 'dark') : prefersDark;
+            var docEl = document.documentElement;
+            if (isDark) {
+              docEl.classList.add('dark');
+              docEl.classList.remove('light');
+              docEl.style.backgroundColor = '#121214';
+              docEl.style.colorScheme = 'dark';
+            } else {
+              docEl.classList.remove('dark');
+              docEl.classList.add('light');
+              docEl.style.backgroundColor = '#ffffff';
+              docEl.style.colorScheme = 'light';
+            }
+            var metaThemeColor = document.querySelector('meta[name="theme-color"]');
+            if (metaThemeColor) {
+              metaThemeColor.setAttribute('content', isDark ? '#121214' : '#ffffff');
+            }
+          } catch (e) {}
+        }
+
+        // Apply immediately during HTML parsing
+        applyInitialTheme();
+
+        // Enforce with requestAnimationFrame if available before first layout/paint pass
+        if (typeof window !== 'undefined' && 'requestAnimationFrame' in window) {
+          window.requestAnimationFrame(applyInitialTheme);
+        }
       })();
     </script>
 
