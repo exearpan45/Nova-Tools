@@ -41,6 +41,13 @@ jobs:
           GITHUB_PAGES: 'true'
         run: npm run build
 
+      - name: Preserve custom domain in Pages artifact
+        run: |
+          test -f CNAME
+          test "$(tr -d '\r\n' < CNAME)" = "novatools.2bd.net"
+          cp CNAME dist/CNAME
+          test -f dist/CNAME
+
       - name: Ensure sitemap is in Pages artifact
         run: |
           test -f public/sitemap.xml
@@ -65,10 +72,10 @@ jobs:
         run: cp dist/index.html dist/404.html
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
@@ -81,6 +88,6 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
 # Pages deployment trigger
