@@ -2,67 +2,98 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    
+    <!-- 
+      ABSOLUTE FIRST TICK EXECUTION:
+      Positioned at line 5 (before viewport, title, links, and stylesheets).
+      Executes synchronously when document.readyState is 'loading'.
+      Applies .dark / .light, sets property-level background and color-scheme,
+      and adds 'no-transitions' to kill any restyle color transitions on laptop reload.
+    -->
+    <script>
+      (function() {
+        function applyInitialTheme() {
+          try {
+            var t = localStorage.getItem('novatools_theme');
+            var isDark = t ? (t === 'dark') : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            var doc = document.documentElement;
+            doc.classList.add('no-transitions');
+            if (isDark) {
+              doc.classList.add('dark');
+              doc.classList.remove('light');
+              doc.style.setProperty('background-color', '#121214', 'important');
+              doc.style.setProperty('color-scheme', 'dark', 'important');
+            } else {
+              doc.classList.remove('dark');
+              doc.classList.add('light');
+              doc.style.setProperty('background-color', '#ffffff', 'important');
+              doc.style.setProperty('color-scheme', 'light', 'important');
+            }
+          } catch(e) {}
+        }
+        applyInitialTheme();
+        
+        // Re-verify during readyState transitions and remove no-transitions after initial paint
+        var releaseTransitions = function() {
+          setTimeout(function() {
+            if (document.documentElement) {
+              document.documentElement.classList.remove('no-transitions');
+            }
+          }, 80);
+        };
+        
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', releaseTransitions, { once: true });
+        } else {
+          releaseTransitions();
+        }
+      })();
+    </script>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark light" />
     <title>NOVA TOOLS — Simple tools. Done well.</title>
-    
+
     <!-- Critical Pre-paint Theme CSS: Instant Native Canvas & Background Before Any Script or File Loads -->
     <style id="nova-critical-theme">
       :root {
         color-scheme: dark light;
       }
-      html {
-        background-color: #ffffff;
-        color: #171717;
+      /* Prevent restyle transition flash on hard refresh or stylesheet injection */
+      .no-transitions,
+      .no-transitions *,
+      .no-transitions *::before,
+      .no-transitions *::after {
+        -webkit-transition: none !important;
+        -moz-transition: none !important;
+        -o-transition: none !important;
+        transition: none !important;
       }
-      html.dark {
+      html.dark, html.dark body {
         background-color: #121214 !important;
         color: #f5f5f5 !important;
-        color-scheme: dark;
+        color-scheme: dark !important;
       }
-      html.dark body {
-        background-color: #121214 !important;
-        color: #f5f5f5 !important;
-      }
-      html.light {
+      html.light, html.light body {
         background-color: #ffffff !important;
         color: #171717 !important;
-        color-scheme: light;
-      }
-      html.light body {
-        background-color: #ffffff !important;
-        color: #171717 !important;
+        color-scheme: light !important;
       }
       @media (prefers-color-scheme: dark) {
-        html:not(.light) {
+        html:not(.light), html:not(.light) body {
           background-color: #121214;
           color: #f5f5f5;
           color-scheme: dark;
         }
-        html:not(.light) body {
-          background-color: #121214;
-          color: #f5f5f5;
+      }
+      @media (prefers-color-scheme: light) {
+        html:not(.dark), html:not(.dark) body {
+          background-color: #ffffff;
+          color: #171717;
+          color-scheme: light;
         }
       }
     </style>
-
-    <!-- Pre-paint Theme Initialization: apply the saved/system theme synchronously before first paint -->
-    <script id="nova-critical-theme-script">
-      (function() {
-        try {
-          var saved = localStorage.getItem('novatools_theme');
-          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var isDark = saved === 'dark' || (!saved && prefersDark);
-          var docEl = document.documentElement;
-          docEl.classList.toggle('dark', isDark);
-          docEl.classList.toggle('light', !isDark);
-          docEl.style.colorScheme = isDark ? 'dark' : 'light';
-          docEl.style.backgroundColor = isDark ? '#121214' : '#ffffff';
-        } catch (e) {
-          document.documentElement.classList.add('light');
-        }
-      })();
-    </script>
 
     <meta name="author" content="Arpan Goswami" />
     <meta name="robots" content="index, follow" />
@@ -120,8 +151,15 @@
     }
     </script>
   </head>
-  <body class="bg-white dark:bg-[#121214] text-neutral-900 dark:text-neutral-100 antialiased" style="background-color: inherit; color: inherit;">
+  <body class="text-neutral-900 dark:text-neutral-100 antialiased" style="background-color: inherit; color: inherit;">
     <div id="root"></div>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(regs) {
+          for (var i = 0; i < regs.length; i++) { regs[i].unregister(); }
+        });
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

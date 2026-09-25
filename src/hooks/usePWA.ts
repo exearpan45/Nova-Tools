@@ -24,33 +24,13 @@ export function usePWA() {
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
-    // Manage service worker: unregister in dev to prevent hard-refresh failures; register in prod
-    if ('serviceWorker' in navigator) {
-      if (import.meta.env.DEV) {
-        navigator.serviceWorker.getRegistrations().then((registrations) => {
-          for (const registration of registrations) {
-            registration.unregister();
-          }
-        });
-      } else if (import.meta.env.PROD) {
-        navigator.serviceWorker
-          .register('/sw.js')
-          .then((reg) => {
-            reg.addEventListener('updatefound', () => {
-              const newWorker = reg.installing;
-              if (newWorker) {
-                newWorker.addEventListener('statechange', () => {
-                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    setHasUpdate(true);
-                  }
-                });
-              }
-            });
-          })
-          .catch(() => {
-            // SW registration failed, ignore silently
-          });
-      }
+    // Ensure all stale service workers are completely unregistered to guarantee instantaneous, error-free hard refreshes
+    if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (const registration of registrations) {
+          registration.unregister();
+        }
+      });
     }
 
     return () => {

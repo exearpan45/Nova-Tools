@@ -4,7 +4,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
-  html {
+  html:not(.dark) {
     color-scheme: light;
     background-color: #ffffff;
     color: #171717;
