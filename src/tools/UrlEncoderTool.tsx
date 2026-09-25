@@ -9,7 +9,7 @@ export const UrlEncoderTool: React.FC = () => {
   const [mode, setMode] = useState<'encode' | 'decode'>('encode');
   const [scope, setScope] = useState<'component' | 'full'>('component');
   const [input, setInput] = useState<string>(
-    'https://novatools.net/search?query=simple tools&category=calculators & converters'
+    'https://novatools.2bd.net/search?query=simple tools&category=calculators & converters'
   );
   const [copied, setCopied] = useState<boolean>(false);
 
