@@ -3,8 +3,49 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
     <title>NOVA TOOLS — Simple tools. Done well.</title>
     
+    <!-- Critical Pre-paint Theme CSS: Instant Native Canvas & Background Before Any Script or File Loads -->
+    <style id="nova-critical-theme">
+      :root {
+        color-scheme: dark light;
+      }
+      html {
+        background-color: #ffffff;
+        color: #171717;
+      }
+      html.dark {
+        background-color: #121214 !important;
+        color: #f5f5f5 !important;
+        color-scheme: dark;
+      }
+      html.dark body {
+        background-color: #121214 !important;
+        color: #f5f5f5 !important;
+      }
+      html.light {
+        background-color: #ffffff !important;
+        color: #171717 !important;
+        color-scheme: light;
+      }
+      html.light body {
+        background-color: #ffffff !important;
+        color: #171717 !important;
+      }
+      @media (prefers-color-scheme: dark) {
+        html:not(.light) {
+          background-color: #121214;
+          color: #f5f5f5;
+          color-scheme: dark;
+        }
+        html:not(.light) body {
+          background-color: #121214;
+          color: #f5f5f5;
+        }
+      }
+    </style>
+
     <!-- Pre-paint Theme Initialization: Eliminates Light/Dark Flash Before Render -->
     <script>
       (function() {
@@ -12,10 +53,21 @@
           var saved = localStorage.getItem('novatools_theme');
           var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
           var isDark = saved ? (saved === 'dark') : prefersDark;
+          var docEl = document.documentElement;
           if (isDark) {
-            document.documentElement.classList.add('dark');
+            docEl.classList.add('dark');
+            docEl.classList.remove('light');
+            docEl.style.backgroundColor = '#121214';
+            docEl.style.colorScheme = 'dark';
           } else {
-            document.documentElement.classList.remove('dark');
+            docEl.classList.remove('dark');
+            docEl.classList.add('light');
+            docEl.style.backgroundColor = '#ffffff';
+            docEl.style.colorScheme = 'light';
+          }
+          var metaThemeColor = document.querySelector('meta[name="theme-color"]');
+          if (metaThemeColor) {
+            metaThemeColor.setAttribute('content', isDark ? '#121214' : '#ffffff');
           }
         } catch (e) {}
       })();
@@ -77,7 +129,7 @@
     }
     </script>
   </head>
-  <body class="bg-white dark:bg-[#121214] text-neutral-900 dark:text-neutral-100 antialiased">
+  <body class="bg-white dark:bg-[#121214] text-neutral-900 dark:text-neutral-100 antialiased" style="background-color: inherit; color: inherit;">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

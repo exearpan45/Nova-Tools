@@ -1,6 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
 
+const applyThemeToDOM = (dark: boolean) => {
+  const root = document.documentElement;
+  if (dark) {
+    root.classList.add('dark');
+    root.classList.remove('light');
+    root.style.backgroundColor = '#121214';
+    root.style.colorScheme = 'dark';
+  } else {
+    root.classList.remove('dark');
+    root.classList.add('light');
+    root.style.backgroundColor = '#ffffff';
+    root.style.colorScheme = 'light';
+  }
+  const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+  if (metaThemeColor) {
+    metaThemeColor.setAttribute('content', dark ? '#121214' : '#ffffff');
+  }
+};
+
 export const ThemeToggle: React.FC = () => {
   const [isDark, setIsDark] = useState<boolean>(() => {
     if (typeof document !== 'undefined') {
@@ -12,18 +31,10 @@ export const ThemeToggle: React.FC = () => {
   const toggleTheme = () => {
     const nextDark = !isDark;
     setIsDark(nextDark);
-    const root = document.documentElement;
-    if (nextDark) {
-      root.classList.add('dark');
-      try {
-        localStorage.setItem('novatools_theme', 'dark');
-      } catch {}
-    } else {
-      root.classList.remove('dark');
-      try {
-        localStorage.setItem('novatools_theme', 'light');
-      } catch {}
-    }
+    applyThemeToDOM(nextDark);
+    try {
+      localStorage.setItem('novatools_theme', nextDark ? 'dark' : 'light');
+    } catch {}
   };
 
   // Sync if system OS scheme changes and user hasn't explicitly set a preference
@@ -34,13 +45,8 @@ export const ThemeToggle: React.FC = () => {
       try {
         const stored = localStorage.getItem('novatools_theme');
         if (!stored) {
-          if (e.matches) {
-            document.documentElement.classList.add('dark');
-            setIsDark(true);
-          } else {
-            document.documentElement.classList.remove('dark');
-            setIsDark(false);
-          }
+          applyThemeToDOM(e.matches);
+          setIsDark(e.matches);
         }
       } catch {}
     };
@@ -56,20 +62,15 @@ export const ThemeToggle: React.FC = () => {
       if (e.key === 'novatools_theme') {
         const newTheme = e.newValue;
         if (newTheme === 'dark') {
-          document.documentElement.classList.add('dark');
+          applyThemeToDOM(true);
           setIsDark(true);
         } else if (newTheme === 'light') {
-          document.documentElement.classList.remove('dark');
+          applyThemeToDOM(false);
           setIsDark(false);
         } else {
           const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          if (sysDark) {
-            document.documentElement.classList.add('dark');
-            setIsDark(true);
-          } else {
-            document.documentElement.classList.remove('dark');
-            setIsDark(false);
-          }
+          applyThemeToDOM(sysDark);
+          setIsDark(sysDark);
         }
       }
     };
