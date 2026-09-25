@@ -61,17 +61,14 @@
 
 .animate-page-enter {
   animation: novaFadeInUp 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  will-change: opacity, transform;
 }
 
 .animate-tool-enter {
   animation: novaToolEnter 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  will-change: opacity, transform;
 }
 
 .animate-result-in {
   animation: novaResultIn 160ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  will-change: opacity, transform;
 }
 
 /* WCAG / Core Web Vitals Reduced Motion Compliance */
