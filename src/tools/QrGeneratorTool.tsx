@@ -75,7 +75,7 @@ export const QrGeneratorTool: React.FC = () => {
                 setType(t);
                 if (t === 'URL') setContent('https://novatools.2bd.net');
                 else if (t === 'Text') setContent('Hello from NOVA TOOLS');
-                else if (t === 'Email') setContent('hello@novatools.net');
+                else if (t === 'Email') setContent('hello@example.com');
                 else if (t === 'Phone') setContent('+1234567890');
               }}
               className={`px-3 py-1 text-xs font-medium rounded-md transition-colors cursor-pointer ${
@@ -127,7 +127,7 @@ export const QrGeneratorTool: React.FC = () => {
                 type === 'URL'
                   ? 'https://novatools.2bd.net'
                   : type === 'Email'
-                  ? 'contact@novatools.net'
+                  ? 'contact@example.com'
                   : '+1 555 0199'
               }
               className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-1 focus:ring-blue-500"
