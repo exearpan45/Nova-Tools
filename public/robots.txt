@@ -1,8 +1,4 @@
 User-agent: *
 Allow: /
 
-# Sitemap
-Sitemap: https://novatools.net/sitemap.xml
-
-# Host
-Host: https://novatools.net
+Sitemap: https://novatools.2bd.net/sitemap.xml
