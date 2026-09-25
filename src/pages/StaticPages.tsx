@@ -21,7 +21,7 @@ export const AboutPage: React.FC<StaticPageProps> = ({ onNavigate }) => {
 
       <div className="prose dark:prose-invert max-w-none text-sm text-neutral-700 dark:text-neutral-300 space-y-6 leading-relaxed">
         <p>
-          <strong>NOVA TOOLS</strong> (<a href="https://novatools.net/" className="text-blue-600 dark:text-blue-400 hover:underline">https://novatools.net/</a>) is an independent suite of browser-based utilities created and maintained by <strong>Arpan Goswami</strong>.
+          <strong>NOVA TOOLS</strong> (<a href="https://novatools.2bd.net/" className="text-blue-600 dark:text-blue-400 hover:underline">https://novatools.2bd.net/</a>) is an independent suite of browser-based utilities created and maintained by <strong>Arpan Goswami</strong>.
         </p>
         <p>
           The platform was created in response to modern web utilities that have become crowded with intrusive advertising, mandatory registrations, paywalls, and slow loading times. NOVA TOOLS provides clean, purposeful, lightweight tools that execute everyday tasks in seconds directly in your web browser.
@@ -229,7 +229,7 @@ export const PrivacyPage: React.FC<StaticPageProps> = ({ onNavigate }) => {
           Privacy Policy
         </h1>
         <p className="text-xs text-neutral-500 dark:text-neutral-400">
-          Last updated: January 2026 | NOVA TOOLS (https://novatools.net/)
+          Last updated: January 2026 | NOVA TOOLS (https://novatools.2bd.net/)
         </p>
       </header>
 
@@ -320,7 +320,7 @@ export const PrivacyPage: React.FC<StaticPageProps> = ({ onNavigate }) => {
           </p>
           <div className="p-4 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 text-xs space-y-1 not-prose">
             <div><strong>Data Controller:</strong> Arpan Goswami</div>
-            <div><strong>Website:</strong> https://novatools.net/</div>
+            <div><strong>Website:</strong> https://novatools.2bd.net/</div>
             <div><strong>Contact Email:</strong> <a href="mailto:exe.arpan45@gmail.com" className="text-blue-600 dark:text-blue-400 hover:underline">exe.arpan45@gmail.com</a></div>
           </div>
         </section>
@@ -343,7 +343,7 @@ export const CookiePolicyPage: React.FC<StaticPageProps> = ({ onNavigate }) => {
 
       <div className="prose dark:prose-invert max-w-none text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 space-y-6 leading-relaxed">
         <p>
-          This Cookie Policy explains how <strong>NOVA TOOLS</strong> (https://novatools.net/) uses cookies and modern browser storage mechanisms.
+          This Cookie Policy explains how <strong>NOVA TOOLS</strong> (https://novatools.2bd.net/) uses cookies and modern browser storage mechanisms.
         </p>
 
         <h2 className="text-base font-semibold text-neutral-900 dark:text-neutral-100">
@@ -402,7 +402,7 @@ export const TermsPage: React.FC<StaticPageProps> = () => {
 
       <div className="prose dark:prose-invert max-w-none text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 space-y-6 leading-relaxed">
         <p>
-          Welcome to NOVA TOOLS (https://novatools.net/). By accessing or using our website, you agree to comply with and be bound by these Terms of Service.
+          Welcome to NOVA TOOLS (https://novatools.2bd.net/). By accessing or using our website, you agree to comply with and be bound by these Terms of Service.
         </p>
 
         <h2 className="text-base font-semibold text-neutral-900 dark:text-neutral-100">
@@ -453,7 +453,7 @@ export const DisclaimerPage: React.FC<StaticPageProps> = () => {
 
       <div className="prose dark:prose-invert max-w-none text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 space-y-6 leading-relaxed">
         <p>
-          The calculations, conversions, estimators, and text tools provided by NOVA TOOLS (https://novatools.net/) are provided for everyday informational and general productivity purposes only.
+          The calculations, conversions, estimators, and text tools provided by NOVA TOOLS (https://novatools.2bd.net/) are provided for everyday informational and general productivity purposes only.
         </p>
 
         <h2 className="text-base font-semibold text-neutral-900 dark:text-neutral-100">
