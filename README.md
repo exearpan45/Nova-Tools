@@ -3,7 +3,7 @@
 > **Simple tools. Done well.**  
 > Free, fast tools for everyday tasks.
 
-* **Domain:** [https://novatools.net/](https://novatools.net/)
+* **Domain:** [https://novatools.2bd.net/](https://novatools.2bd.net/)
 * **Creator:** Arpan Goswami
 * **Copyright:** © 2026 Copyright Arpan Goswami. All rights reserved.
 
@@ -64,7 +64,7 @@ npm run preview
 
 NOVA TOOLS is optimized for static hosting on **Cloudflare Pages** (or any static hosting platform) with custom domain support:
 
-* **Production Domain:** `https://novatools.net/`
+* **Production Domain:** `https://novatools.2bd.net/`
 * **Build Command:** `npm run build`
 * **Build Output Directory:** `dist`
 * **Root Directory:** `/`
@@ -72,7 +72,7 @@ NOVA TOOLS is optimized for static hosting on **Cloudflare Pages** (or any stati
   ```text
   /*    /index.html   200
   ```
-  This ensures direct navigation and refreshing of deep routes (such as `https://novatools.net/tools/calculator`) returns `index.html` with status 200 rather than a 404 error.
+  This ensures direct navigation and refreshing of deep routes (such as `https://novatools.2bd.net/tools/calculator`) returns `index.html` with status 200 rather than a 404 error.
 
 ---
 
@@ -125,16 +125,16 @@ Once registered, the tool automatically appears in:
 
 ## 5. SEO & Search Console Readiness
 
-* **Canonical URLs:** All routes have dynamic canonical tags pointing to `https://novatools.net/` or `https://novatools.net/tools/{slug}`.
+* **Canonical URLs:** All routes have dynamic canonical tags pointing to `https://novatools.2bd.net/` or `https://novatools.2bd.net/tools/{slug}`.
 * **Open Graph & Twitter Cards:** Complete `og:title`, `og:description`, `og:image` (1200x630 banner), and `twitter:card`.
 * **Structured Data:** Schema.org `WebApplication` structured data embedded in `index.html`.
-* **Robots.txt:** Clean `public/robots.txt` allowing all legitimate crawlers and pointing to `https://novatools.net/sitemap.xml`.
+* **Robots.txt:** Clean `public/robots.txt` allowing all legitimate crawlers and pointing to `https://novatools.2bd.net/sitemap.xml`.
 * **Sitemap:** Automated generation via `generate-sitemap.ts` (`npm run sitemap`).
 
 ### Google Search Console Verification
 1. Add `novatools.net` as a Domain property in Google Search Console.
 2. Verify via DNS TXT record at your domain registrar/DNS provider.
-3. Submit sitemap URL: `https://novatools.net/sitemap.xml`.
+3. Submit sitemap URL: `https://novatools.2bd.net/sitemap.xml`.
 
 ---
 
@@ -176,4 +176,4 @@ Once registered, the tool automatically appears in:
 ## 9. Copyright & License
 
 © 2026 Copyright **Arpan Goswami**. All rights reserved.  
-Official website: [https://novatools.net/](https://novatools.net/)
+Official website: [https://novatools.2bd.net/](https://novatools.2bd.net/)
