@@ -431,7 +431,7 @@ export const TOOLS_DATA: ToolDefinition[] = [
       'Click "Download PNG" to save the high-resolution image file to your device.'
     ],
     example: {
-      input: 'https://novatools.net',
+      input: 'https://novatools.2bd.net',
       output: 'High-contrast 256x256 pixel QR code matrix with Reed-Solomon error correction.',
       note: 'Can be scanned instantly by any iOS, Android, or dedicated optical barcode reader.'
     },
@@ -870,8 +870,8 @@ export const TOOLS_DATA: ToolDefinition[] = [
       'View the processed output instantly, inspect parsed query parameters below, and copy with one click.'
     ],
     example: {
-      input: 'https://novatools.net/search?query=hello world&category=tools',
-      output: 'https://novatools.net/search?query=hello%20world&category=tools',
+      input: 'https://novatools.2bd.net/search?query=hello world&category=tools',
+      output: 'https://novatools.2bd.net/search?query=hello%20world&category=tools',
       note: 'Spaces percent-encoded to %20 while structural URL components are preserved.'
     },
     howItWorks: 'Uses browser-native encodeURIComponent, decodeURIComponent, encodeURI, and decodeURI functions along with standard URLSearchParams for query string decomposition.',
