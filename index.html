@@ -46,37 +46,20 @@
       }
     </style>
 
-    <!-- Pre-paint Theme Initialization: Eliminates Light/Dark Flash Before Render -->
+    <!-- Pre-paint Theme Initialization: apply the saved/system theme synchronously before first paint -->
     <script id="nova-critical-theme-script">
       (function() {
-        var applyTheme = function() {
-          try {
-            var saved = localStorage.getItem('novatools_theme');
-            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            var isDark = saved ? (saved === 'dark') : prefersDark;
-            var docEl = document.documentElement;
-            if (isDark) {
-              docEl.classList.add('dark');
-              docEl.classList.remove('light');
-              docEl.style.backgroundColor = '#121214';
-              docEl.style.colorScheme = 'dark';
-            } else {
-              docEl.classList.remove('dark');
-              docEl.classList.add('light');
-              docEl.style.backgroundColor = '#ffffff';
-              docEl.style.colorScheme = 'light';
-            }
-            var metaThemeColor = document.querySelector('meta[name="theme-color"]');
-            if (metaThemeColor) {
-              metaThemeColor.setAttribute('content', isDark ? '#121214' : '#ffffff');
-            }
-          } catch (e) {}
-        };
-
-        if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
-          window.requestAnimationFrame(applyTheme);
-        } else {
-          applyTheme();
+        try {
+          var saved = localStorage.getItem('novatools_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved === 'dark' || (!saved && prefersDark);
+          var docEl = document.documentElement;
+          docEl.classList.toggle('dark', isDark);
+          docEl.classList.toggle('light', !isDark);
+          docEl.style.colorScheme = isDark ? 'dark' : 'light';
+          docEl.style.backgroundColor = isDark ? '#121214' : '#ffffff';
+        } catch (e) {
+          document.documentElement.classList.add('light');
         }
       })();
     </script>
