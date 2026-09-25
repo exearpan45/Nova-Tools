@@ -3,13 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     
-    <!-- 
-      ABSOLUTE FIRST TICK EXECUTION:
-      Positioned at line 5 (before viewport, title, links, and stylesheets).
-      Executes synchronously when document.readyState is 'loading'.
-      Applies .dark / .light, sets property-level background and color-scheme,
-      and adds 'no-transitions' to kill any restyle color transitions on laptop reload.
-    -->
     <script>
       (function() {
         function applyInitialTheme() {
@@ -32,8 +25,6 @@
           } catch(e) {}
         }
         applyInitialTheme();
-        
-        // Re-verify during readyState transitions and remove no-transitions after initial paint
         var releaseTransitions = function() {
           setTimeout(function() {
             if (document.documentElement) {
@@ -41,7 +32,6 @@
             }
           }, 80);
         };
-        
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', releaseTransitions, { once: true });
         } else {
@@ -54,12 +44,8 @@
     <meta name="color-scheme" content="dark light" />
     <title>NOVA TOOLS — Simple tools. Done well.</title>
 
-    <!-- Critical Pre-paint Theme CSS: Instant Native Canvas & Background Before Any Script or File Loads -->
     <style id="nova-critical-theme">
-      :root {
-        color-scheme: dark light;
-      }
-      /* Prevent restyle transition flash on hard refresh or stylesheet injection */
+      :root { color-scheme: dark light; }
       .no-transitions,
       .no-transitions *,
       .no-transitions *::before,
@@ -107,6 +93,15 @@
     <link rel="apple-touch-icon" sizes="180x180" href="%BASE_URL%apple-touch-icon.png" />
     <link rel="manifest" href="%BASE_URL%manifest.json" />
     <meta name="theme-color" content="#2563eb" />
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X5PB7K7H9N"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-X5PB7K7H9N');
+    </script>
     
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3171742470969015" crossorigin="anonymous"></script>
@@ -163,4 +158,3 @@
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-
