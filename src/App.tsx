@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { SearchModal } from './components/SearchModal';
@@ -79,17 +79,12 @@ function toBrowserPath(path: string): string {
 }
 
 export default function App() {
-  const isInitialMount = useRef(true);
   const [currentPath, setCurrentPath] = useState<string>(() => {
     return toAppPath(window.location.pathname);
   });
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [shareFeedback, setShareFeedback] = useState<string | null>(null);
   const { isOnline, canInstall, hasUpdate, installApp } = usePWA();
-
-  useEffect(() => {
-    isInitialMount.current = false;
-  }, []);
 
   const handleShareCurrentPage = async () => {
     const fullUrl = window.location.href;
@@ -361,7 +356,7 @@ export default function App() {
 
           {/* Main Content Area */}
           <main className="flex-1">
-            <div key={currentPath} className={isInitialMount.current ? undefined : 'animate-page-enter'}>
+            <div key={currentPath} className="animate-page-enter">
               {renderContent()}
             </div>
           </main>
