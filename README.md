@@ -133,7 +133,7 @@ Once registered, the tool automatically appears in:
 
 ### Google Search Console Verification
 1. Add `novatools.net` as a Domain property in Google Search Console.
-2. Verify via DNS TXT record at your domain registrar/DNS provider.
+2. If using URL-prefix verification, follow Google's verification method shown for the property.
 3. Submit sitemap URL: `https://novatools.2bd.net/sitemap.xml`.
 
 ---
