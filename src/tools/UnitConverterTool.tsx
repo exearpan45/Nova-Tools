@@ -259,14 +259,16 @@ export const UnitConverterTool: React.FC = () => {
               To
             </label>
             <div className="space-y-2">
-              <input
-                type="text"
-                readOnly
-                data-action="output"
-                value={outputValue}
-                placeholder="Result"
-                className="w-full px-3 py-2 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-100/70 dark:bg-neutral-900/60 text-sm font-mono font-semibold text-blue-600 dark:text-blue-400 focus:outline-none"
-              />
+              <div key={outputValue} className="animate-result-in">
+                <input
+                  type="text"
+                  readOnly
+                  data-action="output"
+                  value={outputValue}
+                  placeholder="Result"
+                  className="w-full px-3 py-2 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-100/70 dark:bg-neutral-900/60 text-sm font-mono font-semibold text-blue-600 dark:text-blue-400 focus:outline-none"
+                />
+              </div>
               <select
                 id="to-unit-select"
                 value={toUnitId}

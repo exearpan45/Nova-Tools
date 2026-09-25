@@ -133,14 +133,16 @@ export const Base64Tool: React.FC = () => {
             {resultData.error}
           </div>
         ) : (
-          <textarea
-            id="base64-output"
-            readOnly
-            rows={5}
-            value={resultData.text}
-            placeholder="Result will appear here..."
-            className="w-full p-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900/50 text-sm font-mono text-neutral-900 dark:text-neutral-100 focus:outline-none select-all"
-          />
+          <div key={resultData.text} className="animate-result-in">
+            <textarea
+              id="base64-output"
+              readOnly
+              rows={5}
+              value={resultData.text}
+              placeholder="Result will appear here..."
+              className="w-full p-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900/50 text-sm font-mono text-neutral-900 dark:text-neutral-100 focus:outline-none select-all"
+            />
+          </div>
         )}
       </div>
     </div>

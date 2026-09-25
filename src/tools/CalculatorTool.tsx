@@ -337,7 +337,9 @@ export const CalculatorTool: React.FC = () => {
             data-action="output"
             className="text-2xl sm:text-3xl font-mono font-medium tracking-tight text-neutral-900 dark:text-neutral-100 overflow-x-auto whitespace-nowrap py-1"
           >
-            {expression || '0'}
+            <div key={expression} className="animate-result-in">
+              {expression || '0'}
+            </div>
           </div>
           <div className="flex justify-between items-center mt-2 pt-2 border-t border-neutral-200/50 dark:border-neutral-800 text-[11px] text-neutral-400">
             <span>Keyboard supported</span>
