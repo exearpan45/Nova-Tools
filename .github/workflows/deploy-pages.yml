@@ -13,8 +13,6 @@ permissions:
 
 concurrency:
   group: pages
-  # Queue deployments instead of cancelling an in-progress run when commits arrive quickly.
-  # This keeps every push independently traceable and avoids false 'cancelled' runs.
   cancel-in-progress: false
 
 jobs:
@@ -27,7 +25,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: '24'
+          node-version: '22'
           package-manager-cache: false
 
       - name: Install dependencies
@@ -47,26 +45,9 @@ jobs:
           GITHUB_PAGES: 'true'
         run: npm run build
 
-      - name: Ensure sitemap is in Pages artifact
+      - name: Verify Pages output
         run: |
-          test -f public/sitemap.xml
-          mkdir -p dist
-          cp public/sitemap.xml dist/sitemap.xml
-          test -f dist/sitemap.xml
-          grep -q 'https://novatools.2bd.net/' dist/sitemap.xml
-          if grep -q 'https://novatools.net/' dist/sitemap.xml; then
-            echo "ERROR: old novatools.net URLs found in deployed sitemap"
-            exit 1
-          fi
-          if grep -RIl 'https://novatools.net/' dist public >/tmp/old-domain-files.txt 2>/dev/null; then
-            echo "ERROR: old novatools.net URL found in deployable files:"
-            cat /tmp/old-domain-files.txt
-            exit 1
-          fi
-
-      - name: Verify build output
-        run: |
-          test -f dist/index.html
+          test -s dist/index.html
           test -f dist/404.html
           test -f dist/CNAME
           grep -qx 'novatools.2bd.net' dist/CNAME
@@ -75,6 +56,12 @@ jobs:
           test -f dist/tools/calculator/index.html
           test -f dist/tools/password-generator/index.html
           test -f dist/tools/qr-generator/index.html
+          grep -q 'https://novatools.2bd.net/' dist/sitemap.xml
+          if grep -RIl 'https://novatools.net/' dist public >/tmp/old-domain-files.txt 2>/dev/null; then
+            echo "ERROR: old novatools.net URL found in deployable files:"
+            cat /tmp/old-domain-files.txt
+            exit 1
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -94,5 +81,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-# Pages deployment trigger
