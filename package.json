@@ -1,5 +1,5 @@
 {
-  "name": "react-example",
+  "name": "nova-tools",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -34,5 +34,6 @@
     "tailwindcss": "^4.3.3",
     "tsx": "^4.21.0",
     "typescript": "^7.0.2"
-  }
+  },
+  "description": "Fast, lightweight browser-based utilities for everyday tasks."
 }
