@@ -83,6 +83,7 @@ jobs:
           path: dist
 
   deploy:
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -92,6 +93,53 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+      - name: Verify live production site
+        timeout-minutes: 5
+        env:
+          SITE_URL: https://novatools.2bd.net
+        run: |
+          set -euo pipefail
+
+          urls=(
+            "/"
+            "/tools"
+            "/tools/calculator"
+            "/tools/password-generator"
+            "/tools/qr-generator"
+            "/tools/json-formatter"
+          )
+
+          for path in "${urls[@]}"; do
+            ok=0
+            for attempt in {1..12}; do
+              echo "Checking ${SITE_URL}${path} (attempt ${attempt}/12)"
+              if curl --fail --silent --show-error --location \
+                --connect-timeout 10 --max-time 30 \
+                -H "Cache-Control: no-cache" \
+                "${SITE_URL}${path}" \
+                | grep -q "NOVA TOOLS"; then
+                ok=1
+                break
+              fi
+              sleep 5
+            done
+
+            if [ "${ok}" -ne 1 ]; then
+              echo "Production smoke test failed for ${SITE_URL}${path}"
+              exit 1
+            fi
+          done
+
+          for asset in /robots.txt /sitemap.xml /manifest.json /favicon.svg /og-image.png; do
+            echo "Checking ${SITE_URL}${asset}"
+            curl --fail --silent --show-error --location \
+              --connect-timeout 10 --max-time 30 \
+              -H "Cache-Control: no-cache" \
+              "${SITE_URL}${asset}" >/dev/null
+          done
+
+          echo "Production smoke test passed."
 
 # Pages deployment trigger
 # Reliability trigger: redeploy on every main-branch push.
