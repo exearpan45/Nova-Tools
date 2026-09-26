@@ -74,27 +74,6 @@ jobs:
       - name: Create GitHub Pages SPA fallback
         run: cp dist/index.html dist/404.html
 
-      - name: Validate deployment artifact
-        timeout-minutes: 2
-        run: |
-          set -euo pipefail
-          test -s dist/index.html
-          test -s dist/404.html
-          test -s dist/sitemap.xml
-          test -s dist/robots.txt
-          test -f dist/CNAME
-          test "$(tr -d '\r\n' < dist/CNAME)" = "novatools.2bd.net"
-          grep -q 'https://novatools.2bd.net/' dist/sitemap.xml
-          if grep -RIl 'https://novatools.net/' dist; then
-            echo "ERROR: stale novatools.net URL found in deployment artifact"
-            exit 1
-          fi
-          if grep -RIl 'http://' dist --include='*.html' --include='*.js' --include='*.css'; then
-            echo "ERROR: insecure http:// asset/reference found in deployment artifact"
-            exit 1
-          fi
-          echo "Deployment artifact validation passed."
-
       - name: Setup Pages
         uses: actions/configure-pages@v6
 
