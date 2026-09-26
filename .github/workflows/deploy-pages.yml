@@ -31,6 +31,12 @@ jobs:
           package-manager-cache: false
 
       - name: Install dependencies
+        timeout-minutes: 10
+        env:
+          npm_config_fetch_retries: '5'
+          npm_config_fetch_retry_factor: '2'
+          npm_config_fetch_retry_mintimeout: '2000'
+          npm_config_fetch_retry_maxtimeout: '30000'
         run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund
 
       - name: Verify dependencies
