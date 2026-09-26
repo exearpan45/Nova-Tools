@@ -268,7 +268,9 @@ export default function App() {
         if (TOOL_COMPONENTS[tool.id]) {
           return (
             <ToolLayout tool={tool} onNavigate={handleNavigate}>
-              {TOOL_COMPONENTS[tool.id]}
+              <ErrorBoundary>
+                {TOOL_COMPONENTS[tool.id]}
+              </ErrorBoundary>
             </ToolLayout>
           );
         }
