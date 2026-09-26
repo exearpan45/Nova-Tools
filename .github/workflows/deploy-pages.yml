@@ -100,6 +100,10 @@ jobs:
         run: |
           set -euo pipefail
 
+          # GitHub Pages serves client-side SPA routes through 404.html.
+          # Those routes can legitimately return HTTP 404 while rendering
+          # the full NOVA TOOLS app, so validate the response body instead
+          # of requiring a 2xx status for application routes.
           urls=(
             "/"
             "/tools"
@@ -113,11 +117,20 @@ jobs:
             ok=0
             for attempt in {1..12}; do
               echo "Checking ${SITE_URL}${path} (attempt ${attempt}/12)"
-              if curl --fail --silent --show-error --location \
+              body="$(curl --silent --show-error --location \
                 --connect-timeout 10 --max-time 30 \
                 -H "Cache-Control: no-cache" \
-                "${SITE_URL}${path}" \
-                | grep -q "NOVA TOOLS"; then
+                -w '
+%{http_code}' \
+                "${SITE_URL}${path}")"
+
+              status="$(printf '%s
+' "${body}" | tail -n1)"
+              html="$(printf '%s
+' "${body}" | sed '$d')"
+
+              if printf '%s' "${html}" | grep -q "NOVA TOOLS" && \
+                 { [ "${status}" -ge 200 ] && [ "${status}" -lt 400 ] || [ "${status}" = "404" ]; }; then
                 ok=1
                 break
               fi
