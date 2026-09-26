@@ -76,7 +76,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
 
         <div className="mt-6 pt-6 border-t border-neutral-100 dark:border-neutral-800/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px] text-neutral-400 dark:text-neutral-500">
-          <p>Created by Arpan Goswami</p>
+          <p>Created by Arpan Goswami • DNS by <a href="https://dnsexit.com" target="_blank" rel="noopener noreferrer" className="hover:underline text-neutral-500 dark:text-neutral-400">DNS Exit</a></p>
           <p>© 2026 Copyright Arpan Goswami. All rights reserved.</p>
         </div>
       </div>

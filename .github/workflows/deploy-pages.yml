@@ -64,6 +64,7 @@ jobs:
           test -f dist/404.html
           test -f dist/CNAME
           grep -qx 'novatools.2bd.net' dist/CNAME
+          test -f dist/.nojekyll
           test -f dist/sitemap.xml
           test -f dist/tools/calculator/index.html
           test -f dist/tools/password-generator/index.html

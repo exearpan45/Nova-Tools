@@ -117,10 +117,14 @@ export function prerenderRoutes(): void {
 
   const templateHtml = fs.readFileSync(indexHtmlPath, 'utf-8');
 
-  // 1. Ensure CNAME is present in dist
+  // 1. Ensure CNAME and .nojekyll are present in dist
   const cnameDistPath = path.resolve(DIST_DIR, 'CNAME');
   fs.writeFileSync(cnameDistPath, 'novatools.2bd.net\n', 'utf-8');
   console.log('✓ Verified dist/CNAME (novatools.2bd.net)');
+
+  const nojekyllDistPath = path.resolve(DIST_DIR, '.nojekyll');
+  fs.writeFileSync(nojekyllDistPath, '', 'utf-8');
+  console.log('✓ Created dist/.nojekyll (bypasses GitHub Pages Jekyll)');
 
   // 2. Ensure 404.html is present in dist
   const fourOhFourPath = path.resolve(DIST_DIR, '404.html');
