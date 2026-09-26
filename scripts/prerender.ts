@@ -126,10 +126,19 @@ export function prerenderRoutes(): void {
   fs.writeFileSync(nojekyllDistPath, '', 'utf-8');
   console.log('✓ Created dist/.nojekyll (bypasses GitHub Pages Jekyll)');
 
-  // 2. Ensure 404.html is present in dist
+  // 2. Preserve the dedicated GitHub Pages SPA fallback when one exists.
+  // This file is intentionally different from the prerendered app shell: it
+  // redirects deep links back through index.html so refreshes on unprerendered
+  // routes continue to work on static hosting.
   const fourOhFourPath = path.resolve(DIST_DIR, '404.html');
-  fs.writeFileSync(fourOhFourPath, templateHtml, 'utf-8');
-  console.log('✓ Created dist/404.html SPA fallback');
+  const sourceFourOhFourPath = path.resolve(ROOT_DIR, 'public/404.html');
+  if (fs.existsSync(sourceFourOhFourPath)) {
+    fs.copyFileSync(sourceFourOhFourPath, fourOhFourPath);
+    console.log('✓ Preserved public/404.html SPA fallback');
+  } else {
+    fs.writeFileSync(fourOhFourPath, templateHtml, 'utf-8');
+    console.log('✓ Created dist/404.html fallback from app shell');
+  }
 
   // 3. Prerender Static Pages
   for (const page of STATIC_PAGES) {
