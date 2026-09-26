@@ -3,6 +3,7 @@ import { Copy, Trash2, Check, Download, FileText } from 'lucide-react';
 import { copyToClipboard } from '../utils/clipboard';
 import { useToast } from '../context/ToastContext';
 import { addScratchpadItem } from '../utils/scratchpad';
+import { countGraphemes, countWordsUnicode } from '../utils/textMetrics';
 
 export const WordCounterTool: React.FC = () => {
   const { showToast } = useToast();
@@ -26,9 +27,9 @@ export const WordCounterTool: React.FC = () => {
       };
     }
 
-    const words = trimmed.split(/\s+/).filter(Boolean).length;
-    const chars = text.length;
-    const charsNoSpaces = text.replace(/\s/g, '').length;
+    const words = countWordsUnicode(trimmed);
+    const chars = countGraphemes(text);
+    const charsNoSpaces = countGraphemes(text.replace(/\s/g, ''));
     // Sentences count: splitting by ., !, ?
     const sentences = trimmed.split(/[.!?]+/).filter((s) => s.trim().length > 0).length;
     // Paragraphs count: splitting by double newlines or single newlines with content

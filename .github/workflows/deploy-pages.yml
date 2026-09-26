@@ -31,12 +31,6 @@ jobs:
           package-manager-cache: false
 
       - name: Install dependencies
-        timeout-minutes: 10
-        env:
-          npm_config_fetch_retries: '5'
-          npm_config_fetch_retry_factor: '2'
-          npm_config_fetch_retry_mintimeout: '2000'
-          npm_config_fetch_retry_maxtimeout: '30000'
         run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund
 
       - name: Verify dependencies
@@ -46,13 +40,6 @@ jobs:
         env:
           GITHUB_PAGES: 'true'
         run: npm run build
-
-      - name: Preserve custom domain in Pages artifact
-        run: |
-          test -f CNAME
-          test "$(tr -d '\r\n' < CNAME)" = "novatools.2bd.net"
-          cp CNAME dist/CNAME
-          test -f dist/CNAME
 
       - name: Ensure sitemap is in Pages artifact
         run: |
@@ -71,14 +58,22 @@ jobs:
             exit 1
           fi
 
-      - name: Create GitHub Pages SPA fallback
-        run: cp dist/index.html dist/404.html
+      - name: Verify build output
+        run: |
+          test -f dist/index.html
+          test -f dist/404.html
+          test -f dist/CNAME
+          grep -qx 'novatools.2bd.net' dist/CNAME
+          test -f dist/sitemap.xml
+          test -f dist/tools/calculator/index.html
+          test -f dist/tools/password-generator/index.html
+          test -f dist/tools/qr-generator/index.html
 
       - name: Setup Pages
-        uses: actions/configure-pages@v6
+        uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-pages-artifact@v4
         with:
           path: dist
 
@@ -91,7 +86,6 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v4
 
 # Pages deployment trigger
-# Reliability trigger: redeploy on every main-branch push.

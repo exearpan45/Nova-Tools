@@ -3,6 +3,7 @@ import { Copy, Trash2, Check, Download, FileText } from 'lucide-react';
 import { copyToClipboard } from '../utils/clipboard';
 import { useToast } from '../context/ToastContext';
 import { addScratchpadItem } from '../utils/scratchpad';
+import { countGraphemes, countWordsUnicode } from '../utils/textMetrics';
 
 export const CharacterCounterTool: React.FC = () => {
   const { showToast } = useToast();
@@ -11,13 +12,13 @@ export const CharacterCounterTool: React.FC = () => {
   const [copiedAll, setCopiedAll] = useState<boolean>(false);
 
   const breakdown = useMemo(() => {
-    const totalChars = text.length;
+    const totalChars = countGraphemes(text);
     const letters = (text.match(/\p{L}/gu) || []).length;
     const digits = (text.match(/\d/g) || []).length;
     const spaces = (text.match(/\s/g) || []).length;
     const lines = text.length > 0 ? text.split('\n').length : 0;
-    const symbols = totalChars - letters - digits - spaces;
-    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    const symbols = Math.max(0, totalChars - letters - digits - spaces);
+    const words = countWordsUnicode(text);
 
     return {
       totalChars,

@@ -47,7 +47,7 @@ const ogSvg = `
   <g transform="translate(480, 480)">
     <rect width="240" height="40" rx="20" fill="#18181b" stroke="#27272a" stroke-width="1"/>
     <text x="120" y="25" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500" fill="#93c5fd" text-anchor="middle">
-      novatools.net
+      novatools.2bd.net
     </text>
   </g>
 </svg>

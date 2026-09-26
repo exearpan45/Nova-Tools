@@ -3,6 +3,7 @@ import { RotateCcw, AlertCircle, Info, Copy, Check } from 'lucide-react';
 import { copyToClipboard } from '../utils/clipboard';
 import { useToast } from '../context/ToastContext';
 import { addScratchpadItem } from '../utils/scratchpad';
+import { getSavedPreference, savePreference } from '../utils/storage';
 
 const ABSOLUTE_ZERO_C = -273.15;
 const ABSOLUTE_ZERO_F = -459.67;
@@ -16,11 +17,21 @@ function cleanRound(num: number): string {
 
 export const TemperatureConverterTool: React.FC = () => {
   const { showToast } = useToast();
+  const [activeScale, setActiveScale] = useState<'celsius' | 'fahrenheit' | 'kelvin'>(() => {
+    const saved = getSavedPreference<'celsius' | 'fahrenheit' | 'kelvin'>('temp-scale', 'celsius');
+    return saved === 'fahrenheit' || saved === 'kelvin' ? saved : 'celsius';
+  });
+
   const [celsius, setCelsius] = useState<string>('25');
   const [fahrenheit, setFahrenheit] = useState<string>('77');
   const [kelvin, setKelvin] = useState<string>('298.15');
   const [error, setError] = useState<string | null>(null);
   const [copiedScale, setCopiedScale] = useState<string | null>(null);
+
+  const handleScaleSelect = (scale: 'celsius' | 'fahrenheit' | 'kelvin') => {
+    setActiveScale(scale);
+    savePreference('temp-scale', scale);
+  };
 
   const updateFromCelsius = (val: string) => {
     setCelsius(val);

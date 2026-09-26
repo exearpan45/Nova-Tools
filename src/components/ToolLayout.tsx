@@ -124,7 +124,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
   };
 
   const handleShare = async () => {
-    const toolUrl = `https://novatools.2bd.net/tools/${tool.slug}`;
+    const toolUrl = window.location.href || `https://novatools.2bd.net/tools/${tool.slug}`;
     if (navigator.share) {
       try {
         await navigator.share({
@@ -133,14 +133,15 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
           url: toolUrl,
         });
         return;
-      } catch {
+      } catch (err: any) {
+        if (err?.name === 'AbortError') return;
         // Fallback to clipboard
       }
     }
 
     const copied = await copyToClipboard(toolUrl);
     if (copied) {
-      showToast('Link copied to clipboard', 'copied');
+      showToast('✓ Link copied', 'copied');
     }
   };
 
@@ -168,7 +169,9 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
     }
   };
 
-  const relatedTools = TOOLS_DATA.filter((t) => tool.relatedSlugs.includes(t.slug));
+  const relatedTools = useMemo(() => {
+    return TOOLS_DATA.filter((t) => tool.relatedSlugs.includes(t.slug)).slice(0, 3);
+  }, [tool]);
 
   const readingTimeMinutes = useMemo(() => {
     const parts: string[] = [
@@ -528,7 +531,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
       {relatedTools.length > 0 && (
         <section id="tool-related" className="space-y-3 no-print">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-            Related Tools
+            You might also need
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {relatedTools.map((rel) => (

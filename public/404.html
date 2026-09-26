@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>NOVA TOOLS</title>
+    <script>
+      // GitHub Pages & Static Hosts SPA Redirect Script
+      // Preserves paths and query parameters across deep links and browser refreshes
+      (function() {
+        var l = window.location;
+        // Check if first segment is a known route or a repository subdirectory
+        var firstSeg = l.pathname.split('/').filter(Boolean)[0] || '';
+        var knownRoutes = ['tools', 'about', 'contact', 'privacy', 'privacy-policy', 'terms', 'disclaimer', 'cookie-policy'];
+        var pathSegmentsToKeep = (l.hostname.endsWith('github.io') && firstSeg && !knownRoutes.includes(firstSeg)) ? 1 : 0;
+        
+        var targetUrl = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+          l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+          l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+          (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+          l.hash;
+          
+        l.replace(targetUrl);
+      })();
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

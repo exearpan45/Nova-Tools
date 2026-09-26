@@ -10,7 +10,7 @@ type QrType = 'URL' | 'Text' | 'Email' | 'Phone';
 export const QrGeneratorTool: React.FC = () => {
   const { showToast } = useToast();
   const [type, setType] = useState<QrType>('URL');
-  const [content, setContent] = useState<string>('https://novatools.net');
+  const [content, setContent] = useState<string>('https://novatools.2bd.net');
   const [copied, setCopied] = useState<boolean>(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -106,7 +106,7 @@ export const QrGeneratorTool: React.FC = () => {
 
   const handleReset = () => {
     setType('URL');
-    setContent('https://novatools.net');
+    setContent('https://novatools.2bd.net');
     showToast('Reset to default URL', 'info');
   };
 
@@ -121,9 +121,9 @@ export const QrGeneratorTool: React.FC = () => {
               type="button"
               onClick={() => {
                 setType(t);
-                if (t === 'URL') setContent('https://novatools.net');
+                if (t === 'URL') setContent('https://novatools.2bd.net');
                 else if (t === 'Text') setContent('Simple tools. Done well.');
-                else if (t === 'Email') setContent('hello@novatools.net');
+                else if (t === 'Email') setContent('hello@novatools.2bd.net');
                 else if (t === 'Phone') setContent('+1234567890');
               }}
               className={`px-3 py-1 text-xs font-medium rounded-md transition-colors cursor-pointer ${
@@ -175,9 +175,9 @@ export const QrGeneratorTool: React.FC = () => {
                 onChange={(e) => setContent(e.target.value)}
                 placeholder={
                   type === 'URL'
-                    ? 'https://novatools.net'
+                    ? 'https://novatools.2bd.net'
                     : type === 'Email'
-                    ? 'contact@novatools.net'
+                    ? 'contact@novatools.2bd.net'
                     : '+1 555 0199'
                 }
                 className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-sm text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"

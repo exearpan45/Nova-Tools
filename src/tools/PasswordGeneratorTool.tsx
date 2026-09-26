@@ -3,6 +3,27 @@ import { Copy, RefreshCw, Check, Shield, AlertCircle, Sparkles } from 'lucide-re
 import { copyToClipboard } from '../utils/clipboard';
 import { useToast } from '../context/ToastContext';
 import { addScratchpadItem } from '../utils/scratchpad';
+import { getSavedPreference, savePreference } from '../utils/storage';
+
+interface PasswordPreferences {
+  length: number;
+  includeUpper: boolean;
+  includeLower: boolean;
+  includeNumbers: boolean;
+  includeSymbols: boolean;
+  avoidAmbiguous: boolean;
+  noDuplicates: boolean;
+}
+
+const DEFAULT_PASSWORD_PREFS: PasswordPreferences = {
+  length: 16,
+  includeUpper: true,
+  includeLower: true,
+  includeNumbers: true,
+  includeSymbols: true,
+  avoidAmbiguous: false,
+  noDuplicates: false,
+};
 
 /**
  * Cryptographically secure unbiased random integer in [0, max - 1]
@@ -10,17 +31,20 @@ import { addScratchpadItem } from '../utils/scratchpad';
  */
 export function secureRandomInt(max: number): number {
   if (max <= 1) return 0;
-  const maxUint32 = 0x100000000; // 4294967296
-  const limit = Math.floor(maxUint32 / max) * max;
-  const buf = new Uint32Array(1);
+  if (typeof window !== 'undefined' && window.crypto && typeof window.crypto.getRandomValues === 'function') {
+    const maxUint32 = 0x100000000; // 4294967296
+    const limit = Math.floor(maxUint32 / max) * max;
+    const buf = new Uint32Array(1);
 
-  while (true) {
-    window.crypto.getRandomValues(buf);
-    const rand = buf[0];
-    if (rand < limit) {
-      return rand % max;
+    while (true) {
+      window.crypto.getRandomValues(buf);
+      const rand = buf[0];
+      if (rand < limit) {
+        return rand % max;
+      }
     }
   }
+  return Math.floor(Math.random() * max);
 }
 
 /**
@@ -39,13 +63,39 @@ export function secureShuffle<T>(array: T[]): T[] {
 
 export const PasswordGeneratorTool: React.FC = () => {
   const { showToast } = useToast();
-  const [length, setLength] = useState<number>(16);
-  const [includeUpper, setIncludeUpper] = useState<boolean>(true);
-  const [includeLower, setIncludeLower] = useState<boolean>(true);
-  const [includeNumbers, setIncludeNumbers] = useState<boolean>(true);
-  const [includeSymbols, setIncludeSymbols] = useState<boolean>(true);
-  const [avoidAmbiguous, setAvoidAmbiguous] = useState<boolean>(false);
-  const [noDuplicates, setNoDuplicates] = useState<boolean>(false);
+  const initialPrefs = useMemo(() => {
+    const saved = getSavedPreference<PasswordPreferences>('password-generator', DEFAULT_PASSWORD_PREFS);
+    return {
+      length: typeof saved?.length === 'number' && saved.length >= 4 && saved.length <= 128 ? saved.length : 16,
+      includeUpper: typeof saved?.includeUpper === 'boolean' ? saved.includeUpper : true,
+      includeLower: typeof saved?.includeLower === 'boolean' ? saved.includeLower : true,
+      includeNumbers: typeof saved?.includeNumbers === 'boolean' ? saved.includeNumbers : true,
+      includeSymbols: typeof saved?.includeSymbols === 'boolean' ? saved.includeSymbols : true,
+      avoidAmbiguous: typeof saved?.avoidAmbiguous === 'boolean' ? saved.avoidAmbiguous : false,
+      noDuplicates: typeof saved?.noDuplicates === 'boolean' ? saved.noDuplicates : false,
+    };
+  }, []);
+
+  const [length, setLength] = useState<number>(initialPrefs.length);
+  const [includeUpper, setIncludeUpper] = useState<boolean>(initialPrefs.includeUpper);
+  const [includeLower, setIncludeLower] = useState<boolean>(initialPrefs.includeLower);
+  const [includeNumbers, setIncludeNumbers] = useState<boolean>(initialPrefs.includeNumbers);
+  const [includeSymbols, setIncludeSymbols] = useState<boolean>(initialPrefs.includeSymbols);
+  const [avoidAmbiguous, setAvoidAmbiguous] = useState<boolean>(initialPrefs.avoidAmbiguous);
+  const [noDuplicates, setNoDuplicates] = useState<boolean>(initialPrefs.noDuplicates);
+
+  // Sync harmless preferences across visits
+  useEffect(() => {
+    savePreference<PasswordPreferences>('password-generator', {
+      length,
+      includeUpper,
+      includeLower,
+      includeNumbers,
+      includeSymbols,
+      avoidAmbiguous,
+      noDuplicates,
+    });
+  }, [length, includeUpper, includeLower, includeNumbers, includeSymbols, avoidAmbiguous, noDuplicates]);
 
   const [password, setPassword] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);

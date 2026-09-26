@@ -5,8 +5,9 @@
 const RECENT_KEY = 'nova-tools-recent';
 const FAVORITES_KEY = 'nova-tools-favorites';
 const PREFS_KEY_PREFIX = 'nova-tools-pref-';
+const VISIT_COUNT_KEY = 'nova-tools-visit-count';
 
-const MAX_RECENTS = 6;
+const MAX_RECENTS = 8;
 
 export function getRecentToolSlugs(): string[] {
   try {
@@ -30,9 +31,45 @@ export function recordRecentToolSlug(slug: string): string[] {
   }
 }
 
+export function removeRecentToolSlug(slug: string): string[] {
+  try {
+    const current = getRecentToolSlugs().filter((s) => s !== slug);
+    localStorage.setItem(RECENT_KEY, JSON.stringify(current));
+    return current;
+  } catch {
+    return [];
+  }
+}
+
 export function clearRecentTools(): void {
   try {
     localStorage.removeItem(RECENT_KEY);
+  } catch {
+    // Ignore storage errors
+  }
+}
+
+// Returning User Detection
+export function isReturningUser(): boolean {
+  try {
+    const rawCount = localStorage.getItem(VISIT_COUNT_KEY);
+    const count = rawCount ? parseInt(rawCount, 10) : 0;
+    if (count > 0) return true;
+    
+    // Also check if user has existing recents or favorites
+    const hasRecents = getRecentToolSlugs().length > 0;
+    const hasFavorites = getFavoriteToolSlugs().length > 0;
+    return hasRecents || hasFavorites;
+  } catch {
+    return false;
+  }
+}
+
+export function markUserVisited(): void {
+  try {
+    const rawCount = localStorage.getItem(VISIT_COUNT_KEY);
+    const count = rawCount ? parseInt(rawCount, 10) : 0;
+    localStorage.setItem(VISIT_COUNT_KEY, (count + 1).toString());
   } catch {
     // Ignore storage errors
   }

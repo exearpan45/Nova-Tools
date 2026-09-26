@@ -1,8 +1,21 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { ArrowLeftRight, Copy, Check, RotateCcw } from 'lucide-react';
 import { copyToClipboard } from '../utils/clipboard';
 import { useToast } from '../context/ToastContext';
 import { addScratchpadItem } from '../utils/scratchpad';
+import { getSavedPreference, savePreference } from '../utils/storage';
+
+interface UnitConverterPrefs {
+  category: UnitCategory;
+  fromUnitId: string;
+  toUnitId: string;
+}
+
+const DEFAULT_UNIT_PREFS: UnitConverterPrefs = {
+  category: 'Length',
+  fromUnitId: 'm',
+  toUnitId: 'ft',
+};
 
 export type UnitCategory =
   | 'Length'
@@ -132,11 +145,36 @@ function formatResult(num: number): string {
 
 export const UnitConverterTool: React.FC = () => {
   const { showToast } = useToast();
-  const [category, setCategory] = useState<UnitCategory>('Length');
+  
+  const initialPrefs = useMemo(() => {
+    const saved = getSavedPreference<UnitConverterPrefs>('unit-converter', DEFAULT_UNIT_PREFS);
+    if (saved && saved.category && CATEGORY_UNITS[saved.category]) {
+      const validUnits = CATEGORY_UNITS[saved.category];
+      const hasFrom = validUnits.some((u) => u.id === saved.fromUnitId);
+      const hasTo = validUnits.some((u) => u.id === saved.toUnitId);
+      return {
+        category: saved.category,
+        fromUnitId: hasFrom ? saved.fromUnitId : validUnits[0].id,
+        toUnitId: hasTo ? saved.toUnitId : validUnits[1]?.id || validUnits[0].id,
+      };
+    }
+    return DEFAULT_UNIT_PREFS;
+  }, []);
+
+  const [category, setCategory] = useState<UnitCategory>(initialPrefs.category);
   const [inputValue, setInputValue] = useState<string>('1');
-  const [fromUnitId, setFromUnitId] = useState<string>('m');
-  const [toUnitId, setToUnitId] = useState<string>('ft');
+  const [fromUnitId, setFromUnitId] = useState<string>(initialPrefs.fromUnitId);
+  const [toUnitId, setToUnitId] = useState<string>(initialPrefs.toUnitId);
   const [copied, setCopied] = useState<boolean>(false);
+
+  // Persist preference updates
+  useEffect(() => {
+    savePreference<UnitConverterPrefs>('unit-converter', {
+      category,
+      fromUnitId,
+      toUnitId,
+    });
+  }, [category, fromUnitId, toUnitId]);
 
   const units = CATEGORY_UNITS[category];
 

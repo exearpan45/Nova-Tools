@@ -3,10 +3,14 @@ import { AlertCircle, RotateCcw, Home } from 'lucide-react';
 
 interface Props {
   children: ReactNode;
+  inline?: boolean;
+  toolName?: string;
+  onResetTool?: () => void;
 }
 
 interface State {
   hasError: boolean;
+  error?: Error;
 }
 
 export class ErrorBoundary extends Component<Props, State> {
@@ -14,8 +18,8 @@ export class ErrorBoundary extends Component<Props, State> {
     hasError: false,
   };
 
-  public static getDerivedStateFromError(): State {
-    return { hasError: true };
+  public static getDerivedStateFromError(error: Error): State {
+    return { hasError: true, error };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
@@ -23,17 +27,48 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   private handleReset = () => {
-    this.setState({ hasError: false });
-    window.location.reload();
+    this.setState({ hasError: false, error: undefined });
+    if (this.props.onResetTool) {
+      this.props.onResetTool();
+    } else {
+      window.location.reload();
+    }
   };
 
   private handleGoHome = () => {
-    this.setState({ hasError: false });
-    window.location.href = '/';
+    this.setState({ hasError: false, error: undefined });
+    const base = (typeof import.meta !== 'undefined' && import.meta.env?.BASE_URL) || '/';
+    window.location.href = base;
   };
 
   public render() {
     if (this.state.hasError) {
+      if (this.props.inline) {
+        return (
+          <div className="w-full p-6 rounded-2xl border border-neutral-200/80 dark:border-neutral-800/80 bg-neutral-50/50 dark:bg-[#18181b]/50 text-center space-y-4">
+            <div className="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto">
+              <AlertCircle className="w-5 h-5" />
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+                {this.props.toolName ? `${this.props.toolName} encountered an error` : 'This tool encountered an error'}
+              </h2>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 max-w-md mx-auto">
+                An unexpected calculation or render state occurred. You can reset this tool to its clean initial state.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={this.handleReset}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition-colors cursor-pointer"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset Tool</span>
+            </button>
+          </div>
+        );
+      }
+
       return (
         <div className="min-h-screen flex items-center justify-center px-4 bg-white dark:bg-[#121214] text-neutral-900 dark:text-neutral-100">
           <div className="max-w-md w-full text-center space-y-5 p-8 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-[#18181b]/50 shadow-sm">

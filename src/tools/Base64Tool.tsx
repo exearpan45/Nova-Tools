@@ -1,7 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { Copy, Check, Trash2, ArrowDown } from 'lucide-react';
+import { copyToClipboard } from '../utils/clipboard';
+import { useToast } from '../context/ToastContext';
 
 export const Base64Tool: React.FC = () => {
+  const { showToast } = useToast();
   const [mode, setMode] = useState<'encode' | 'decode'>('encode');
   const [input, setInput] = useState<string>('Hello, World! 🚀');
   const [copied, setCopied] = useState<boolean>(false);
@@ -37,11 +40,16 @@ export const Base64Tool: React.FC = () => {
     }
   }, [input, mode]);
 
-  const handleCopy = () => {
+  const handleCopy = async () => {
     if (!resultData.text) return;
-    navigator.clipboard.writeText(resultData.text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    const ok = await copyToClipboard(resultData.text);
+    if (ok) {
+      setCopied(true);
+      showToast('✓ Copied to clipboard', 'copied');
+      setTimeout(() => setCopied(false), 2000);
+    } else {
+      showToast('Copy unavailable', 'error');
+    }
   };
 
   const handleClear = () => {

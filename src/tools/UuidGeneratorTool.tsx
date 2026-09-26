@@ -9,9 +9,15 @@ function generateSingleUuid(uppercase: boolean, withHyphens: boolean, withBraces
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
     uuid = crypto.randomUUID();
   } else {
-    // Cryptographic fallback using crypto.getRandomValues
+    // Cryptographic fallback using crypto.getRandomValues with pseudo-random safety
     const buf = new Uint8Array(16);
-    window.crypto.getRandomValues(buf);
+    if (typeof window !== 'undefined' && window.crypto && typeof window.crypto.getRandomValues === 'function') {
+      window.crypto.getRandomValues(buf);
+    } else {
+      for (let i = 0; i < 16; i++) {
+        buf[i] = Math.floor(Math.random() * 256);
+      }
+    }
     buf[6] = (buf[6] & 0x0f) | 0x40; // Version 4
     buf[8] = (buf[8] & 0x3f) | 0x80; // Variant 10
     const hex = Array.from(buf, (b) => b.toString(16).padStart(2, '0')).join('');

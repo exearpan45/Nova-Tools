@@ -91,9 +91,25 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         role="dialog"
         aria-modal="true"
         aria-label="Search tools"
-        className="w-full max-w-xl bg-white dark:bg-[#18181b] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-lg overflow-hidden animate-in zoom-in-95 duration-100"
+        className="w-full max-w-xl bg-white dark:bg-[#18181b] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Modal Top Header */}
+        <div className="flex items-center justify-between px-4 py-2 bg-neutral-50/80 dark:bg-neutral-900/60 border-b border-neutral-200/60 dark:border-neutral-800/60 text-xs text-neutral-500 dark:text-neutral-400">
+          <span className="font-semibold tracking-tight text-neutral-800 dark:text-neutral-200">
+            Search NOVA TOOLS
+          </span>
+          <div className="flex items-center gap-1.5 font-mono text-[10px]">
+            <span className="px-1.5 py-0.5 rounded bg-neutral-200/60 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
+              Ctrl K
+            </span>
+            <span>or</span>
+            <span className="px-1.5 py-0.5 rounded bg-neutral-200/60 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
+              ⌘K
+            </span>
+          </div>
+        </div>
+
         {/* Search Input Bar */}
         <div className="flex items-center px-4 py-3 border-b border-neutral-100 dark:border-neutral-800 gap-3">
           <Search className="w-4 h-4 text-neutral-400 dark:text-neutral-500 flex-shrink-0" />

@@ -1,9 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Search, ArrowRight, Sparkles, ShieldCheck, Cpu, EyeOff, Lock, Heart, Clock, RotateCcw } from 'lucide-react';
+import {
+  Search,
+  ArrowRight,
+  Sparkles,
+  ShieldCheck,
+  Cpu,
+  EyeOff,
+  Lock,
+  Heart,
+  Clock,
+  RotateCcw,
+  KeyRound,
+  QrCode,
+  FileCode2,
+  ArrowLeftRight,
+  Percent,
+  X
+} from 'lucide-react';
 import { TOOLS_DATA, TOOL_CATEGORIES } from '../data/toolsData';
 import { ToolCard } from '../components/ToolCard';
 import { ToolDefinition, ToolCategory } from '../types';
-import { getRecentToolSlugs, clearRecentTools, getFavoriteToolSlugs, toggleFavoriteToolSlug, getAllToolRatings } from '../utils/storage';
+import {
+  getRecentToolSlugs,
+  removeRecentToolSlug,
+  clearRecentTools,
+  getFavoriteToolSlugs,
+  toggleFavoriteToolSlug,
+  getAllToolRatings,
+  isReturningUser,
+  markUserVisited
+} from '../utils/storage';
 import { useToast } from '../context/ToastContext';
 
 interface HomePageProps {
@@ -15,6 +41,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSearch }) 
   const { showToast } = useToast();
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [inlineQuery, setInlineQuery] = useState<string>('');
+  const [isReturning] = useState<boolean>(() => {
+    try {
+      return isReturningUser();
+    } catch {
+      return false;
+    }
+  });
   const [recentSlugs, setRecentSlugs] = useState<string[]>(() => {
     try {
       return getRecentToolSlugs();
@@ -37,10 +70,21 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSearch }) 
     }
   });
 
+  useEffect(() => {
+    markUserVisited();
+  }, []);
+
   const handleToggleFavorite = (slug: string) => {
     const { isFavorite, favorites } = toggleFavoriteToolSlug(slug);
     setFavoriteSlugs(favorites);
     showToast(isFavorite ? 'Added to favorites' : 'Removed from favorites', 'info');
+  };
+
+  const handleRemoveRecent = (slug: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const updated = removeRecentToolSlug(slug);
+    setRecentSlugs(updated);
+    showToast('Removed from recent', 'info');
   };
 
   const handleClearRecents = () => {
@@ -75,6 +119,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSearch }) 
     <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-12">
       {/* Hero Section */}
       <section className="text-center max-w-2xl mx-auto space-y-4">
+        {isReturning && (
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-900/40 shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-blue-500" />
+            <span>Welcome back</span>
+          </div>
+        )}
+
         <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
           Simple tools. Done well.
         </h1>
@@ -107,48 +158,91 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSearch }) 
               </kbd>
             )}
           </div>
-
-          {/* Quick Access Area (Item 3 & Item 28) */}
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400">
-            <span className="font-semibold text-neutral-700 dark:text-neutral-300">Quick tools:</span>
-            <button
-              onClick={() => onNavigate('/tools/calculator')}
-              className="hover:text-blue-600 dark:hover:text-blue-400 hover:underline cursor-pointer"
-            >
-              Calculator
-            </button>
-            <span>·</span>
-            <button
-              onClick={() => onNavigate('/tools/qr-generator')}
-              className="hover:text-blue-600 dark:hover:text-blue-400 hover:underline cursor-pointer"
-            >
-              QR
-            </button>
-            <span>·</span>
-            <button
-              onClick={() => onNavigate('/tools/password-generator')}
-              className="hover:text-blue-600 dark:hover:text-blue-400 hover:underline cursor-pointer"
-            >
-              Password
-            </button>
-            <span>·</span>
-            <button
-              onClick={() => onNavigate('/tools/unit-converter')}
-              className="hover:text-blue-600 dark:hover:text-blue-400 hover:underline cursor-pointer"
-            >
-              Unit Converter
-            </button>
-          </div>
         </div>
       </section>
 
-      {/* Favorites Section (Item 2) - Only displayed if favorites exist */}
+      {/* Quick Actions (Compact & Visually Clean) */}
+      {!inlineQuery && (
+        <section id="quick-actions-section" className="space-y-3">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+            Quick Actions
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+            <button
+              onClick={() => onNavigate('/tools/password-generator')}
+              className="flex items-center gap-2.5 p-3 rounded-xl border border-neutral-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#18181b] hover:border-blue-500/40 dark:hover:border-blue-500/40 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-all text-left cursor-pointer group shadow-2xs"
+            >
+              <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                <KeyRound className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate">Generate Password</div>
+                <div className="text-[10px] text-neutral-400 truncate">Secure & custom</div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => onNavigate('/tools/qr-generator')}
+              className="flex items-center gap-2.5 p-3 rounded-xl border border-neutral-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#18181b] hover:border-blue-500/40 dark:hover:border-blue-500/40 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-all text-left cursor-pointer group shadow-2xs"
+            >
+              <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                <QrCode className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate">Create QR</div>
+                <div className="text-[10px] text-neutral-400 truncate">PNG & SVG vector</div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => onNavigate('/tools/json-formatter')}
+              className="flex items-center gap-2.5 p-3 rounded-xl border border-neutral-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#18181b] hover:border-blue-500/40 dark:hover:border-blue-500/40 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-all text-left cursor-pointer group shadow-2xs"
+            >
+              <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                <FileCode2 className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate">Format JSON</div>
+                <div className="text-[10px] text-neutral-400 truncate">Validate & format</div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => onNavigate('/tools/unit-converter')}
+              className="flex items-center gap-2.5 p-3 rounded-xl border border-neutral-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#18181b] hover:border-blue-500/40 dark:hover:border-blue-500/40 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-all text-left cursor-pointer group shadow-2xs"
+            >
+              <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                <ArrowLeftRight className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate">Convert Units</div>
+                <div className="text-[10px] text-neutral-400 truncate">10 categories</div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => onNavigate('/tools/percentage-calculator')}
+              className="flex items-center gap-2.5 p-3 rounded-xl border border-neutral-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#18181b] hover:border-blue-500/40 dark:hover:border-blue-500/40 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-all text-left cursor-pointer group shadow-2xs"
+            >
+              <div className="w-8 h-8 rounded-lg bg-cyan-50 dark:bg-cyan-950/40 text-cyan-600 dark:text-cyan-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                <Percent className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate">Calculate Percentage</div>
+                <div className="text-[10px] text-neutral-400 truncate">Increase & margin</div>
+              </div>
+            </button>
+          </div>
+        </section>
+      )}
+
+      {/* Favorites Section (Item 3) - Only displayed if favorites exist */}
       {!inlineQuery && favoriteTools.length > 0 && (
         <section id="favorites-section" className="space-y-3">
           <div className="flex items-center gap-1.5">
             <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
             <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-300">
-              Favorites ({favoriteTools.length})
+              Your Favorites ({favoriteTools.length})
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -166,14 +260,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSearch }) 
         </section>
       )}
 
-      {/* Recently Used Tools Section (Item 1) - Only displayed if recents exist */}
+      {/* Recently Used Tools Section (Item 2) - Only displayed if recents exist */}
       {!inlineQuery && recentTools.length > 0 && (
         <section id="recent-tools-section" className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-neutral-500" />
               <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-600 dark:text-neutral-300">
-                Recent
+                Recently Used
               </h2>
             </div>
             <button
@@ -187,14 +281,24 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onOpenSearch }) 
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {recentTools.map((tool) => (
-              <ToolCard
-                key={`recent-${tool.slug}`}
-                tool={tool}
-                onClick={() => onNavigate(`/tools/${tool.slug}`)}
-                isFavorite={favoriteSlugs.includes(tool.slug)}
-                onToggleFavorite={handleToggleFavorite}
-                rating={ratings[tool.slug] || 0}
-              />
+              <div key={`recent-${tool.slug}`} className="relative group/recent">
+                <ToolCard
+                  tool={tool}
+                  onClick={() => onNavigate(`/tools/${tool.slug}`)}
+                  isFavorite={favoriteSlugs.includes(tool.slug)}
+                  onToggleFavorite={handleToggleFavorite}
+                  rating={ratings[tool.slug] || 0}
+                />
+                <button
+                  type="button"
+                  onClick={(e) => handleRemoveRecent(tool.slug, e)}
+                  title="Remove from recent"
+                  aria-label={`Remove ${tool.name} from recent tools`}
+                  className="absolute top-2.5 right-10 p-1 rounded-md text-neutral-400 hover:text-rose-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 opacity-0 group-hover/recent:opacity-100 transition-opacity cursor-pointer z-10"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
             ))}
           </div>
         </section>

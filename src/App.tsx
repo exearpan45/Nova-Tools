@@ -66,15 +66,25 @@ const TOOL_COMPONENTS: Record<string, React.ReactNode> = {
 const APP_BASE_PATH = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 function toAppPath(pathname: string): string {
-  if (APP_BASE_PATH && pathname.startsWith(APP_BASE_PATH)) {
-    const stripped = pathname.slice(APP_BASE_PATH.length);
-    return stripped || '/';
+  let clean = pathname || '/';
+  if (APP_BASE_PATH && clean.startsWith(APP_BASE_PATH)) {
+    clean = clean.slice(APP_BASE_PATH.length);
   }
-  return pathname || '/';
+  // Replace duplicate slashes e.g. //tools///calculator -> /tools/calculator
+  clean = clean.replace(/\/+/g, '/');
+  // Strip trailing slash unless root
+  if (clean.length > 1 && clean.endsWith('/')) {
+    clean = clean.slice(0, -1);
+  }
+  return clean || '/';
 }
 
 function toBrowserPath(path: string): string {
-  const normalized = path.startsWith('/') ? path : `/${path}`;
+  let normalized = path.startsWith('/') ? path : `/${path}`;
+  normalized = normalized.replace(/\/+/g, '/');
+  if (normalized.length > 1 && normalized.endsWith('/')) {
+    normalized = normalized.slice(0, -1);
+  }
   return APP_BASE_PATH ? `${APP_BASE_PATH}${normalized === '/' ? '/' : normalized}` : normalized;
 }
 
@@ -245,7 +255,7 @@ export default function App() {
     }
 
     if (currentPath.startsWith('/tools/')) {
-      const rawSlug = currentPath.replace('/tools/', '');
+      const rawSlug = currentPath.replace(/^\/tools\//, '').replace(/\/+$/, '');
       const slug = rawSlug === 'base64-tool' ? 'base64' : rawSlug;
       const tool = TOOLS_DATA.find((t) => t.slug === slug);
 
@@ -268,7 +278,7 @@ export default function App() {
         if (TOOL_COMPONENTS[tool.id]) {
           return (
             <ToolLayout tool={tool} onNavigate={handleNavigate}>
-              <ErrorBoundary>
+              <ErrorBoundary inline toolName={tool.name}>
                 {TOOL_COMPONENTS[tool.id]}
               </ErrorBoundary>
             </ToolLayout>

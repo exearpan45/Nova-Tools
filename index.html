@@ -39,6 +39,20 @@
         }
       })();
     </script>
+
+    <!-- Single Page App query redirect decoder for GitHub Pages & static hosting -->
+    <script>
+      (function(l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&');
+          }).join('?');
+          window.history.replaceState(null, null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location));
+    </script>
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark light" />
@@ -112,7 +126,7 @@
     <meta property="og:site_name" content="NOVA TOOLS" />
     <meta property="og:title" content="NOVA TOOLS — Simple tools. Done well." />
     <meta property="og:description" content="NOVA TOOLS — Simple, fast and useful online tools for everyday tasks. Use calculators, converters, text tools, developer utilities, QR tools, password tools and more." />
-    <meta property="og:image" content="%BASE_URL%og-image.png" />
+    <meta property="og:image" content="https://novatools.2bd.net/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="NOVA TOOLS — Simple tools. Done well." />
@@ -121,7 +135,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="NOVA TOOLS — Simple tools. Done well." />
     <meta name="twitter:description" content="Free, fast, simple tools for everyday tasks. Calculations, conversions, text tools, developer utilities and more." />
-    <meta name="twitter:image" content="%BASE_URL%og-image.png" />
+    <meta name="twitter:image" content="https://novatools.2bd.net/og-image.png" />
     <meta name="twitter:image:alt" content="NOVA TOOLS — Simple tools. Done well." />
     
     <!-- Schema.org JSON-LD -->
