@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Copy, RefreshCw, Check, Shield, AlertCircle, Sparkles } from 'lucide-react';
 import { copyToClipboard } from '../utils/clipboard';
 import { useToast } from '../context/ToastContext';
-import { addScratchpadItem } from '../utils/scratchpad';
 import { getSavedPreference, savePreference } from '../utils/storage';
 
 interface PasswordPreferences {
@@ -195,7 +194,6 @@ export const PasswordGeneratorTool: React.FC = () => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
       showToast('Password copied to clipboard', 'success');
-      addScratchpadItem('password-generator', password, `${length} chars (Encrypted entropy)`);
     }
   };
 
