@@ -12,8 +12,8 @@
 ## 1. Overview & Architecture
 
 NOVA TOOLS is a clean, modern, and private collection of browser-based utilities. All tools execute **100% client-side** in the user's browser:
-* No calculations, passwords, text, or file data are ever transmitted to external servers.
-* No accounts, tracking cookies, or mandatory sign-ins.
+* Tool calculations and transformations run locally in the browser; the site also loads third-party analytics/advertising services.
+* No user accounts or mandatory sign-ins; Google Analytics and Google AdSense are loaded on the site.
 * User preferences (Theme, Favorites, Recent tools, 5-Star Ratings) are saved solely in the browser's `localStorage`.
 
 ### Technology Stack
@@ -21,7 +21,7 @@ NOVA TOOLS is a clean, modern, and private collection of browser-based utilities
 * **Bundler & Dev Server:** Vite 8
 * **Styling:** Tailwind CSS (modern `@import "tailwindcss";`)
 * **Icons:** Lucide React
-* **PWA:** Web App Manifest + Service Worker caching for offline readiness
+* **Web app:** Web App Manifest for installable browser-app behavior; no active service worker is currently registered.
 
 ---
 
@@ -60,21 +60,17 @@ npm run preview
 
 ---
 
-## 3. Deployment (Cloudflare Pages & Custom Domain)
+## 3. Deployment (GitHub Pages & Custom Domain)
 
-NOVA TOOLS is optimized for static hosting on **Cloudflare Pages** (or any static hosting platform) with custom domain support:
+NOVA TOOLS is currently deployed through **GitHub Actions + GitHub Pages**.
 
 * **Production Domain:** `https://novatools.2bd.net/`
 * **Build Command:** `npm run build`
 * **Build Output Directory:** `dist`
-* **Root Directory:** `/`
-* **SPA Routing Fallback:** The file `public/_redirects` contains:
-  ```text
-  /*    /index.html   200
-  ```
-  This ensures direct navigation and refreshing of deep routes (such as `https://novatools.2bd.net/tools/calculator`) returns `index.html` with status 200 rather than a 404 error.
+* **Publishing workflow:** `.github/workflows/deploy-pages.yml`
+* **Custom domain:** `novatools.2bd.net`
 
----
+GitHub Pages handles the public static deployment. The build also creates prerendered route directories and a `404.html` fallback for direct navigation and refreshes on deep routes.
 
 ## 4. Centralized Tool Registry & Adding a Tool
 
@@ -138,18 +134,11 @@ Once registered, the tool automatically appears in:
 
 ---
 
-## 6. Progressive Web App (PWA) & Offline Readiness
+## 6. Installable Web App
 
-* **Manifest:** `public/manifest.json` configured with `name`, `short_name`, `theme_color`, and standalone display.
-* **Icons:** Includes SVG vector icon (`favicon.svg`) plus high-resolution raster icons:
-  * `favicon-16x16.png`
-  * `favicon-32x32.png`
-  * `apple-touch-icon.png` (180x180)
-  * `pwa-192x192.png` (192x192)
-  * `pwa-512x512.png` (512x512)
-* **Service Worker:** `public/sw.js` caches application shells and assets for instant load and offline resilience.
-
----
+* **Manifest:** `public/manifest.json` is configured with app name, theme color, icons, and standalone display.
+* **Icons:** Includes SVG and raster icons for browser and installed-app surfaces.
+* **Offline:** No active service worker is registered in the current deployment, so offline behavior should not be advertised as guaranteed.
 
 ## 7. Google AdSense Integration
 
