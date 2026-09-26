@@ -52,11 +52,15 @@ export function updatePageSeo(options: RouteSeoOptions): void {
   setMeta('meta[property="og:type"]', 'content', tool ? 'article' : 'website');
   setMeta('meta[property="og:site_name"]', 'content', 'NOVA TOOLS');
   setMeta('meta[property="og:image"]', 'content', `${BASE_URL}/og-image.png`);
+  setMeta('meta[property="og:image:type"]', 'content', 'image/png');
+  setMeta('meta[property="og:image:secure_url"]', 'content', `${BASE_URL}/og-image.png`);
+  setMeta('meta[property="og:image:alt"]', 'content', 'NOVA TOOLS — Simple tools. Done well.');
 
   // 6. Twitter Card Tags
   setMeta('meta[name="twitter:card"]', 'content', 'summary_large_image');
   setMeta('meta[name="twitter:title"]', 'content', title);
   setMeta('meta[name="twitter:description"]', 'content', description);
+  setMeta('meta[name="twitter:url"]', 'content', fullCanonicalUrl);
   setMeta('meta[name="twitter:image"]', 'content', `${BASE_URL}/og-image.png`);
 
   // 7. Dynamic JSON-LD Structured Data
