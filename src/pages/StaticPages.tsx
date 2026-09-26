@@ -253,7 +253,7 @@ export const PrivacyPage: React.FC<StaticPageProps> = ({ onNavigate }) => {
             When you enter numbers into the Calculator, check your Body Mass Index, calculate your age from a birth date, format a JSON string, encode Base64, generate a random password, or produce a QR code, all processing occurs entirely within your device's memory using JavaScript and Web APIs.
           </p>
           <p>
-            Your inputs, formulas, passwords, and source texts are never transmitted across the network to our servers or any third-party infrastructure.
+            Tool calculations and transformations are performed locally in your browser. NOVA TOOLS does not intentionally send the values you enter into these tools to its own server or database. The site does load third-party services for analytics and advertising, so their own network requests and privacy policies may apply.
           </p>
         </section>
 
@@ -280,7 +280,7 @@ export const PrivacyPage: React.FC<StaticPageProps> = ({ onNavigate }) => {
             3. Progressive Web App & Service Worker
           </h2>
           <p>
-            NOVA TOOLS is an installable Progressive Web App (PWA). It utilizes a standard service worker to cache application assets (HTML, CSS, JavaScript, icons) locally on your device. This allows the application to load instantly on subsequent visits and function even when you are disconnected from the internet. The cache stores static application code only, never user input.
+            NOVA TOOLS includes an installable web-app manifest. The current deployment does not register an active service worker, so offline operation is not guaranteed. Browser-installed app data and locally stored preferences remain under your browser's control.
           </p>
         </section>
 
@@ -289,7 +289,7 @@ export const PrivacyPage: React.FC<StaticPageProps> = ({ onNavigate }) => {
             4. Cookies & Tracking
           </h2>
           <p>
-            NOVA TOOLS does not set any first-party tracking or advertising cookies. We do not use third-party behavioral profiling trackers or cross-site fingerprinting scripts.
+            NOVA TOOLS itself does not intentionally use first-party tracking cookies. The site currently loads Google Analytics and Google AdSense. Those third-party services may use cookies, local storage, device identifiers, or similar technologies according to their own policies and configuration.
           </p>
         </section>
 
@@ -298,7 +298,7 @@ export const PrivacyPage: React.FC<StaticPageProps> = ({ onNavigate }) => {
             5. Advertising & Third-Party Services
           </h2>
           <p>
-            To cover domain hosting and infrastructure bandwidth, NOVA TOOLS may display non-intrusive contextual advertising (such as Google AdSense). Any third-party advertising network operates under its respective privacy policies. Ad networks have zero access to the data, calculations, or inputs you process within NOVA TOOLS.
+            NOVA TOOLS may display advertising through Google AdSense. Third-party services can receive the network requests required to load their scripts or content. Tool inputs are processed locally by the application and are not intentionally submitted to the NOVA TOOLS server.
           </p>
         </section>
 
@@ -352,7 +352,7 @@ export const CookiePolicyPage: React.FC<StaticPageProps> = ({ onNavigate }) => {
         <div className="space-y-3 not-prose">
           <div className="p-3.5 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#18181b]">
             <h3 className="text-xs font-semibold text-neutral-900 dark:text-neutral-100 mb-1">Cookies</h3>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">Small text files sent with HTTP network requests. NOVA TOOLS does NOT set tracking cookies.</p>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">NOVA TOOLS does not intentionally set first-party tracking cookies. Google Analytics and Google AdSense are loaded on the site and may use their own cookies or similar technologies.</p>
           </div>
           <div className="p-3.5 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#18181b]">
             <h3 className="text-xs font-semibold text-neutral-900 dark:text-neutral-100 mb-1">LocalStorage</h3>
