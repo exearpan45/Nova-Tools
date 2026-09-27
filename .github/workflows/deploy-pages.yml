@@ -56,7 +56,7 @@ jobs:
           test -f dist/tools/calculator/index.html
           test -f dist/tools/password-generator/index.html
           test -f dist/tools/qr-generator/index.html
-          grep -q 'https://novatools.2bd.net/' dist/sitemap.xml
+          grep -q 'https://nova-tools2.pages.dev/' dist/sitemap.xml
           if grep -RIl 'https://novatools.net/' dist public >/tmp/old-domain-files.txt 2>/dev/null; then
             echo "ERROR: old novatools.net URL found in deployable files:"
             cat /tmp/old-domain-files.txt
