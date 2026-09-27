@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://novatools.2bd.net/sitemap.xml
+Sitemap: https://nova-tools2.pages.dev/sitemap.xml
