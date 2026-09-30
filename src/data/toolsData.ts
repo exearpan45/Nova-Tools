@@ -431,7 +431,7 @@ export const TOOLS_DATA: ToolDefinition[] = [
       'Click "Download PNG" to save the high-resolution image file to your device.'
     ],
     example: {
-      input: 'https://novatools.2bd.net',
+      input: 'https://nova-tools2.pages.dev',
       output: 'High-contrast 256x256 pixel QR code matrix with Reed-Solomon error correction.',
       note: 'Can be scanned instantly by any iOS, Android, or dedicated optical barcode reader.'
     },
@@ -521,7 +521,7 @@ export const TOOLS_DATA: ToolDefinition[] = [
       'Copy the verified text with one click.'
     ],
     example: {
-      input: '"NOVA TOOLS v1.1 is now live! Visit novatools.2bd.net for clean, fast utilities."',
+      input: '"NOVA TOOLS v1.1 is now live! Visit nova-tools2.pages.dev for clean, fast utilities."',
       output: '75 total characters | 58 letters | 2 numbers | 10 spaces | 5 symbols | 1 line',
       note: 'Leaves 205 characters remaining for a standard 280-character post.'
     },
@@ -870,8 +870,8 @@ export const TOOLS_DATA: ToolDefinition[] = [
       'View the processed output instantly, inspect parsed query parameters below, and copy with one click.'
     ],
     example: {
-      input: 'https://novatools.2bd.net/search?query=hello world&category=tools',
-      output: 'https://novatools.2bd.net/search?query=hello%20world&category=tools',
+      input: 'https://nova-tools2.pages.dev/search?query=hello world&category=tools',
+      output: 'https://nova-tools2.pages.dev/search?query=hello%20world&category=tools',
       note: 'Spaces percent-encoded to %20 while structural URL components are preserved.'
     },
     howItWorks: 'Uses browser-native encodeURIComponent, decodeURIComponent, encodeURI, and decodeURI functions along with standard URLSearchParams for query string decomposition.',
