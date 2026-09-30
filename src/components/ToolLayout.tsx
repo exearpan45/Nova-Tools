@@ -124,7 +124,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
   };
 
   const handleShare = async () => {
-    const toolUrl = window.location.href || `https://novatools.2bd.net/tools/${tool.slug}`;
+    const toolUrl = window.location.href || `https://nova-tools2.pages.dev/tools/${tool.slug}`;
     if (navigator.share) {
       try {
         await navigator.share({
@@ -585,7 +585,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
       {/* Print-Only Verification & Timestamp Footer */}
       <footer className="hidden print:block print-footer-notice">
         <div>
-          Generated from <strong>NOVA TOOLS</strong> (https://novatools.2bd.net/tools/{tool.slug})
+          Generated from <strong>NOVA TOOLS</strong> (https://nova-tools2.pages.dev/tools/{tool.slug})
         </div>
         <div className="mt-1">
           100% Client-Side Execution • No sensitive data sent over network • Confidential document
