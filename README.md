@@ -3,7 +3,7 @@
 > **Simple tools. Done well.**  
 > Free, fast tools for everyday tasks.
 
-* **Domain:** [https://novatools.2bd.net/](https://novatools.2bd.net/)
+* **Domain:** [https://nova-tools2.pages.dev/](https://nova-tools2.pages.dev/)
 * **Creator:** Arpan Goswami
 * **Copyright:** © 2026 Copyright Arpan Goswami. All rights reserved.
 
@@ -60,17 +60,17 @@ npm run preview
 
 ---
 
-## 3. Deployment (GitHub Pages & Custom Domain)
+## 3. Deployment (Cloudflare Pages)
 
-NOVA TOOLS is currently deployed through **GitHub Actions + GitHub Pages**.
+NOVA TOOLS is currently deployed through **Cloudflare Pages with Git integration**.
 
-* **Production Domain:** `https://novatools.2bd.net/`
+* **Production Domain:** `https://nova-tools2.pages.dev/`
 * **Build Command:** `npm run build`
 * **Build Output Directory:** `dist`
-* **Publishing workflow:** `.github/workflows/deploy-pages.yml`
-* **Custom domain:** `novatools.2bd.net`
+* **Hosting:** Cloudflare Pages
+* **Deployment:** Automatic deployment from the `main` branch
 
-GitHub Pages handles the public static deployment. The build also creates prerendered route directories and a `404.html` fallback for direct navigation and refreshes on deep routes.
+Cloudflare Pages handles the public static deployment. The build creates prerendered route directories and a `404.html` fallback for direct navigation and refreshes on deep routes.
 
 ## 4. Centralized Tool Registry & Adding a Tool
 
@@ -121,16 +121,16 @@ Once registered, the tool automatically appears in:
 
 ## 5. SEO & Search Console Readiness
 
-* **Canonical URLs:** All routes have dynamic canonical tags pointing to `https://novatools.2bd.net/` or `https://novatools.2bd.net/tools/{slug}`.
+* **Canonical URLs:** All routes have dynamic canonical tags pointing to `https://nova-tools2.pages.dev/` or `https://nova-tools2.pages.dev/tools/{slug}`.
 * **Open Graph & Twitter Cards:** Complete `og:title`, `og:description`, `og:image` (1200x630 banner), and `twitter:card`.
 * **Structured Data:** Schema.org `WebApplication` structured data embedded in `index.html`.
-* **Robots.txt:** Clean `public/robots.txt` allowing all legitimate crawlers and pointing to `https://novatools.2bd.net/sitemap.xml`.
+* **Robots.txt:** Clean `public/robots.txt` allowing all legitimate crawlers and pointing to `https://nova-tools2.pages.dev/sitemap.xml`.
 * **Sitemap:** Automated generation via `generate-sitemap.ts` (`npm run sitemap`).
 
 ### Google Search Console Verification
-1. Add `novatools.2bd.net` as a Domain property in Google Search Console.
+1. Add `nova-tools2.pages.dev` as a Domain property in Google Search Console.
 2. If using URL-prefix verification, follow Google's verification method shown for the property.
-3. Submit sitemap URL: `https://novatools.2bd.net/sitemap.xml`.
+3. Submit sitemap URL: `https://nova-tools2.pages.dev/sitemap.xml`.
 
 ---
 
@@ -158,11 +158,11 @@ Once registered, the tool automatically appears in:
 * **Q: A calculation produces weird decimals like 0.30000000000000004?**  
   *A:* Tools use `Math.round((val + Number.EPSILON) * 1e8) / 1e8` for standard float precision normalization.
 * **Q: How to clear saved user data?**  
-  *A:* Click "Clear history" in Recently Used, reset ratings via the star rating reset button, or clear browser storage for `novatools.2bd.net`.
+  *A:* Click "Clear history" in Recently Used, reset ratings via the star rating reset button, or clear browser storage for `nova-tools2.pages.dev`.
 
 ---
 
 ## 9. Copyright & License
 
 © 2026 Copyright **Arpan Goswami**. All rights reserved.  
-Official website: [https://novatools.2bd.net/](https://novatools.2bd.net/)
+Official website: [https://nova-tools2.pages.dev/](https://nova-tools2.pages.dev/)
