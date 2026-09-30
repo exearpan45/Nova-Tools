@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
 const DIST_DIR = path.resolve(ROOT_DIR, 'dist');
-const BASE_URL = 'https://novatools.2bd.net';
+const BASE_URL = 'https://nova-tools2.pages.dev';
 
 const STATIC_PAGES = [
   {
@@ -117,16 +117,7 @@ export function prerenderRoutes(): void {
 
   const templateHtml = fs.readFileSync(indexHtmlPath, 'utf-8');
 
-  // 1. Ensure CNAME and .nojekyll are present in dist
-  const cnameDistPath = path.resolve(DIST_DIR, 'CNAME');
-  fs.writeFileSync(cnameDistPath, 'novatools.2bd.net\n', 'utf-8');
-  console.log('✓ Verified dist/CNAME (novatools.2bd.net)');
-
-  const nojekyllDistPath = path.resolve(DIST_DIR, '.nojekyll');
-  fs.writeFileSync(nojekyllDistPath, '', 'utf-8');
-  console.log('✓ Created dist/.nojekyll (bypasses GitHub Pages Jekyll)');
-
-  // 2. Preserve the dedicated GitHub Pages SPA fallback when one exists.
+  // 1. Preserve the dedicated SPA fallback when one exists.
   // This file is intentionally different from the prerendered app shell: it
   // redirects deep links back through index.html so refreshes on unprerendered
   // routes continue to work on static hosting.
@@ -140,7 +131,7 @@ export function prerenderRoutes(): void {
     console.log('✓ Created dist/404.html fallback from app shell');
   }
 
-  // 3. Prerender Static Pages
+  // 2. Prerender Static Pages
   for (const page of STATIC_PAGES) {
     const routeDir = path.resolve(DIST_DIR, page.path.replace(/^\//, ''));
     fs.mkdirSync(routeDir, { recursive: true });
@@ -150,7 +141,7 @@ export function prerenderRoutes(): void {
   }
   console.log(`✓ Prerendered ${STATIC_PAGES.length} static page routes`);
 
-  // 4. Prerender Tools Pages
+  // 3. Prerender Tools Pages
   const toolsBaseDir = path.resolve(DIST_DIR, 'tools');
   fs.mkdirSync(toolsBaseDir, { recursive: true });
 
