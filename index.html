@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    
     <script>
       (function() {
         function applyInitialTheme() {
@@ -27,74 +26,30 @@
         applyInitialTheme();
         var releaseTransitions = function() {
           setTimeout(function() {
-            if (document.documentElement) {
-              document.documentElement.classList.remove('no-transitions');
-            }
+            if (document.documentElement) document.documentElement.classList.remove('no-transitions');
           }, 80);
         };
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', releaseTransitions, { once: true });
-        } else {
-          releaseTransitions();
-        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', releaseTransitions, { once: true });
+        else releaseTransitions();
       })();
     </script>
-
-    <!-- Single Page App query redirect decoder for GitHub Pages & static hosting -->
     <script>
       (function(l) {
         if (l.search[1] === '/') {
-          var decoded = l.search.slice(1).split('&').map(function(s) { 
-            return s.replace(/~and~/g, '&');
-          }).join('?');
-          window.history.replaceState(null, null,
-            l.pathname.slice(0, -1) + decoded + l.hash
-          );
+          var decoded = l.search.slice(1).split('&').map(function(s) { return s.replace(/~and~/g, '&'); }).join('?');
+          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
         }
       }(window.location));
     </script>
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark light" />
     <title>NOVA TOOLS — Simple tools. Done well.</title>
-
     <style id="nova-critical-theme">
       :root { color-scheme: dark light; }
-      .no-transitions,
-      .no-transitions *,
-      .no-transitions *::before,
-      .no-transitions *::after {
-        -webkit-transition: none !important;
-        -moz-transition: none !important;
-        -o-transition: none !important;
-        transition: none !important;
-      }
-      html.dark, html.dark body {
-        background-color: #121214 !important;
-        color: #f5f5f5 !important;
-        color-scheme: dark !important;
-      }
-      html.light, html.light body {
-        background-color: #ffffff !important;
-        color: #171717 !important;
-        color-scheme: light !important;
-      }
-      @media (prefers-color-scheme: dark) {
-        html:not(.light), html:not(.light) body {
-          background-color: #121214;
-          color: #f5f5f5;
-          color-scheme: dark;
-        }
-      }
-      @media (prefers-color-scheme: light) {
-        html:not(.dark), html:not(.dark) body {
-          background-color: #ffffff;
-          color: #171717;
-          color-scheme: light;
-        }
-      }
+      .no-transitions,.no-transitions *, .no-transitions *::before,.no-transitions *::after { transition:none !important; }
+      html.dark,html.dark body { background-color:#121214 !important; color:#f5f5f5 !important; color-scheme:dark !important; }
+      html.light,html.light body { background-color:#fff !important; color:#171717 !important; color-scheme:light !important; }
     </style>
-
     <meta name="author" content="Arpan Goswami" />
     <meta name="robots" content="index, follow" />
     <meta name="application-name" content="NOVA TOOLS" />
@@ -116,59 +71,42 @@
       gtag('js', new Date());
       gtag('config', 'G-X5PB7K7H9N');
     </script>
-    
+
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3171742470969015" crossorigin="anonymous"></script>
-    
-    <!-- Open Graph / Facebook -->
+
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://novatools.2bd.net/" />
     <meta property="og:site_name" content="NOVA TOOLS" />
     <meta property="og:title" content="NOVA TOOLS — Simple tools. Done well." />
     <meta property="og:description" content="NOVA TOOLS — Simple, fast and useful online tools for everyday tasks. Use calculators, converters, text tools, developer utilities, QR tools, password tools and more." />
     <meta property="og:image" content="https://novatools.2bd.net/og-image.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:secure_url" content="https://novatools.2bd.net/og-image.png" />
-    <meta property="og:image:alt" content="NOVA TOOLS — Simple tools. Done well." />
-    
-    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="NOVA TOOLS — Simple tools. Done well." />
     <meta name="twitter:description" content="Free, fast, simple tools for everyday tasks. Calculations, conversions, text tools, developer utilities and more." />
     <meta name="twitter:url" content="https://novatools.2bd.net/" />
     <meta name="twitter:image" content="https://novatools.2bd.net/og-image.png" />
-    <meta name="twitter:image:alt" content="NOVA TOOLS — Simple tools. Done well." />
-    
-    <!-- Schema.org JSON-LD -->
+
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "NOVA TOOLS",
-      "url": "https://novatools.2bd.net/",
-      "description": "Free, fast, and private browser-based tools for everyday tasks.",
-      "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "All",
-      "author": {
-        "@type": "Person",
-        "name": "Arpan Goswami"
-      },
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
+      "@context":"https://schema.org",
+      "@type":"WebApplication",
+      "name":"NOVA TOOLS",
+      "url":"https://novatools.2bd.net/",
+      "description":"Free, fast, and private browser-based tools for everyday tasks.",
+      "applicationCategory":"UtilitiesApplication",
+      "operatingSystem":"All",
+      "author":{"@type":"Person","name":"Arpan Goswami"},
+      "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}
     }
     </script>
   </head>
-  <body class="text-neutral-900 dark:text-neutral-100 antialiased" style="background-color: inherit; color: inherit;">
+  <body class="text-neutral-900 dark:text-neutral-100 antialiased" style="background-color:inherit;color:inherit;">
     <div id="root"></div>
     <script>
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(function(regs) {
-          for (var i = 0; i < regs.length; i++) { regs[i].unregister(); }
+          for (var i=0;i<regs.length;i++) regs[i].unregister();
         });
       }
     </script>
