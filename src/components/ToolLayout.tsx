@@ -170,7 +170,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
   };
 
   const relatedTools = useMemo(() => {
-    return TOOLS_DATA.filter((t) => tool.relatedSlugs.includes(t.slug)).slice(0, 3);
+    return TOOLS_DATA.filter((t) => (tool.relatedSlugs || []).includes(t.slug)).slice(0, 3);
   }, [tool]);
 
   const readingTimeMinutes = useMemo(() => {

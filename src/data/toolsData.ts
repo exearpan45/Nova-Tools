@@ -1,6 +1,6 @@
-import { ToolDefinition, ToolCategory } from '../types';
+import { ToolDefinition, ToolCategory, ToolSuite } from '../types';
 
-export const TOOLS_DATA: ToolDefinition[] = [
+const RAW_TOOLS_DATA: Omit<ToolDefinition, 'suite'>[] = [
   // Calculators
   {
     id: 'calculator',
@@ -897,3 +897,33 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
   'Text Tools',
   'Developer Tools'
 ];
+
+const CATEGORY_TO_SUITE: Record<string, ToolSuite> = {
+  'Calculators': 'calculators',
+  'Converters': 'utility',
+  'Generators': 'security',
+  'Text Tools': 'text',
+  'Developer Tools': 'developer'
+};
+
+export const TOOLS_DATA: ToolDefinition[] = RAW_TOOLS_DATA.map((tool) => ({
+  ...tool,
+  suite: (tool.id === 'qr-generator'
+    ? 'web'
+    : tool.id === 'data-converter'
+    ? 'data'
+    : tool.id === 'temperature-converter'
+    ? 'calculators'
+    : tool.id === 'uuid-generator' || tool.id === 'timestamp-converter'
+    ? 'developer'
+    : CATEGORY_TO_SUITE[tool.category || ''] || 'utility') as ToolSuite,
+}));
+
+export const TOOLS_BY_SLUG: Map<string, ToolDefinition> = new Map(
+  TOOLS_DATA.map((tool) => [tool.slug, tool])
+);
+
+export const FEATURED_TOOLS: ToolDefinition[] = TOOLS_DATA.filter(
+  (t) => t.popular || t.featured
+);
+

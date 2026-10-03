@@ -1,32 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://nova-tools2.pages.dev/</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/about</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/contact</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/privacy-policy</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/privacy</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/cookie-policy</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/terms</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/disclaimer</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/calculator</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/percentage-calculator</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/age-calculator</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/bmi-calculator</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/unit-converter</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/temperature-converter</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/data-converter</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/time-converter</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/password-generator</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/qr-generator</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/word-counter</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/character-counter</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/case-converter</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/json-formatter</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/base64</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/discount-calculator</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/uuid-generator</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/timestamp-converter</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/text-sorter</loc></url>
-  <url><loc>https://nova-tools2.pages.dev/tools/url-encoder</loc></url>
+  <url><loc>https://nova-tools2.pages.dev/</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/about</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/contact</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/privacy-policy</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/privacy</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/cookie-policy</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/terms</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/disclaimer</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/calculator</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/percentage-calculator</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/age-calculator</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/bmi-calculator</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/unit-converter</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/temperature-converter</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/data-converter</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/time-converter</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/password-generator</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/qr-generator</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/word-counter</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/character-counter</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/case-converter</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/json-formatter</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/base64</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/discount-calculator</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/uuid-generator</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/timestamp-converter</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/text-sorter</loc></url>\n  <url><loc>https://nova-tools2.pages.dev/tools/url-encoder</loc></url>
 </urlset>

@@ -12,6 +12,13 @@ export type ToolSuite =
   | 'writing'
   | 'utility';
 
+export type ToolCategory =
+  | 'Calculators'
+  | 'Converters'
+  | 'Generators'
+  | 'Text Tools'
+  | 'Developer Tools';
+
 export interface FAQItem {
   question: string;
   answer: string;
@@ -29,7 +36,7 @@ export interface ToolDefinition {
   name: string;
   description: string;
   suite: ToolSuite;
-  category?: string; // backwards compatibility
+  category?: ToolCategory | string;
   keywords: string[];
   icon: string;
   popular?: boolean;

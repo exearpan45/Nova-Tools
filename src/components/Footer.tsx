@@ -1,10 +1,13 @@
 import React from 'react';
+import { useNova } from '../context/NovaContext';
 
 interface FooterProps {
-  onNavigate: (path: string) => void;
+  onNavigate?: (path: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+  const { navigate } = useNova();
+  const handleNav = onNavigate || navigate;
   return (
     <footer className="w-full border-t border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#121214] mt-auto transition-colors no-print">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
@@ -25,49 +28,49 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-neutral-600 dark:text-neutral-400">
             <button
               id="footer-link-tools"
-              onClick={() => onNavigate('/tools')}
+              onClick={() => handleNav('/tools')}
               className="hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"
             >
               Tools
             </button>
             <button
               id="footer-link-about"
-              onClick={() => onNavigate('/about')}
+              onClick={() => handleNav('/about')}
               className="hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"
             >
               About
             </button>
             <button
               id="footer-link-contact"
-              onClick={() => onNavigate('/contact')}
+              onClick={() => handleNav('/contact')}
               className="hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"
             >
               Contact
             </button>
             <button
               id="footer-link-privacy"
-              onClick={() => onNavigate('/privacy-policy')}
+              onClick={() => handleNav('/privacy-policy')}
               className="hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"
             >
               Privacy
             </button>
             <button
               id="footer-link-terms"
-              onClick={() => onNavigate('/terms')}
+              onClick={() => handleNav('/terms')}
               className="hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"
             >
               Terms
             </button>
             <button
               id="footer-link-cookies"
-              onClick={() => onNavigate('/cookie-policy')}
+              onClick={() => handleNav('/cookie-policy')}
               className="hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"
             >
               Cookies
             </button>
             <button
               id="footer-link-disclaimer"
-              onClick={() => onNavigate('/disclaimer')}
+              onClick={() => handleNav('/disclaimer')}
               className="hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"
             >
               Disclaimer
