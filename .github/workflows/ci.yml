@@ -1,0 +1,50 @@
+name: NOVA TOOLS CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify production build
+        run: |
+          test -s dist/index.html
+          test -f dist/404.html
+          test -f dist/.nojekyll
+          test -f dist/sitemap.xml
+          test -f dist/tools/calculator/index.html
+          test -f dist/tools/password-generator/index.html
+          test -f dist/tools/qr-generator/index.html
+          grep -q 'https://nova-tools2.pages.dev/' dist/sitemap.xml
+          if grep -RIl 'https://novatools.net/' dist public >/tmp/old-domain-files.txt 2>/dev/null; then
+            echo "ERROR: old novatools.net URL found in deployable files:"
+            cat /tmp/old-domain-files.txt
+            exit 1
+          fi
+          echo "✓ NOVA TOOLS production build verified successfully"
