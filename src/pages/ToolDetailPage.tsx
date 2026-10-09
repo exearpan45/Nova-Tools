@@ -81,7 +81,7 @@ export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
       </div>
 
       {/* Hero Header for Tool */}
-      <div className="p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-slate-200/90 dark:border-slate-800/90 bg-white/80 dark:bg-slate-900/60 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6">
+      <div className="relative isolate overflow-hidden p-5 sm:p-7 md:p-8 rounded-2xl sm:rounded-3xl border border-violet-500/15 bg-gradient-to-br from-white via-violet-50/60 to-cyan-50/50 dark:from-[#10182B] dark:via-[#11142B] dark:to-[#0B1B2A] shadow-lg shadow-violet-950/5 dark:shadow-black/20 flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6"><div aria-hidden="true" className="pointer-events-none absolute -right-10 -top-12 -z-10 h-40 w-40 rounded-full bg-violet-500/10 blur-3xl" />
         <div className="space-y-1.5 sm:space-y-2">
           <div className="flex items-center gap-2">
             <span
@@ -95,7 +95,7 @@ export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
               <span>100% Client-side</span>
             </div>
           </div>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
             {tool.name}
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
