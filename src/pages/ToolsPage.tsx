@@ -66,9 +66,9 @@ export const ToolsPage: React.FC = () => {
   return (
     <div className="space-y-8 animate-page-enter">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="relative overflow-hidden rounded-3xl border border-violet-500/15 bg-gradient-to-br from-white via-violet-50/60 to-cyan-50/60 p-5 sm:p-7 dark:from-[#10182B] dark:via-[#11142B] dark:to-[#0B1B2A] shadow-lg shadow-violet-950/5"><div className="pointer-events-none absolute -right-10 -top-16 h-44 w-44 rounded-full bg-violet-500/10 blur-3xl" /><div className="relative flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
             Tools Directory
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -103,7 +103,7 @@ export const ToolsPage: React.FC = () => {
             </button>
           </div>
         </div>
-      </div>
+      </div></div>
 
       {/* Filter Tabs Strip */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-2 no-scrollbar -mx-1 px-1 sm:mx-0">
