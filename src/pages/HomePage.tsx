@@ -43,13 +43,13 @@ export const HomePage: React.FC = () => {
       </div>
 
       {/* 2. Compact Hero Section */}
-      <section className="relative pt-1 sm:pt-2 md:pt-6 text-center max-w-4xl mx-auto space-y-2 sm:space-y-3 md:space-y-5">
+      <section className="relative isolate overflow-hidden pt-7 pb-6 px-3 sm:px-6 md:pt-12 md:pb-10 text-center max-w-5xl mx-auto space-y-3 sm:space-y-4 md:space-y-6 rounded-[1.75rem] border border-violet-500/15 bg-gradient-to-br from-white via-violet-50/70 to-cyan-50/70 dark:from-[#10182B] dark:via-[#11142B] dark:to-[#0B1B2A] shadow-xl shadow-violet-950/5 dark:shadow-black/20"><div aria-hidden="true" className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-56 w-56 -translate-x-1/2 rounded-full bg-violet-500/15 blur-3xl" /><div aria-hidden="true" className="pointer-events-none absolute -bottom-24 right-0 -z-10 h-48 w-48 rounded-full bg-cyan-400/10 blur-3xl" />
         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-cyan-500/20 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 text-[10px] sm:text-xs font-semibold">
           <Sparkles className="w-3 h-3" />
-          <span>NOVA TOOLS · 100+ Utilities</span>
+          <span>NOVA TOOLS · YOUR EVERYDAY TOOLKIT</span>
         </div>
 
-        <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-snug sm:leading-tight text-balance">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.08] text-balance">
           Your tools.{' '}
           <span className="bg-gradient-to-r from-cyan-400 via-violet-400 to-pink-500 bg-clip-text text-transparent">
             One workspace.
@@ -57,8 +57,10 @@ export const HomePage: React.FC = () => {
         </h1>
 
         <p className="text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-400 max-w-xl mx-auto leading-relaxed px-2">
-          100+ fast tools for files, images, developers, students, and everyday work. 100% private in your browser.
+          A powerful collection of free tools for files, images, developers, students and everyday work. Fast, simple and designed to keep your workflow moving.
         </p>
+
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-1"><button type="button" onClick={() => navigate('/tools')} className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-violet-600/20 hover:shadow-violet-500/30 hover:-translate-y-0.5"><Sparkles className="h-4 w-4" /> Explore all tools <ArrowRight className="h-4 w-4" /></button><button type="button" onClick={() => setSearchOpen(true)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300/80 bg-white/70 px-5 py-3 text-xs sm:text-sm font-bold text-slate-700 hover:border-violet-400 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200"><Search className="h-4 w-4" /> Find a tool</button></div>
 
         {/* Desktop Search Trigger (Visible on md+ screens) */}
         <div className="hidden md:block pt-2 max-w-2xl mx-auto">
