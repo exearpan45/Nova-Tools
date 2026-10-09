@@ -29,7 +29,7 @@ export function generateSitemapXml(): string {
   // backed by a real content-change timestamp.
   const urlEntries = allRoutes
     .map((route) => `  <url><loc>${BASE_URL}${route}</loc></url>`)
-    .join('\\n');
+    .join('\n');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
