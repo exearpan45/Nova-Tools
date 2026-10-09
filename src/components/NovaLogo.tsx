@@ -44,18 +44,17 @@ export const NovaLogo: React.FC<NovaLogoProps> = ({
         >
           <defs>
             <linearGradient id="novaGradientBrand" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#06b6d4" />
-              <stop offset="35%" stopColor="#3b82f6" />
-              <stop offset="70%" stopColor="#8b5cf6" />
-              <stop offset="100%" stopColor="#ec4899" />
+              <stop offset="0%" stopColor="#00D9FF" />
+              <stop offset="50%" stopColor="#7657FF" />
+              <stop offset="100%" stopColor="#FF4FC8" />
             </linearGradient>
             <linearGradient id="novaSparkBrand" x1="12" y1="36" x2="36" y2="12" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#38bdf8" />
-              <stop offset="50%" stopColor="#c084fc" />
-              <stop offset="100%" stopColor="#f472b6" />
+              <stop offset="0%" stopColor="#00D9FF" />
+              <stop offset="50%" stopColor="#A88BFF" />
+              <stop offset="100%" stopColor="#FF4FC8" />
             </linearGradient>
             <filter id="novaGlowFilter" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="2" stdDeviation="2.5" floodColor="#3b82f6" floodOpacity="0.35" />
+              <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#7657FF" floodOpacity="0.4" />
             </filter>
           </defs>
 

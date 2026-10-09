@@ -3,6 +3,7 @@
   "description": "Fast, clean, browser-based utilities for everyday tasks. Created by Arpan Goswami.",
   "requestFramePermissions": [],
   "majorCapabilities": [
-    "CLIENT_SIDE_BROWSER_TOOLS"
+    "CLIENT_SIDE_BROWSER_TOOLS",
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
   ]
 }

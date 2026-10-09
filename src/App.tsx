@@ -73,7 +73,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen min-h-[100dvh] w-full flex flex-row bg-slate-50 dark:bg-[#070b14] text-slate-900 dark:text-slate-100 transition-colors overflow-x-hidden">
+    <div className="min-h-screen min-h-[100dvh] w-full flex flex-row bg-slate-50 dark:bg-[#080D1C] text-slate-900 dark:text-[#F5F7FF] transition-colors overflow-x-hidden selection:bg-[#7657FF]/30 selection:text-[#00D9FF]">
       {/* Desktop / Tablet Sidebar */}
       <Sidebar />
 

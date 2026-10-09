@@ -5,7 +5,29 @@
 
 @layer base {
   :root {
-    --nova-accent: #06b6d4;
+    --nova-bg: #f8fafc;
+    --nova-surface: #ffffff;
+    --nova-surface-elevated: #f1f5f9;
+    --nova-primary: #6366f1;
+    --nova-secondary: #0ea5e9;
+    --nova-accent: #ec4899;
+    --nova-text-primary: #0f172a;
+    --nova-text-secondary: #475569;
+    --nova-border: rgba(15, 23, 42, 0.08);
+    --nova-glow: rgba(99, 102, 241, 0.15);
+  }
+
+  html.dark {
+    --nova-bg: #080D1C;
+    --nova-surface: #10182B;
+    --nova-surface-elevated: #16213A;
+    --nova-primary: #7657FF;
+    --nova-secondary: #00D9FF;
+    --nova-accent: #FF4FC8;
+    --nova-text-primary: #F5F7FF;
+    --nova-text-secondary: #A5B1CC;
+    --nova-border: rgba(170, 190, 255, 0.12);
+    --nova-glow: rgba(118, 87, 255, 0.2);
   }
 
   html {
@@ -23,11 +45,11 @@
     color: #0f172a;
   }
 
-  /* Default Midnight Deep Dark */
+  /* Futuristic Deep Midnight Dark */
   html.dark, html.dark body {
     color-scheme: dark;
-    background-color: #070b14;
-    color: #f1f5f9;
+    background-color: #080D1C;
+    color: #F5F7FF;
   }
 
   body {
@@ -37,6 +59,12 @@
     overflow-x: hidden;
     background-color: inherit;
     color: inherit;
+  }
+
+  /* Accessible focus indicators */
+  :focus-visible {
+    outline: 2px solid #7657FF;
+    outline-offset: 2px;
   }
 
   /* Touch target sizes and tap highlight reset on mobile */
@@ -68,13 +96,30 @@
   .safe-pr {
     padding-right: env(safe-area-inset-right, 0px);
   }
+
+  /* Subtle ambient glow utilities */
+  .nova-glow-primary {
+    box-shadow: 0 0 30px -5px rgba(118, 87, 255, 0.25);
+  }
+  .nova-glow-cyan {
+    box-shadow: 0 0 30px -5px rgba(0, 217, 255, 0.22);
+  }
+  .nova-glow-accent {
+    box-shadow: 0 0 30px -5px rgba(255, 79, 200, 0.22);
+  }
+
+  /* Glassmorphism surface */
+  .nova-glass {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
 }
 
-/* Animations: Fast, smooth micro-interactions (160ms - 200ms) */
+/* Animations: Fast, smooth micro-interactions */
 @keyframes novaFadeInUp {
   0% {
     opacity: 0;
-    transform: translate3d(0, 4px, 0);
+    transform: translate3d(0, 8px, 0);
   }
   100% {
     opacity: 1;
@@ -85,7 +130,7 @@
 @keyframes novaToolEnter {
   0% {
     opacity: 0;
-    transform: translate3d(0, 3px, 0);
+    transform: translate3d(0, 6px, 0);
   }
   100% {
     opacity: 1;
@@ -93,30 +138,27 @@
   }
 }
 
+@keyframes novaPulseGlow {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.03);
+  }
+}
+
 .animate-page-enter {
-  animation: novaFadeInUp 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: novaFadeInUp 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .animate-tool-enter {
-  animation: novaToolEnter 150ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: novaToolEnter 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Compact mode */
-.compact-mode button {
-  padding-top: 0.25rem !important;
-  padding-bottom: 0.25rem !important;
-}
-
-.compact-mode .p-6 {
-  padding: 1rem !important;
-}
-
-/* High Contrast Mode */
-.high-contrast * {
-  border-color: rgba(100, 116, 139, 0.7) !important;
-}
-.dark.high-contrast * {
-  border-color: rgba(148, 163, 184, 0.5) !important;
+.animate-ambient-glow {
+  animation: novaPulseGlow 6s ease-in-out infinite;
 }
 
 /* Reduced motion compliance */
@@ -130,24 +172,11 @@
     scroll-behavior: auto !important;
   }
   .animate-page-enter,
-  .animate-tool-enter {
+  .animate-tool-enter,
+  .animate-ambient-glow {
     animation: none !important;
     transform: none !important;
   }
-}
-
-.reduced-motion *,
-.reduced-motion *::before,
-.reduced-motion *::after {
-  animation-duration: 0.01ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 0.01ms !important;
-  scroll-behavior: auto !important;
-}
-.reduced-motion .animate-page-enter,
-.reduced-motion .animate-tool-enter {
-  animation: none !important;
-  transform: none !important;
 }
 
 /* Custom Desktop Scrollbars */
@@ -159,9 +188,9 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.25);
+  background: rgba(118, 87, 255, 0.25);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.45);
+  background: rgba(118, 87, 255, 0.5);
 }
