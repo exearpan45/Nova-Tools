@@ -194,3 +194,81 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(118, 87, 255, 0.5);
 }
+
+
+/* NOVA 2.0 visual polish: shared across every route and tool surface. */
+:root {
+  --nova-radius-card: 1.25rem;
+  --nova-motion-fast: 160ms;
+  --nova-motion-normal: 240ms;
+}
+html.dark body {
+  background-image: radial-gradient(ellipse at 70% -15%, rgba(118,87,255,.10), transparent 42%),
+                    radial-gradient(ellipse at 5% 30%, rgba(0,217,255,.045), transparent 34%);
+  background-attachment: fixed;
+}
+html.light body {
+  background-image: radial-gradient(ellipse at 85% -15%, rgba(118,87,255,.075), transparent 40%),
+                    radial-gradient(ellipse at 0% 25%, rgba(0,180,220,.035), transparent 32%);
+  background-attachment: fixed;
+}
+button, a, input, select, textarea {
+  transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+  transition-duration: var(--nova-motion-fast);
+  transition-timing-function: cubic-bezier(.2,.75,.25,1);
+}
+button:active { transform: scale(.985); }
+button:disabled { cursor: not-allowed; transform: none; opacity: .58; }
+input, select, textarea {
+  border-radius: .85rem;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: rgba(118,87,255,.75) !important;
+  box-shadow: 0 0 0 3px rgba(118,87,255,.13);
+}
+html.dark input, html.dark select, html.dark textarea {
+  background-color: rgba(10,16,31,.78);
+}
+html.light input, html.light select, html.light textarea {
+  background-color: rgba(255,255,255,.92);
+}
+/* Card surfaces across home, categories, tools and settings. */
+main [class*="rounded-2xl"][class*="border"],
+main [class*="rounded-3xl"][class*="border"] {
+  transition: border-color var(--nova-motion-normal) ease,
+              box-shadow var(--nova-motion-normal) ease,
+              background-color var(--nova-motion-normal) ease,
+              transform var(--nova-motion-normal) cubic-bezier(.2,.75,.25,1);
+}
+@media (hover:hover) and (pointer:fine) {
+  main [class*="rounded-2xl"][class*="border"]:hover,
+  main [class*="rounded-3xl"][class*="border"]:hover {
+    border-color: rgba(118,87,255,.28);
+  }
+  main button:not(:disabled):hover {
+    filter: brightness(1.035);
+  }
+}
+html.dark main [class*="bg-white/80"],
+html.dark main [class*="bg-white/90"] {
+  background-color: rgba(16,24,43,.78);
+}
+html.dark header {
+  background-color: rgba(8,13,28,.86);
+  border-color: rgba(170,190,255,.12);
+}
+html.dark aside {
+  background-color: rgba(7,11,22,.96);
+  border-color: rgba(170,190,255,.12);
+}
+.animate-page-enter { animation-duration: 260ms; }
+.animate-tool-enter { animation-duration: 220ms; }
+::selection { background: rgba(118,87,255,.28); color: inherit; }
+@media (max-width: 640px) {
+  main [class*="rounded-3xl"] { border-radius: 1.15rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  button:active { transform: none; }
+}
