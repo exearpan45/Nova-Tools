@@ -68,6 +68,61 @@ for (const suite of declaredSuites) {
   if (!dispatchedSuites.has(suite)) errors.push(`Tool suite has no dispatcher case: ${suite}`);
 }
 
+// Verify every registered tool is routed to a suite component that handles its slug.
+const implementationEntries = [...source.matchAll(/\\{\\s*id:\\s*'([^']+)'[\\s\\S]*?slug:\\s*'([^']+)'[\\s\\S]*?name:\\s*'([^']+)'[\\s\\S]*?description:\\s*'([^']+)'[\\s\\S]*?category:\\s*'([^']+)'/g)]
+  .map((match) => ({ id: match[1], slug: match[2], name: match[3], category: match[5] }));
+const explicitSuiteBlock = source.match(/\\(\\(\\{([\\s\\S]*?)\\}\\s+as Record<string, ToolSuite>\\)\\[tool\\.id\\]/);
+const explicitSuiteMap = new Map(
+  explicitSuiteBlock
+    ? [...explicitSuiteBlock[1].matchAll(/'([^']+)':\\s*'([^']+)'/g)].map((match) => [match[1], match[2]])
+    : []
+);
+const categorySuiteMap = {
+  Calculators: 'calculators',
+  Converters: 'utility',
+  Generators: 'security',
+  'Text Tools': 'text',
+  'Developer Tools': 'developer',
+};
+const componentBySuite = {
+  image: 'imageTools',
+  pdf: 'pdfTools',
+  text: 'textTools',
+  developer: 'developerTools',
+  student: 'studentTools',
+  calculators: 'calculatorTools',
+  web: 'webTools',
+  design: 'designTools',
+  security: 'securityTools',
+  data: 'dataTools',
+  writing: 'writingTools',
+  utility: 'utilityTools',
+};
+const componentSources = new Map();
+for (const [suite, component] of Object.entries(componentBySuite)) {
+  componentSources.set(suite, readFileSync(resolve(`src/tools/${component}.tsx`), 'utf8'));
+}
+for (const tool of implementationEntries) {
+  const suite = explicitSuiteMap.get(tool.id)
+    || (tool.id === 'qr-generator' ? 'web'
+      : tool.id === 'temperature-converter' ? 'calculators'
+      : tool.id === 'uuid-generator' || tool.id === 'timestamp-converter' ? 'developer'
+      : categorySuiteMap[tool.category] || 'utility');
+  const component = componentSources.get(suite);
+  if (!component) {
+    errors.push(`Tool ${tool.slug} maps to unknown suite: ${suite}`);
+    continue;
+  }
+  // These two tools are intentionally handled by the shared text-statistics panel.
+  const sharedTextStatistics = tool.slug === 'word-counter' || tool.slug === 'character-counter';
+  if (!sharedTextStatistics && !component.includes(`'${tool.slug}'`) && !component.includes(`"${tool.slug}"`)) {
+    errors.push(`No tool-specific handler reference found for ${tool.slug} in suite ${suite}`);
+  }
+}
+if (implementationEntries.length !== entries.length) {
+  errors.push(`Could only map ${implementationEntries.length} of ${entries.length} registry entries to suite implementations.`);
+}
+
 console.log(`NOVA Tools registry audit: ${entries.length} entries`);
 console.log(`Unique IDs: ${ids.size}; unique slugs: ${slugs.size}`);
 if (warnings.length) {
