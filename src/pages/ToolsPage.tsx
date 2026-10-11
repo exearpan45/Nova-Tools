@@ -105,8 +105,28 @@ export const ToolsPage: React.FC = () => {
         </div>
       </div></div>
 
-      {/* Filter Tabs Strip */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 no-scrollbar -mx-1 px-1 sm:mx-0">
+      {/* Mobile suite picker: avoids a tiny 12-tab strip on phones. */}
+      <div className="sm:hidden">
+        <label htmlFor="mobile-suite-filter" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">
+          Browse by category
+        </label>
+        <select
+          id="mobile-suite-filter"
+          value={selectedSuite}
+          onChange={(e) => handleSelectSuite(e.target.value as ToolSuite | 'all')}
+          className="w-full min-h-11 px-3 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 text-sm font-semibold text-slate-800 dark:text-slate-100"
+        >
+          <option value="all">All Tools ({TOOLS_DATA.length})</option>
+          {SUITE_LIST.map((suite) => (
+            <option key={suite.id} value={suite.id}>
+              {suite.name} ({TOOLS_DATA.filter((tool) => tool.suite === suite.id).length})
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Desktop/tablet suite tabs */}
+      <div className="hidden sm:flex items-center gap-1.5 overflow-x-auto pb-2 no-scrollbar -mx-1 px-1 sm:mx-0">
         <button
           onClick={() => handleSelectSuite('all')}
           className={`px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
