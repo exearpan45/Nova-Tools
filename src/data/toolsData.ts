@@ -1465,15 +1465,7 @@ const RAW_TOOLS_DATA: Omit<ToolDefinition, 'suite'>[] = [
     howItWorks: 'Processes the supplied input in the browser using the tool interface.',
     privacyInfo: 'Input is processed in your browser. Avoid entering sensitive information into online tools.',
     relatedSlugs: []
-  }
-];
-
-export const TOOL_CATEGORIES: ToolCategory[] = [
-  'Calculators',
-  'Converters',
-  'Generators',
-  'Text Tools',
-  'Developer Tools',
+  },
   {
     id: 'sentence-case-converter',
     slug: 'sentence-case-converter',
@@ -1627,6 +1619,14 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
     privacyInfo: 'Text is processed in your browser and is not uploaded by this tool.',
     relatedSlugs: []
   }
+];
+
+export const TOOL_CATEGORIES: ToolCategory[] = [
+  'Calculators',
+  'Converters',
+  'Generators',
+  'Text Tools',
+  'Developer Tools',
 ];
 
 const CATEGORY_TO_SUITE: Record<string, ToolSuite> = {
