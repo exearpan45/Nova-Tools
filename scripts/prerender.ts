@@ -135,7 +135,7 @@ export function prerenderRoutes(): void {
   for (const page of STATIC_PAGES) {
     const routeDir = path.resolve(DIST_DIR, page.path.replace(/^\//, ''));
     fs.mkdirSync(routeDir, { recursive: true });
-    const canonicalUrl = `${BASE_URL}${page.path}`;
+    const canonicalUrl = page.path === '/privacy' ? `${BASE_URL}/privacy-policy` : `${BASE_URL}${page.path}`;
     const pageHtml = injectSeoMetadata(templateHtml, page.title, page.description, canonicalUrl);
     fs.writeFileSync(path.resolve(routeDir, 'index.html'), pageHtml, 'utf-8');
   }
