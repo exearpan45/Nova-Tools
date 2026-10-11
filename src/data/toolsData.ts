@@ -803,7 +803,7 @@ const RAW_TOOLS_DATA: Omit<ToolDefinition, 'suite'>[] = [
         answer: 'Unix epoch time is the number of seconds that have elapsed since January 1, 1970 (UTC), excluding leap seconds.'
       }
     ],
-    relatedSlugs: ['time-converter', 'age-calculator', 'date-difference']
+    relatedSlugs: ['time-converter', 'age-calculator']
   },
   {
     id: 'text-sorter',
