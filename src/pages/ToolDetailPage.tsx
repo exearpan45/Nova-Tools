@@ -92,7 +92,7 @@ export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
             </span>
             <div className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>100% Client-side</span>
+              <span>Browser-based tool</span>
             </div>
           </div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -115,6 +115,90 @@ export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
       <div className="p-3.5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-slate-200/90 dark:border-slate-800/90 bg-white dark:bg-slate-900/40 shadow-sm">
         <ToolDispatcher tool={tool} />
       </div>
+
+      {/* Search-friendly, practical guide for this specific tool */}
+      <article className="space-y-6 sm:space-y-8" aria-labelledby="tool-guide-title">
+        <header className="max-w-3xl space-y-2">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-600 dark:text-violet-300">Tool guide</p>
+          <h2 id="tool-guide-title" className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+            About the {tool.name}
+          </h2>
+          <p className="text-sm sm:text-base leading-7 text-slate-600 dark:text-slate-300">{tool.description}</p>
+        </header>
+
+        {tool.whatItDoes && tool.whatItDoes.length > 0 && (
+          <section className="space-y-3">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">What this tool does</h3>
+            <div className="space-y-3">
+              {tool.whatItDoes.map((paragraph, index) => (
+                <p key={index} className="text-sm leading-7 text-slate-600 dark:text-slate-300">{paragraph}</p>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {tool.howToUse && tool.howToUse.length > 0 && (
+          <section className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/40 p-4 sm:p-6 space-y-4">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">How to use the {tool.name}</h3>
+            <ol className="space-y-3">
+              {tool.howToUse.map((step, index) => (
+                <li key={index} className="flex items-start gap-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-violet-100 text-[11px] font-bold text-violet-700 dark:bg-violet-400/15 dark:text-violet-300">{index + 1}</span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
+        {tool.example && (
+          <section className="space-y-3">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">Example</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Input</p>
+                <p className="mt-2 whitespace-pre-wrap break-words text-sm font-medium text-slate-800 dark:text-slate-200">{tool.example.input}</p>
+              </div>
+              <div className="rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/60 dark:bg-emerald-950/20 p-4">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">Expected output</p>
+                <p className="mt-2 whitespace-pre-wrap break-words text-sm font-semibold text-slate-900 dark:text-white">{tool.example.output}</p>
+              </div>
+            </div>
+            {tool.example.note && <p className="text-xs leading-6 text-slate-500 dark:text-slate-400">{tool.example.note}</p>}
+          </section>
+        )}
+
+        {tool.howItWorks && (
+          <section className="space-y-2">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">How it works</h3>
+            <p className="text-sm leading-7 text-slate-600 dark:text-slate-300">{tool.howItWorks}</p>
+          </section>
+        )}
+
+        {tool.privacyInfo && (
+          <section className="rounded-2xl border border-cyan-200/80 dark:border-cyan-900/60 bg-cyan-50/60 dark:bg-cyan-950/15 p-4 sm:p-5 space-y-2">
+            <h3 className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white"><ShieldCheck className="h-4 w-4 text-cyan-600 dark:text-cyan-300" />Data and privacy notes</h3>
+            <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">{tool.privacyInfo}</p>
+            <p className="text-xs leading-5 text-slate-500 dark:text-slate-400">For site-wide analytics, advertising, and browser storage details, read the <button type="button" onClick={() => navigate('/privacy-policy')} className="font-semibold text-cyan-700 underline underline-offset-2 dark:text-cyan-300">Privacy Policy</button>.</p>
+          </section>
+        )}
+
+        {tool.faqs && tool.faqs.length > 0 && (
+          <section className="space-y-3">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white">Frequently asked questions</h3>
+            <div className="space-y-2">
+              {tool.faqs.map((faq, index) => (
+                <details key={index} className="group rounded-xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/40 p-4">
+                  <summary className="cursor-pointer list-none pr-5 text-sm font-semibold text-slate-900 dark:text-white marker:hidden">
+                    {faq.question}
+                  </summary>
+                  <p className="pt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">{faq.answer}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
+      </article>
 
       {/* Related Suite Tools */}
       {relatedTools.length > 0 && (
