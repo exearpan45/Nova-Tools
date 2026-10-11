@@ -41,29 +41,29 @@ const homeSource = readFileSync(resolve('src/pages/HomePage.tsx'), 'utf8');
 const dispatcherSource = readFileSync(resolve('src/tools/ToolDispatcher.tsx'), 'utf8');
 const typesSource = readFileSync(resolve('src/types.ts'), 'utf8');
 
-const workflowSlugs = [...workflowSource.matchAll(/toolSlug:\\s*'([^']+)'/g)].map((match) => match[1]);
+const workflowSlugs = [...workflowSource.matchAll(/toolSlug:\s*'([^']+)'/g)].map((match) => match[1]);
 for (const slug of workflowSlugs) {
   if (!slugs.has(slug)) errors.push(`Workflow references missing tool slug: ${slug}`);
 }
 
-const dropZoneSlugs = [...dropZoneSource.matchAll(/slug:\\s*'([^']+)'/g)].map((match) => match[1]);
+const dropZoneSlugs = [...dropZoneSource.matchAll(/slug:\s*'([^']+)'/g)].map((match) => match[1]);
 for (const slug of dropZoneSlugs) {
   if (!slugs.has(slug)) errors.push(`Smart file-drop suggestions reference missing tool slug: ${slug}`);
 }
 
-const quickActionBlock = homeSource.match(/const quickActions = \\[([\\s\\S]*?)\\];/);
+const quickActionBlock = homeSource.match(/const quickActions = \[([\s\S]*?)\];/);
 if (!quickActionBlock) {
   errors.push('Could not locate homepage quick actions list.');
 } else {
-  const quickActionSlugs = [...quickActionBlock[1].matchAll(/slug:\\s*'([^']+)'/g)].map((match) => match[1]);
+  const quickActionSlugs = [...quickActionBlock[1].matchAll(/slug:\s*'([^']+)'/g)].map((match) => match[1]);
   for (const slug of quickActionSlugs) {
     if (!slugs.has(slug)) errors.push(`Homepage quick action references missing tool slug: ${slug}`);
   }
 }
 
-const suiteType = typesSource.match(/export type ToolSuite =([\\s\\S]*?);/);
+const suiteType = typesSource.match(/export type ToolSuite =([\s\S]*?);/);
 const declaredSuites = suiteType ? [...suiteType[1].matchAll(/'([^']+)'/g)].map((match) => match[1]) : [];
-const dispatchedSuites = new Set([...dispatcherSource.matchAll(/case '([^']+)'\\s*:/g)].map((match) => match[1]));
+const dispatchedSuites = new Set([...dispatcherSource.matchAll(/case '([^']+)'\s*:/g)].map((match) => match[1]));
 for (const suite of declaredSuites) {
   if (!dispatchedSuites.has(suite)) errors.push(`Tool suite has no dispatcher case: ${suite}`);
 }
