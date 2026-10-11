@@ -632,24 +632,41 @@ export const ImageTools: React.FC<ImageProps> = ({ toolSlug }) => {
             </div>
           )}
 
-          {/* Visual Canvas & Preview Box */}
-          <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-slate-100/60 dark:bg-slate-950/40 flex flex-col items-center justify-center min-h-[300px] overflow-hidden">
-            {toolSlug === 'color-picker-image' ? (
-              <canvas
-                ref={canvasRef}
-                onClick={handleEyedropperCanvasClick}
-                className="max-h-[460px] max-w-full rounded-lg cursor-crosshair shadow-md object-contain"
-              />
-            ) : processedUrl ? (
-              <img
-                src={processedUrl}
-                alt="Processed output"
-                className="max-h-[460px] max-w-full rounded-lg shadow-md object-contain transition-all"
-              />
-            ) : (
-              <div className="animate-pulse text-xs text-slate-400">Processing image canvas...</div>
-            )}
-          </div>
+          {/* Full-size before / after workspace */}
+          <section className="space-y-3" aria-label="Full image preview comparison">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Full image preview</h3>
+              <span className="text-xs text-slate-500 dark:text-slate-400">Original stays unchanged</span>
+            </div>
+            <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+              <div className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-slate-100/60 dark:bg-slate-950/40">
+                <div className="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 px-4 py-3">
+                  <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">Original</span>
+                  <span className="text-[11px] text-slate-500">{imgNaturalWidth} × {imgNaturalHeight}px · {formatBytes(originalSize)}</span>
+                </div>
+                <div className="flex min-h-[320px] items-center justify-center p-3 sm:p-5">
+                  {imageSrc && <img src={imageSrc} alt="Original uploaded image full preview" className="max-h-[620px] max-w-full object-contain" />}
+                </div>
+                {imageSrc && <div className="border-t border-slate-200 dark:border-slate-800 px-4 py-3"><a href={imageSrc} target="_blank" rel="noreferrer" className="text-xs font-semibold text-cyan-700 dark:text-cyan-400 hover:underline">Open original at full size</a></div>}
+              </div>
+              <div className="overflow-hidden rounded-2xl border border-cyan-500/30 bg-slate-100/60 dark:bg-slate-950/40">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 px-4 py-3">
+                  <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">{toolSlug === 'color-picker-image' ? 'Color picker canvas' : 'Processed output'}</span>
+                  {processedSize > 0 && <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">{formatBytes(processedSize)} output</span>}
+                </div>
+                <div className="flex min-h-[320px] items-center justify-center p-3 sm:p-5">
+                  {toolSlug === 'color-picker-image' ? (
+                    <canvas ref={canvasRef} onClick={handleEyedropperCanvasClick} aria-label="Click image to inspect a color" className="max-h-[620px] max-w-full rounded-lg cursor-crosshair shadow-md object-contain" />
+                  ) : processedUrl ? (
+                    <img src={processedUrl} alt="Processed image full preview" className="max-h-[620px] max-w-full rounded-lg shadow-md object-contain transition-all" />
+                  ) : (
+                    <div className="text-xs text-slate-400" role="status">Preparing preview…</div>
+                  )}
+                </div>
+                {processedUrl && <div className="border-t border-slate-200 dark:border-slate-800 px-4 py-3"><a href={processedUrl} target="_blank" rel="noreferrer" className="text-xs font-semibold text-cyan-700 dark:text-cyan-400 hover:underline">Open processed image at full size</a></div>}
+              </div>
+            </div>
+          </section>
         </div>
       )}
     </div>
