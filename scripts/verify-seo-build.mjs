@@ -69,10 +69,9 @@ for (const file of htmlFiles) {
 // Ensure every homepage quick action points to a real registered tool.
 const homeSource = fs.readFileSync(path.join(root, 'src/pages/HomePage.tsx'), 'utf8');
 const toolsSource = fs.readFileSync(path.join(root, 'src/data/toolsData.ts'), 'utf8');
-const quickActionBlock = homeSource.match(/const quickActions = \\[([\\s\\S]*?)\\];/);
-if (!quickActionBlock) fail('Could not locate the homepage quick actions list.');
-const shortcutSlugs = [...quickActionBlock[1].matchAll(/slug:\\s*'([^']+)'/g)].map((match) => match[1]);
-const registeredSlugs = new Set([...toolsSource.matchAll(/slug:\\s*'([^']+)'/g)].map((match) => match[1]));
+const quickActionBlock = homeSource.match(/const quickActions = \[([\s\S]*?)\];if (!quickActionBlock) fail('Could not locate the homepage quick actions list.');
+const shortcutSlugs = [...quickActionBlock[1].matchAll(/slug:\s*'([^']+)'/g)].map((match) => match[1]);
+const registeredSlugs = new Set([...toolsSource.matchAll(/slug:\s*'([^']+)'/g)].map((match) => match[1]));
 const brokenShortcuts = shortcutSlugs.filter((slug) => !registeredSlugs.has(slug));
 if (shortcutSlugs.length === 0) fail('Homepage quick actions list is empty.');
 if (brokenShortcuts.length > 0) fail(`Homepage shortcuts point to missing tools: ${brokenShortcuts.join(', ')}`);
