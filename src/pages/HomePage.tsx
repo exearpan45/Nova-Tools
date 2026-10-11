@@ -24,7 +24,7 @@ export const HomePage: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6 sm:space-y-8 md:space-y-12 animate-page-enter">
+    <div className="space-y-5 sm:space-y-8 md:space-y-12 animate-page-enter min-w-0">
       {/* 1. Mobile Search Bar (Directly top on phones) */}
       <div className="md:hidden">
         <button
@@ -44,13 +44,13 @@ export const HomePage: React.FC = () => {
       </div>
 
       {/* 2. Compact Hero Section */}
-      <section className="relative isolate overflow-hidden pt-7 pb-6 px-3 sm:px-6 md:pt-12 md:pb-10 text-left max-w-full mx-0 space-y-4 sm:space-y-5 md:space-y-6 nova-home-hero rounded-[1.75rem] border border-violet-500/20 bg-gradient-to-br from-white via-violet-50/70 to-cyan-50/70 dark:from-[#090E1D] dark:via-[#10132A] dark:to-[#071B2A] shadow-2xl shadow-violet-950/5 dark:shadow-black/20"><div aria-hidden="true" className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-56 w-56 -translate-x-1/2 rounded-full bg-violet-500/15 blur-3xl" /><div aria-hidden="true" className="pointer-events-none absolute -bottom-24 right-0 -z-10 h-48 w-48 rounded-full bg-cyan-400/10 blur-3xl" />
+      <section className="relative isolate overflow-hidden pt-6 pb-6 px-4 sm:px-6 md:pt-12 md:pb-10 text-left max-w-full mx-0 space-y-4 sm:space-y-5 md:space-y-6 nova-home-hero rounded-[1.75rem] border border-violet-500/20 bg-gradient-to-br from-white via-violet-50/70 to-cyan-50/70 dark:from-[#090E1D] dark:via-[#10132A] dark:to-[#071B2A] shadow-2xl shadow-violet-950/5 dark:shadow-black/20"><div aria-hidden="true" className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-56 w-56 -translate-x-1/2 rounded-full bg-violet-500/15 blur-3xl" /><div aria-hidden="true" className="pointer-events-none absolute -bottom-24 right-0 -z-10 h-48 w-48 rounded-full bg-cyan-400/10 blur-3xl" />
         <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 text-[10px] sm:text-xs font-bold tracking-wide">
           <Sparkles className="w-3 h-3" />
           <span>NOVA TOOLS · YOUR EVERYDAY TOOLKIT</span>
         </div>
 
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.02] text-balance max-w-4xl">
+        <h1 className="text-[2.35rem] min-[390px]:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.02] text-balance max-w-4xl">
           Your tools.{' '}
           <span className="bg-gradient-to-r from-cyan-400 via-violet-400 to-pink-500 bg-clip-text text-transparent">
             One workspace.
@@ -61,7 +61,7 @@ export const HomePage: React.FC = () => {
           A powerful collection of free tools for files, images, developers, students and everyday work. Fast, simple and designed to keep your workflow moving.
         </p>
 
-        <div className="flex flex-wrap items-center justify-start gap-3 pt-2"><button type="button" onClick={() => navigate('/tools')} className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-violet-600/20 hover:shadow-violet-500/30 hover:-translate-y-0.5"><Sparkles className="h-4 w-4" /> Explore all tools <ArrowRight className="h-4 w-4" /></button><button type="button" onClick={() => setSearchOpen(true)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300/80 bg-white/70 px-5 py-3 text-xs sm:text-sm font-bold text-slate-700 hover:border-violet-400 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200"><Search className="h-4 w-4" /> Find a tool</button></div>
+        <div className="flex flex-col min-[420px]:flex-row flex-wrap items-stretch min-[420px]:items-center justify-start gap-2.5 sm:gap-3 pt-2"><button type="button" onClick={() => navigate('/tools')} className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-4 sm:px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-violet-600/20 hover:shadow-violet-500/30 hover:-translate-y-0.5"><Sparkles className="h-4 w-4" /> Explore all tools <ArrowRight className="h-4 w-4" /></button><button type="button" onClick={() => setSearchOpen(true)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300/80 bg-white/70 px-4 sm:px-5 py-3 text-xs sm:text-sm font-bold text-slate-700 hover:border-violet-400 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200"><Search className="h-4 w-4" /> Find a tool</button></div>
 
         {/* Desktop Search Trigger (Visible on md+ screens) */}
         <div className="hidden md:block pt-3 max-w-3xl">
@@ -150,7 +150,7 @@ export const HomePage: React.FC = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 min-[380px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-4">
+        <div className="grid grid-cols-1 min-[520px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
           {FEATURED_TOOLS.slice(0, 8).map((tool) => {
             const suite = SUITES_DATA[tool.suite];
             const isFav = isFavorite(tool.slug);
