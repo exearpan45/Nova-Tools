@@ -35,6 +35,9 @@ jobs:
       - name: Calculator regression tests
         run: npm run test:math
 
+      - name: Route regression tests
+        run: npm run test:routing
+
       - name: Build
         run: npm run build
 
