@@ -38,6 +38,9 @@ jobs:
       - name: Route regression tests
         run: npm run test:routing
 
+      - name: TypeScript type check
+        run: npm run lint
+
       - name: Build
         run: npm run build
 
