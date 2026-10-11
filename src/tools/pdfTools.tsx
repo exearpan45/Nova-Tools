@@ -57,7 +57,7 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
     if (toolSlug === 'jpg-to-pdf') {
       const unsupported = selected.find((file) => {
         const name = file.name.toLowerCase();
-        return !(file.type === 'image/jpeg' || file.type === 'image/png' || /\\.(jpe?g|png)$/.test(name));
+        return !(file.type === 'image/jpeg' || file.type === 'image/png' || /\.(jpe?g|png)$/i.test(name));
       });
       if (unsupported) {
         setErrorMsg('Please select only JPG, JPEG, or PNG images. WebP and other formats are not supported by this converter yet.');
