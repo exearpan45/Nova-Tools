@@ -13,22 +13,22 @@ const STATIC_PAGES = [
   {
     path: '/tools',
     title: 'All Tools — NOVA TOOLS',
-    description: 'Browse the complete collection of fast, private, and simple online utilities for everyday tasks.'
+    description: 'Explore free browser-based calculators, converters, PDF and image utilities, text tools, developer helpers, and everyday productivity tools.'
   },
   {
     path: '/about',
     title: 'About NOVA TOOLS — Mission & Philosophy',
-    description: 'NOVA TOOLS was created by Arpan Goswami to provide fast, completely private, and deterministic browser-based utilities.'
+    description: 'Learn about NOVA TOOLS, an independent collection of browser-based calculators, file utilities, text tools, and developer helpers created by Arpan Goswami.'
   },
   {
     path: '/contact',
     title: 'Contact — NOVA TOOLS',
-    description: 'Get in touch with the NOVA TOOLS team for suggestions, bug reports, and utility requests.'
+    description: 'Contact NOVA TOOLS to report a bug, suggest a new online utility, share accessibility feedback, or ask a question about the website.'
   },
   {
     path: '/privacy-policy',
     title: 'Privacy Policy — NOVA TOOLS',
-    description: 'NOVA TOOLS runs 100% in your browser. We never collect, store, or transmit your calculation or text inputs.'
+    description: 'Read how NOVA TOOLS handles browser-based tool inputs, locally saved preferences, hosting requests, analytics, advertising, and third-party services.'
   },
   {
     path: '/privacy',
@@ -38,17 +38,17 @@ const STATIC_PAGES = [
   {
     path: '/cookie-policy',
     title: 'Cookie Policy — NOVA TOOLS',
-    description: 'Learn how NOVA TOOLS uses harmless local storage to remember your dark mode preference and favorite tools.'
+    description: 'Understand cookies, browser local storage, analytics, and advertising technologies that may be used while visiting NOVA TOOLS.'
   },
   {
     path: '/terms',
     title: 'Terms of Service — NOVA TOOLS',
-    description: 'Terms and conditions for using the free online utilities provided by NOVA TOOLS.'
+    description: 'Review the terms for using NOVA TOOLS online utilities, including availability, accuracy, permitted use, and intellectual property.'
   },
   {
     path: '/disclaimer',
     title: 'Disclaimer — NOVA TOOLS',
-    description: 'Legal and operational disclaimer for NOVA TOOLS calculation and conversion utilities.'
+    description: 'Read important limitations for NOVA TOOLS calculators, converters, file utilities, technical outputs, and general-purpose information.'
   }
 ];
 
