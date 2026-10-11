@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { PDFDocument, degrees } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
@@ -19,6 +19,8 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
+  const [sourcePdfUrl, setSourcePdfUrl] = useState<string | null>(null);
+  const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
   const [resultFileName, setResultFileName] = useState<string>('output.pdf');
   const [statusMessage, setStatusMessage] = useState<string>('');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -45,13 +47,17 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  useEffect(() => () => { if (sourcePdfUrl) URL.revokeObjectURL(sourcePdfUrl); }, [sourcePdfUrl]);
+  useEffect(() => () => { if (resultUrl) URL.revokeObjectURL(resultUrl); }, [resultUrl]);
+  useEffect(() => () => { imagePreviewUrls.forEach((url) => URL.revokeObjectURL(url)); }, [imagePreviewUrls]);
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = Array.from(e.target.files || []);
     if (selected.length === 0) return;
     if (toolSlug === 'jpg-to-pdf') {
       const unsupported = selected.find((file) => {
         const name = file.name.toLowerCase();
-        return !(file.type === 'image/jpeg' || file.type === 'image/png' || /\\.(jpe?g|png)$/.test(name));
+        return !(file.type === 'image/jpeg' || file.type === 'image/png' || /\.(jpe?g|png)$/i.test(name));
       });
       if (unsupported) {
         setErrorMsg('Please select only JPG, JPEG, or PNG images. WebP and other formats are not supported by this converter yet.');
@@ -60,6 +66,16 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
       }
     }
     setErrorMsg(null);
+    setStatusMessage('');
+    setSourcePdfUrl((previous) => {
+      if (previous) URL.revokeObjectURL(previous);
+      const pdf = selected.find((file) => file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf'));
+      return pdf ? URL.createObjectURL(pdf) : null;
+    });
+    setImagePreviewUrls((previous) => {
+      previous.forEach((url) => URL.revokeObjectURL(url));
+      return toolSlug === 'jpg-to-pdf' ? selected.map((file) => URL.createObjectURL(file)) : [];
+    });
     setResultUrl((previous) => {
       if (previous) URL.revokeObjectURL(previous);
       return null;
@@ -370,7 +386,9 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
               <button
                 onClick={() => {
                   setFiles([]);
-                  setResultUrl(null);
+                  setResultUrl((previous) => { if (previous) URL.revokeObjectURL(previous); return null; });
+                  setSourcePdfUrl((previous) => { if (previous) URL.revokeObjectURL(previous); return null; });
+                  setImagePreviewUrls((previous) => { previous.forEach((url) => URL.revokeObjectURL(url)); return []; });
                   setFileHashes(null);
                   setFileDetails(null);
                 }}
@@ -394,6 +412,35 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
               ))}
             </div>
           </div>
+
+          {(sourcePdfUrl || imagePreviewUrls.length > 0) && (
+            <section className="space-y-3" aria-label="Original file preview">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Full original preview</h3>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Preview stays on your device</span>
+              </div>
+              {sourcePdfUrl && (
+                <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-950">
+                  <iframe title="Original PDF full preview" src={sourcePdfUrl} className="h-[min(75vh,760px)] min-h-[420px] w-full bg-white" />
+                  <div className="flex justify-end border-t border-slate-200 dark:border-slate-700 p-3">
+                    <a href={sourcePdfUrl} target="_blank" rel="noreferrer" className="text-xs font-semibold text-rose-600 hover:underline">Open PDF in a new tab</a>
+                  </div>
+                </div>
+              )}
+              {imagePreviewUrls.length > 0 && (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {imagePreviewUrls.map((url, index) => (
+                    <div key={index} className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950">
+                      <div className="border-b border-slate-200 dark:border-slate-700 px-3 py-2 text-xs font-medium text-slate-700 dark:text-slate-200">{files[index]?.name || 'Image ' + (index + 1)}</div>
+                      <div className="flex min-h-48 items-center justify-center p-3">
+                        <img src={url} alt={'Preview of ' + (files[index]?.name || 'image ' + (index + 1))} loading="lazy" className="max-h-[420px] max-w-full object-contain" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
 
           {/* Operation Controls */}
           {toolSlug === 'pdf-compressor' && (
@@ -499,6 +546,21 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
               )}
             </div>
           ) : null}
+
+          {resultUrl && (
+            <section className="space-y-3" aria-label="Generated PDF preview">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Full result preview</h3>
+                <span className="text-xs text-slate-500 dark:text-slate-400">{resultFileName}</span>
+              </div>
+              <div className="overflow-hidden rounded-xl border border-emerald-500/30 bg-slate-100 dark:bg-slate-950">
+                <iframe title="Generated PDF full preview" src={resultUrl} className="h-[min(75vh,760px)] min-h-[420px] w-full bg-white" />
+                <div className="flex justify-end border-t border-slate-200 dark:border-slate-700 p-3">
+                  <a href={resultUrl} target="_blank" rel="noreferrer" className="text-xs font-semibold text-emerald-600 hover:underline">Open result in a new tab</a>
+                </div>
+              </div>
+            </section>
+          )}
 
           {statusMessage && (
             <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs flex items-center gap-2 font-medium">
