@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import {
-  Mail, ShieldCheck, FileText, Info, AlertTriangle, Lock, Eye,
-  Cpu, Database, Copy, ExternalLink, Sparkles, ArrowRight, CheckCircle2,
-  Calculator, Image, FileImage, Code2, Type, GraduationCap, Globe,
-  Palette, Wrench, Shield, BookOpen, Cookie, MessageSquare, ChevronRight
+  Mail, ShieldCheck, FileText, Info, AlertTriangle, Lock, Database,
+  Copy, ExternalLink, Sparkles, ArrowRight, CheckCircle2, Calculator,
+  Image, Code2, Type, GraduationCap, Globe, Palette, Wrench, BookOpen,
+  Cookie, ChevronRight
 } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 import { copyToClipboard } from '../utils/clipboard';
@@ -60,7 +60,7 @@ const PolicyText: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 const UpdatedNote = () => <p className="text-xs text-slate-500 dark:text-slate-400">Last updated: {UPDATED} · NOVA TOOLS</p>;
 
 export const AboutPage: React.FC<StaticPageProps> = ({ onNavigate }) => (
-  <main className={pageClass}>
+  <div className={pageClass}>
     <PageHero eyebrow="About the project" title="Useful online tools, without the unnecessary complexity." subtitle="NOVA TOOLS is an independent collection of browser-based utilities built to make everyday calculations, file tasks, text work, and developer workflows simpler." icon={<Sparkles className="h-5 w-5" />} />
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
       <Point title="Built for practical tasks">Focused utilities with clear inputs, understandable outputs, and straightforward workflows.</Point>
@@ -100,7 +100,7 @@ export const AboutPage: React.FC<StaticPageProps> = ({ onNavigate }) => (
       <button onClick={() => onNavigate('/tools')} className="inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200">Explore all tools <ArrowRight className="h-4 w-4" /></button>
       <button onClick={() => onNavigate('/contact')} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Contact the creator</button>
     </div>
-  </main>
+  </div>
 );
 
 export const ContactPage: React.FC<StaticPageProps> = () => {
@@ -121,7 +121,7 @@ export const ContactPage: React.FC<StaticPageProps> = () => {
     { title: 'General enquiry', subject: '[General Enquiry] NOVA TOOLS', description: 'Questions about the website, content, technical behaviour, or intellectual property.' },
   ];
   return (
-    <main className={pageClass}>
+    <div className={pageClass}>
       <PageHero eyebrow="Support & feedback" title="Contact NOVA TOOLS" subtitle="Found a bug, have an idea, or need to ask a question? Choose a topic below or email the maintainer directly." icon={<Mail className="h-5 w-5" />} />
       <section className={cardClass + ' flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'}>
         <div className="min-w-0">
@@ -147,12 +147,12 @@ export const ContactPage: React.FC<StaticPageProps> = () => {
         </ul>
         <p className="mt-3 text-xs leading-5 text-slate-500 dark:text-slate-400">Messages are reviewed as time permits. A response time is not guaranteed.</p>
       </Section>
-    </main>
+    </div>
   );
 };
 
 export const PrivacyPage: React.FC<StaticPageProps> = ({ onNavigate }) => (
-  <main className={pageClass}>
+  <div className={pageClass}>
     <PageHero eyebrow="Your information" title="Privacy Policy" subtitle="This policy explains what NOVA TOOLS processes locally, what browser preferences may be saved, and how third-party services such as analytics and advertising fit into the experience." icon={<ShieldCheck className="h-5 w-5" />} />
     <UpdatedNote />
     <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 sm:p-5 dark:border-emerald-900/60 dark:bg-emerald-950/20">
@@ -183,11 +183,11 @@ export const PrivacyPage: React.FC<StaticPageProps> = ({ onNavigate }) => (
     <Section title="7. Contact">
       <PolicyText>For privacy questions, contact the site maintainer at <a className="font-semibold text-violet-600 hover:underline dark:text-violet-300" href={'mailto:' + EMAIL}>{EMAIL}</a>. NOVA TOOLS may update this policy when the site or its services change. The updated date above indicates the latest editorial revision.</PolicyText>
     </Section>
-  </main>
+  </div>
 );
 
 export const CookiePolicyPage: React.FC<StaticPageProps> = ({ onNavigate }) => (
-  <main className={pageClass}>
+  <div className={pageClass}>
     <PageHero eyebrow="Browser storage explained" title="Cookie Policy" subtitle="Learn the difference between cookies, local storage, and third-party scripts that may be used while visiting NOVA TOOLS." icon={<Cookie className="h-5 w-5" />} />
     <UpdatedNote />
     <Section title="What these technologies do">
@@ -207,11 +207,11 @@ export const CookiePolicyPage: React.FC<StaticPageProps> = ({ onNavigate }) => (
     <Section title="Related policy">
       <button onClick={() => onNavigate('/privacy-policy')} className="inline-flex items-center gap-2 text-sm font-semibold text-violet-600 hover:underline dark:text-violet-300"><ShieldCheck className="h-4 w-4" /> Read the full Privacy Policy <ArrowRight className="h-4 w-4" /></button>
     </Section>
-  </main>
+  </div>
 );
 
 export const TermsPage: React.FC<StaticPageProps> = () => (
-  <main className={pageClass}>
+  <div className={pageClass}>
     <PageHero eyebrow="Using the website" title="Terms of Service" subtitle="These terms describe the basic conditions for accessing and using the free utilities provided by NOVA TOOLS." icon={<FileText className="h-5 w-5" />} />
     <UpdatedNote />
     <Section title="1. Use of the tools"><PolicyText>NOVA TOOLS provides general-purpose browser utilities for everyday, educational, and productivity tasks. You are responsible for how you use the results and for ensuring that your use complies with applicable laws and third-party rights.</PolicyText></Section>
@@ -220,11 +220,11 @@ export const TermsPage: React.FC<StaticPageProps> = () => (
     <Section title="4. No warranty"><PolicyText>The website and its tools are provided on an “as available” basis, without a guarantee that every feature will be uninterrupted, error-free, or suitable for a particular purpose, to the extent permitted by applicable law.</PolicyText></Section>
     <Section title="5. Limitation and changes"><PolicyText>To the extent permitted by applicable law, NOVA TOOLS is not responsible for losses arising from reliance on unverified outputs or temporary service interruptions. Nothing in these terms excludes liability that cannot legally be excluded. These terms may be updated as the project evolves.</PolicyText></Section>
     <p className={bodyClass}>Questions about these terms? Contact <a className="text-violet-600 hover:underline dark:text-violet-300" href={'mailto:' + EMAIL}>{EMAIL}</a>.</p>
-  </main>
+  </div>
 );
 
 export const DisclaimerPage: React.FC<StaticPageProps> = () => (
-  <main className={pageClass}>
+  <div className={pageClass}>
     <PageHero eyebrow="Important information" title="Disclaimer" subtitle="NOVA TOOLS provides general-purpose calculations and utilities. Review these limitations before relying on any output for a consequential decision." icon={<AlertTriangle className="h-5 w-5" />} />
     <div className="rounded-2xl border border-amber-200 bg-amber-50/70 p-4 sm:p-5 dark:border-amber-900/60 dark:bg-amber-950/20">
       <p className="flex items-center gap-2 text-sm font-bold text-amber-900 dark:text-amber-200"><Info className="h-4 w-4" /> Verify important results independently</p>
@@ -237,5 +237,5 @@ export const DisclaimerPage: React.FC<StaticPageProps> = () => (
     <Section title="Scientific, engineering, and technical work"><PolicyText>Unit converters, data tools, code utilities, and related features are intended for convenience. Independently verify critical values, units, algorithms, generated code, and security-sensitive outputs before using them in production, laboratory, engineering, or safety-critical environments.</PolicyText></Section>
     <Section title="Files, generated content, and security"><PolicyText>Review generated files and outputs before sharing or using them. A browser-based password generator or hashing utility is not a complete security system, and no tool can guarantee that a device, browser, or copied output is secure. Keep backups of important source files before performing destructive edits or conversions.</PolicyText></Section>
     <Section title="External services and links"><PolicyText>The website may load third-party analytics and advertising services or link to external websites. NOVA TOOLS does not control all external content, availability, or privacy practices. Review the relevant provider’s terms and policies when using those services.</PolicyText></Section>
-  </main>
+  </div>
 );
