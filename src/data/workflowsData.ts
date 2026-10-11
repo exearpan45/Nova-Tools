@@ -4,7 +4,7 @@ export const DEFAULT_WORKFLOWS: WorkflowDefinition[] = [
   {
     id: 'wf-web-image-optimizer',
     title: 'Web Image Optimization Pipeline',
-    description: 'Prepare raw photos for lightning-fast modern websites in 3 easy steps.',
+    description: 'Prepare photos for websites by resizing dimensions and reducing image file size.',
     category: 'image',
     icon: 'Sparkles',
     estimatedTime: '< 15 sec',
@@ -22,20 +22,13 @@ export const DEFAULT_WORKFLOWS: WorkflowDefinition[] = [
         description: 'Reduce file byte size by 60-80% using optimal perceptual lossy compression.',
         inputHint: 'Scaled image',
         outputHint: 'Optimized image stream'
-      },
-      {
-        toolSlug: 'jpg-to-webp',
-        name: 'Convert to Next-Gen WebP',
-        description: 'Convert output into modern Google WebP format for maximum Lighthouse performance.',
-        inputHint: 'Optimized image',
-        outputHint: 'Final .webp file ready to publish'
       }
     ]
   },
   {
     id: 'wf-pdf-bundle',
     title: 'Document Package & Merge',
-    description: 'Combine multiple individual PDF attachments or forms into one cohesive document.',
+    description: 'Combine multiple PDF attachments or forms into one cohesive document.',
     category: 'pdf',
     icon: 'Layers',
     estimatedTime: '< 10 sec',
@@ -46,13 +39,6 @@ export const DEFAULT_WORKFLOWS: WorkflowDefinition[] = [
         description: 'Merge invoices, receipts, and identification into one sequence.',
         inputHint: 'Multiple PDF files',
         outputHint: 'Single merged PDF file'
-      },
-      {
-        toolSlug: 'pdf-compressor',
-        name: 'Compress PDF for Email',
-        description: 'Optimize internal streams so the final PDF meets email attachment limits (<10MB).',
-        inputHint: 'Merged PDF',
-        outputHint: 'Lightweight compressed PDF'
       }
     ]
   },
@@ -90,24 +76,24 @@ export const DEFAULT_WORKFLOWS: WorkflowDefinition[] = [
   {
     id: 'wf-data-pipeline',
     title: 'Spreadsheet to Clean JSON Feed',
-    description: 'Transform raw spreadsheet data into production-ready web API arrays.',
+    description: 'Inspect a CSV file and convert its rows into structured JSON data.',
     category: 'data',
     icon: 'Database',
     estimatedTime: '< 10 sec',
     steps: [
       {
-        toolSlug: 'data-cleaner',
-        name: 'Clean Empty & Duplicate Rows',
-        description: 'Strip empty lines, extra spaces, and redundant records.',
-        inputHint: 'Raw CSV text',
-        outputHint: 'Sanitized CSV rows'
+        toolSlug: 'csv-viewer',
+        name: 'Inspect CSV Rows',
+        description: 'Open the CSV data in a searchable table and confirm the columns and records.',
+        inputHint: 'CSV text or file',
+        outputHint: 'Readable CSV table'
       },
       {
-        toolSlug: 'data-csv-to-json',
-        name: 'Convert CSV to JSON Objects',
-        description: 'Transform tabular columns into keyed JSON records with typed numbers and booleans.',
-        inputHint: 'Sanitized CSV',
-        outputHint: 'Standard JSON array'
+        toolSlug: 'csv-to-json',
+        name: 'Convert CSV to JSON',
+        description: 'Convert CSV headers and rows into a JSON array for further use.',
+        inputHint: 'Reviewed CSV data',
+        outputHint: 'JSON array'
       }
     ]
   }
