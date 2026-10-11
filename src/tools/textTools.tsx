@@ -117,32 +117,32 @@ export const TextTools: React.FC<TextProps> = ({ toolSlug }) => {
         }
       }
       case 'sentence-case-converter':
-        return inputText.toLowerCase().replace(/(^|[.!?]\\s+)([a-z])/g, (_match, prefix, letter) => prefix + letter.toUpperCase());
+        return inputText.toLowerCase().replace(/(^|[.!?]\s+)([a-z])/g, (_match, prefix, letter) => prefix + letter.toUpperCase());
       case 'slug-generator':
-        return inputText.normalize('NFKD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        return inputText.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
       case 'kebab-case-converter':
-        return inputText.trim().replace(/([a-z0-9])([A-Z])/g, '$1-$2').normalize('NFKD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        return inputText.trim().replace(/([a-z0-9])([A-Z])/g, '$1-$2').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
       case 'remove-empty-lines':
-        return inputText.split(/\\r\\n|\\r|\\n/).filter((line) => line.trim().length > 0).join('\\n');
+        return inputText.split(/\r\n|\r|\n/).filter((line) => line.trim().length > 0).join('\n');
       case 'line-number-adder':
-        return inputText.split(/\\r\\n|\\r|\\n/).map((line, index) => `${index + 1}. ${line}`).join('\\n');
+        return inputText.split(/\r\n|\r|\n/).map((line, index) => `${index + 1}. ${line}`).join('\n');
       case 'duplicate-word-remover': {
         const seen = new Set<string>();
-        return inputText.replace(/\\b[\\p{L}\\p{N}_]+\\b/gu, (word) => {
+        return inputText.replace(/\b[\p{L}\p{N}_]+\b/gu, (word) => {
           const key = word.toLocaleLowerCase();
           if (seen.has(key)) return '';
           seen.add(key);
           return word;
-        }).replace(/[ \\t]{2,}/g, ' ').replace(/ +([,.!?;:])/g, '$1');
+        }).replace(/[ \t]{2,}/g, ' ').replace(/ +([,.!?;:])/g, '$1');
       }
       case 'word-frequency-counter': {
-        const words = inputText.toLocaleLowerCase().match(/[\\p{L}\\p{N}_']+/gu) || [];
+        const words = inputText.toLocaleLowerCase().match(/[\p{L}\p{N}_']+/gu) || [];
         const counts = new Map<string, number>();
         words.forEach((word) => counts.set(word, (counts.get(word) || 0) + 1));
-        return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([word, count]) => `${word}: ${count}`).join('\\n');
+        return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([word, count]) => `${word}: ${count}`).join('\n');
       }
       case 'reverse-words':
-        return inputText.trim().split(/\\s+/).filter(Boolean).reverse().join(' ');
+        return inputText.trim().split(/\s+/).filter(Boolean).reverse().join(' ');
       case 'text-to-ascii':
         return Array.from(inputText).map((character) => character.codePointAt(0)!.toString()).join(' ');
       default:
