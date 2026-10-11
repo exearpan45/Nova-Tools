@@ -508,3 +508,28 @@ html body main .nova-home-hero > .inline-flex {
   main .grid > * { min-width: 0; }
   main h1, main h2, main h3, main p { overflow-wrap: anywhere; }
 }
+
+
+/* Mobile-first usability pass: comfortable cards, safe-area spacing and no sidebar squeeze. */
+@media (max-width: 767px) {
+  #root > div { width: 100%; min-width: 0; }
+  #root aside { display: none !important; }
+  #root header { width: 100%; }
+  #root main { padding-left: 1rem !important; padding-right: 1rem !important; padding-top: .9rem !important; }
+  #root main > * { min-width: 0; }
+  #root main .nova-home-hero { min-height: 0 !important; padding: 1.35rem 1.1rem !important; border-radius: 1.4rem !important; gap: 1rem; }
+  #root main .nova-home-hero h1 { font-size: clamp(2.15rem, 9vw, 3.1rem) !important; line-height: 1.04 !important; letter-spacing: -.045em; overflow-wrap: anywhere; }
+  #root main .nova-home-hero p { font-size: .9rem; line-height: 1.6; }
+  #root main .nova-home-hero button { width: 100%; min-height: 44px; }
+  #root main input, #root main select, #root main textarea { min-height: 44px; font-size: 16px; }
+  #root main button { touch-action: manipulation; }
+  #root main .grid > * { min-width: 0; }
+  #root footer { padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px)); }
+}
+@media (min-width: 520px) and (max-width: 767px) {
+  #root main .nova-home-hero button { width: auto; }
+}
+@media (max-width: 380px) {
+  #root main { padding-left: .75rem !important; padding-right: .75rem !important; }
+  #root main .nova-home-hero { padding: 1.1rem .9rem !important; }
+}
