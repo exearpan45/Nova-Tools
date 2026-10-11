@@ -22,6 +22,7 @@ export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
 
   const [regexPattern, setRegexPattern] = useState<string>('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}');
   const [regexFlags, setRegexFlags] = useState<string>('g');
+  const [base64Mode, setBase64Mode] = useState<'encode' | 'decode'>('encode');
   const [copied, setCopied] = useState<boolean>(false);
 
   // UUID batch count
@@ -118,6 +119,10 @@ export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
         }
         case 'base64-encoder':
           return { outputText: btoa(unescape(encodeURIComponent(inputVal))), error: null };
+        case 'base64':
+          return base64Mode === 'encode'
+            ? { outputText: btoa(unescape(encodeURIComponent(inputVal))), error: null }
+            : { outputText: decodeURIComponent(escape(atob(inputVal))), error: null };
         case 'base64-decoder':
           return { outputText: decodeURIComponent(escape(atob(inputVal))), error: null };
         case 'url-encoder':
@@ -188,7 +193,7 @@ export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
     } catch (e: any) {
       return { outputText: '', error: e.message || 'Syntax Error' };
     }
-  }, [inputVal, toolSlug, uuidCount, strLength, charSet]);
+  }, [inputVal, toolSlug, uuidCount, strLength, charSet, base64Mode]);
 
   const handleCopy = (text: string) => {
     copyToClipboard(text);
@@ -272,6 +277,13 @@ export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
               Symbols (!@#$)
             </label>
           </div>
+        </div>
+      )}
+
+      {toolSlug === 'base64' && (
+        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 flex gap-2">
+          <button type="button" onClick={() => setBase64Mode('encode')} className={`flex-1 min-h-11 rounded-lg px-3 py-2 text-sm font-semibold ${base64Mode === 'encode' ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>Encode to Base64</button>
+          <button type="button" onClick={() => setBase64Mode('decode')} className={`flex-1 min-h-11 rounded-lg px-3 py-2 text-sm font-semibold ${base64Mode === 'decode' ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>Decode Base64</button>
         </div>
       )}
 
