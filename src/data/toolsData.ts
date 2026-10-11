@@ -1150,7 +1150,7 @@ export const TOOLS_DATA: ToolDefinition[] = RAW_TOOLS_DATA.map((tool) => ({
     'image-compressor': 'image', 'image-resizer': 'image',
     'pdf-merger': 'pdf', 'pdf-splitter': 'pdf',
     'text-diff': 'text', 'word-counter': 'text', 'character-counter': 'text',
-    'lorem-ipsum-generator': 'text', 'readability-checker': 'text',
+    'lorem-ipsum-generator': 'text', 'readability-checker': 'writing',
     'regex-tester': 'developer', 'hash-generator': 'developer', 'base64': 'developer',
     'cgpa-calculator': 'student', 'scientific-calculator': 'student',
     'gradient-generator': 'design', 'csv-viewer': 'data',
