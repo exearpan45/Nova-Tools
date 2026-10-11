@@ -1,5 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { PDFDocument, degrees } from 'pdf-lib';
+import * as pdfjsLib from 'pdfjs-dist';
+import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 import {
   Upload, Download, FileText, Plus, Trash2, RotateCw, Check,
   Scissors, FileArchive, HardDrive, Fingerprint, FileSearch, RefreshCw
@@ -23,6 +27,9 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
   const [pageRange, setPageRange] = useState<string>('1');
   const [totalPages, setTotalPages] = useState<number>(1);
   const [rotationAngle, setRotationAngle] = useState<number>(90);
+  const [targetSizeValue, setTargetSizeValue] = useState<number>(1);
+  const [targetSizeUnit, setTargetSizeUnit] = useState<'KB' | 'MB'>('MB');
+  const [rasterizeForCompression, setRasterizeForCompression] = useState<boolean>(false);
 
   // Metadata states
   const [pdfMeta, setPdfMeta] = useState<{ title?: string; author?: string; subject?: string; creator?: string }>({});
@@ -97,6 +104,64 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const createRasterizedPdf = async (file: File, targetBytes: number) => {
+    const sourceBytes = new Uint8Array(await file.arrayBuffer());
+    const loadingTask = pdfjsLib.getDocument({ data: sourceBytes });
+    const sourcePdf = await loadingTask.promise;
+    if (sourcePdf.numPages > 80) {
+      await sourcePdf.destroy();
+      throw new Error('For browser memory safety, rasterized target-size compression currently supports up to 80 pages per PDF. Use preserve-text mode for larger files.');
+    }
+
+    const attempts = [
+      { scale: 1, quality: 0.82 },
+      { scale: 0.85, quality: 0.72 },
+      { scale: 0.7, quality: 0.62 },
+      { scale: 0.55, quality: 0.52 },
+      { scale: 0.4, quality: 0.42 },
+      { scale: 0.3, quality: 0.32 },
+    ];
+    let bestBytes: Uint8Array | null = null;
+
+    try {
+      for (const attempt of attempts) {
+        const outputPdf = await PDFDocument.create();
+        for (let pageNumber = 1; pageNumber <= sourcePdf.numPages; pageNumber += 1) {
+          const sourcePage = await sourcePdf.getPage(pageNumber);
+          const viewport = sourcePage.getViewport({ scale: attempt.scale });
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.max(1, Math.ceil(viewport.width));
+          canvas.height = Math.max(1, Math.ceil(viewport.height));
+          const context = canvas.getContext('2d');
+          if (!context) throw new Error('Your browser could not create a canvas for PDF compression.');
+          await sourcePage.render({ canvasContext: context, viewport }).promise;
+          const jpegBlob = await new Promise<Blob>((resolve, reject) => {
+            canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error('Could not encode a PDF page image.')), 'image/jpeg', attempt.quality);
+          });
+          const jpegBytes = await jpegBlob.arrayBuffer();
+          const embedded = await outputPdf.embedJpg(jpegBytes);
+          const page = outputPdf.addPage([viewport.width / attempt.scale, viewport.height / attempt.scale]);
+          page.drawImage(embedded, { x: 0, y: 0, width: viewport.width / attempt.scale, height: viewport.height / attempt.scale });
+          canvas.width = 0;
+          canvas.height = 0;
+          sourcePage.cleanup();
+        }
+
+        const bytes = await outputPdf.save({ useObjectStreams: true });
+        if (!bestBytes || bytes.byteLength < bestBytes.byteLength) bestBytes = bytes;
+        if (bytes.byteLength <= targetBytes) {
+          bestBytes = bytes;
+          break;
+        }
+      }
+    } finally {
+      await sourcePdf.destroy();
+    }
+
+    if (!bestBytes) throw new Error('Could not compress this PDF. Please try another file.');
+    return { bytes: bestBytes, targetReached: bestBytes.byteLength <= targetBytes };
   };
 
   const executePdfOperation = async () => {
@@ -187,14 +252,30 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
         setResultFileName('extracted-pages.pdf');
         setStatusMessage(`Extracted ${pages.length} pages successfully.`);
       } else if (toolSlug === 'pdf-compressor') {
-        const buffer = await files[0].arrayBuffer();
-        const doc = await PDFDocument.load(buffer);
-        // Optimize streams and discard unused objects
-        const bytes = await doc.save({ useObjectStreams: true });
+        const targetBytes = Math.max(1, targetSizeValue) * (targetSizeUnit === 'MB' ? 1024 * 1024 : 1024);
+        let bytes: Uint8Array;
+        let targetReached: boolean;
+        if (rasterizeForCompression) {
+          const compressed = await createRasterizedPdf(files[0], targetBytes);
+          bytes = compressed.bytes;
+          targetReached = compressed.targetReached;
+        } else {
+          const buffer = await files[0].arrayBuffer();
+          const doc = await PDFDocument.load(buffer);
+          // Preserve selectable text and vector content in the default safe mode.
+          bytes = await doc.save({ useObjectStreams: true });
+          targetReached = bytes.byteLength <= targetBytes;
+        }
         const blob = new Blob([bytes as any], { type: 'application/pdf' });
-        setResultUrl(URL.createObjectURL(blob));
+        setResultUrl((previous) => {
+          if (previous) URL.revokeObjectURL(previous);
+          return URL.createObjectURL(blob);
+        });
         setResultFileName('compressed-document.pdf');
-        setStatusMessage(`Optimized PDF document stream.`);
+        const reduction = files[0].size > 0 ? Math.round((1 - blob.size / files[0].size) * 100) : 0;
+        setStatusMessage(targetReached
+          ? `Target reached: ${formatBytes(blob.size)} (target ${targetSizeValue} ${targetSizeUnit}). Size change: ${reduction}%. ${rasterizeForCompression ? 'Pages were rasterized, so text is no longer selectable.' : 'Text and vector content were preserved.'}`
+          : `Best result: ${formatBytes(blob.size)}; target was ${targetSizeValue} ${targetSizeUnit}. ${rasterizeForCompression ? 'Even the lowest tested page quality did not reach the target.' : 'Try enabling rasterized compression to shrink image-heavy PDFs; this turns each page into an image and removes selectable text.'} Size change: ${reduction}%.`);
       } else if (toolSlug === 'pdf-page-deleter') {
         const buffer = await files[0].arrayBuffer();
         const doc = await PDFDocument.load(buffer);
@@ -298,6 +379,22 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
           </div>
 
           {/* Operation Controls */}
+          {toolSlug === 'pdf-compressor' && (
+            <div className="p-5 rounded-xl border border-rose-500/20 bg-rose-500/5 space-y-3">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Target PDF size</label>
+              <div className="flex flex-wrap items-center gap-2">
+                <input aria-label="Target PDF size" type="number" min="1" max={targetSizeUnit === 'MB' ? 500 : 512000} value={targetSizeValue} onChange={(e) => setTargetSizeValue(Math.max(1, Number(e.target.value) || 1))} className="w-28 px-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900" />
+                <select aria-label="Target PDF size unit" value={targetSizeUnit} onChange={(e) => setTargetSizeUnit(e.target.value as 'KB' | 'MB')} className="px-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                  <option value="KB">KB</option><option value="MB">MB</option>
+                </select>
+              </div>
+              <label className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-200">
+                <input type="checkbox" checked={rasterizeForCompression} onChange={(e) => setRasterizeForCompression(e.target.checked)} className="mt-0.5 rounded accent-rose-500" />
+                <span><strong>Rasterize pages for stronger compression</strong><br /><span className="text-slate-500 dark:text-slate-400">Can reduce scanned/photo PDFs much more. It converts each page into an image, so text will no longer be selectable/searchable. Up to 80 pages per file.</span></span>
+              </label>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Preserve-text mode is safer but may not hit the target. Rasterized mode tries multiple image quality/resolution levels and reports the actual output size.</p>
+            </div>
+          )}
           {(toolSlug === 'pdf-splitter' || toolSlug === 'pdf-page-extractor') && (
             <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 space-y-3">
               <div className="flex justify-between items-center">
