@@ -1125,7 +1125,7 @@ const RAW_TOOLS_DATA: Omit<ToolDefinition, 'suite'>[] = [
     howItWorks: 'Runs in the browser using the supported NOVA Tools interface for this tool.',
     privacyInfo: 'Processing is performed in the browser where supported. Avoid entering sensitive information into any online tool.',
     relatedSlugs: []
-  }
+  },
   {
     id: 'uppercase-converter',
     slug: 'uppercase-converter',
