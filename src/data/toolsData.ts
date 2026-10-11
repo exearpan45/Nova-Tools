@@ -1465,7 +1465,7 @@ const RAW_TOOLS_DATA: Omit<ToolDefinition, 'suite'>[] = [
     howItWorks: 'Processes the supplied input in the browser using the tool interface.',
     privacyInfo: 'Input is processed in your browser. Avoid entering sensitive information into online tools.',
     relatedSlugs: []
-  }
+  },
 
   // Useful PDF and file utilities already implemented in the browser workspace
   {
