@@ -293,15 +293,15 @@ html.dark aside {
 }
 
 /* The homepage hero gets atmosphere without a heavy canvas or JS loop. */
-main section.rounded-\[1\.75rem\],
+.nova-home-hero,
 main section.rounded-3xl {
   isolation: isolate;
 }
-main section.rounded-\[1\.75rem\] > h1 span {
+.nova-home-hero > h1 span {
   background-size: 200% 200%;
   animation: novaGradientFlow 9s ease-in-out infinite;
 }
-main section.rounded-\[1\.75rem\] > div[aria-hidden="true"] {
+.nova-home-hero > div[aria-hidden="true"] {
   animation: novaAuroraDrift 12s ease-in-out infinite;
   will-change: transform;
 }
@@ -320,7 +320,7 @@ main .grid > div[class*="rounded-2xl"][class*="border"]:nth-child(4n) { --nova-c
     transform: translate3d(0, -3px, 0);
     box-shadow: 0 14px 34px -22px var(--nova-card-glow, rgba(118,87,255,.18));
   }
-  main section.rounded-\[1\.75rem\]:hover {
+  .nova-home-hero:hover {
     animation: novaBorderShimmer 5s ease-in-out infinite;
   }
   main button:not(:disabled):hover,
@@ -348,8 +348,8 @@ main .grid > div[class*="rounded-2xl"][class*="border"]:nth-child(7) { animation
 main .grid > div[class*="rounded-2xl"][class*="border"]:nth-child(8) { animation-delay: 175ms; }
 
 @media (prefers-reduced-motion: reduce) {
-  main section.rounded-\[1\.75rem\] > h1 span,
-  main section.rounded-\[1\.75rem\] > div[aria-hidden="true"],
+  .nova-home-hero > h1 span,
+  .nova-home-hero > div[aria-hidden="true"],
   main .grid > div[class*="rounded-2xl"][class*="border"] {
     animation: none !important;
     will-change: auto;
@@ -371,7 +371,7 @@ html.dark body {
     radial-gradient(ellipse at 0% 68%, rgba(255, 79, 200, .055), transparent 32%);
   color: #F5F7FF;
 }
-html.dark main section[class~="rounded-[1.75rem]"],
+.nova-home-hero,
 html.dark main section.rounded-3xl {
   border-color: rgba(118, 87, 255, .34);
   box-shadow: 0 18px 60px -34px rgba(0, 217, 255, .28), 0 14px 50px -35px rgba(118, 87, 255, .42);
@@ -400,4 +400,33 @@ html.dark main .grid > div[class*="rounded-2xl"][class*="border"] [class*="borde
     animation: none !important;
     transition: none !important;
   }
+}
+
+
+/* Explicit homepage classes: predictable styling without fragile arbitrary-class selectors. */
+html.dark .nova-home-hero {
+  background-color: #090E1D;
+  background-image: radial-gradient(ellipse at 50% 0%, rgba(118,87,255,.20), transparent 58%), linear-gradient(135deg, #10152B 0%, #090E1D 55%, #071B2A 100%);
+  border-color: rgba(118,87,255,.38);
+  box-shadow: 0 20px 58px -34px rgba(0,217,255,.32), 0 16px 52px -36px rgba(118,87,255,.48);
+}
+html.dark .nova-tool-card,
+html.dark .nova-suite-card {
+  border-color: rgba(137,158,211,.22);
+  transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease, background 200ms ease;
+}
+@media (hover:hover) and (pointer:fine) {
+  html.dark .nova-tool-card:hover,
+  html.dark .nova-suite-card:hover {
+    border-color: rgba(0,217,255,.62);
+    box-shadow: 0 16px 38px -24px rgba(0,217,255,.42), 0 10px 30px -24px rgba(118,87,255,.5);
+    transform: translateY(-3px);
+  }
+}
+html.dark .nova-workflow-banner { backdrop-filter: blur(10px); }
+@media (prefers-reduced-motion: reduce) {
+  html.dark .nova-tool-card,
+  html.dark .nova-suite-card { transition: none; }
+  html.dark .nova-tool-card:hover,
+  html.dark .nova-suite-card:hover { transform: none; }
 }
