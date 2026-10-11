@@ -64,7 +64,7 @@ export const ToolsPage: React.FC = () => {
   }, [selectedSuite, searchQuery]);
 
   return (
-    <div className="space-y-8 animate-page-enter">
+    <div className="space-y-5 sm:space-y-8 animate-page-enter min-w-0">
       {/* Header */}
       <div className="relative overflow-hidden rounded-3xl border border-violet-500/15 bg-gradient-to-br from-white via-violet-50/60 to-cyan-50/60 p-5 sm:p-7 dark:from-[#10182B] dark:via-[#11142B] dark:to-[#0B1B2A] shadow-lg shadow-violet-950/5"><div className="pointer-events-none absolute -right-10 -top-16 h-44 w-44 rounded-full bg-violet-500/10 blur-3xl" /><div className="relative flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
@@ -159,7 +159,7 @@ export const ToolsPage: React.FC = () => {
 
       {/* Tools Content: Grid or List */}
       {viewMode === 'grid' ? (
-        <div className="grid grid-cols-1 min-[380px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-4">
+        <div className="grid grid-cols-1 min-[520px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
           {filteredTools.map((tool) => {
             const suite = SUITES_DATA[tool.suite];
             const isFav = isFavorite(tool.slug);
@@ -168,7 +168,7 @@ export const ToolsPage: React.FC = () => {
               <div
                 key={tool.slug}
                 onClick={() => navigate(`/tools/${tool.slug}`)}
-                className="p-3 sm:p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800/90 bg-white dark:bg-slate-900/50 hover:border-cyan-500/40 hover:shadow-lg dark:hover:shadow-cyan-950/20 cursor-pointer transition-all active:scale-[0.98] group flex flex-col justify-between"
+                className="p-4 sm:p-5 min-w-0 rounded-2xl border border-slate-200/90 dark:border-slate-800/90 bg-white dark:bg-slate-900/50 hover:border-cyan-500/40 hover:shadow-lg dark:hover:shadow-cyan-950/20 cursor-pointer transition-all active:scale-[0.98] group flex flex-col justify-between"
               >
                 <div className="space-y-1.5 sm:space-y-2">
                   <div className="flex items-center justify-between">
@@ -189,10 +189,10 @@ export const ToolsPage: React.FC = () => {
                     </button>
                   </div>
                   <div>
-                    <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white group-hover:text-cyan-500 transition-colors line-clamp-1">
+                    <h3 className="text-sm sm:text-sm font-bold text-slate-900 dark:text-white group-hover:text-cyan-500 transition-colors line-clamp-2 break-words">
                       {tool.name}
                     </h3>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1 sm:line-clamp-2 mt-0.5 leading-relaxed">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-1 leading-relaxed">
                       {tool.description}
                     </p>
                   </div>
