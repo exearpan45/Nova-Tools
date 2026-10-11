@@ -44,27 +44,27 @@ export const HomePage: React.FC = () => {
       </div>
 
       {/* 2. Compact Hero Section */}
-      <section className="relative isolate overflow-hidden pt-7 pb-6 px-3 sm:px-6 md:pt-12 md:pb-10 text-center max-w-5xl mx-auto space-y-3 sm:space-y-4 md:space-y-6 nova-home-hero rounded-[1.75rem] border border-violet-500/20 bg-gradient-to-br from-white via-violet-50/70 to-cyan-50/70 dark:from-[#090E1D] dark:via-[#10132A] dark:to-[#071B2A] shadow-2xl shadow-violet-950/5 dark:shadow-black/20"><div aria-hidden="true" className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-56 w-56 -translate-x-1/2 rounded-full bg-violet-500/15 blur-3xl" /><div aria-hidden="true" className="pointer-events-none absolute -bottom-24 right-0 -z-10 h-48 w-48 rounded-full bg-cyan-400/10 blur-3xl" />
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-cyan-500/20 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 text-[10px] sm:text-xs font-semibold">
+      <section className="relative isolate overflow-hidden pt-7 pb-6 px-3 sm:px-6 md:pt-12 md:pb-10 text-left max-w-full mx-0 space-y-4 sm:space-y-5 md:space-y-6 nova-home-hero rounded-[1.75rem] border border-violet-500/20 bg-gradient-to-br from-white via-violet-50/70 to-cyan-50/70 dark:from-[#090E1D] dark:via-[#10132A] dark:to-[#071B2A] shadow-2xl shadow-violet-950/5 dark:shadow-black/20"><div aria-hidden="true" className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-56 w-56 -translate-x-1/2 rounded-full bg-violet-500/15 blur-3xl" /><div aria-hidden="true" className="pointer-events-none absolute -bottom-24 right-0 -z-10 h-48 w-48 rounded-full bg-cyan-400/10 blur-3xl" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 text-[10px] sm:text-xs font-bold tracking-wide">
           <Sparkles className="w-3 h-3" />
           <span>NOVA TOOLS · YOUR EVERYDAY TOOLKIT</span>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.08] text-balance">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.02] text-balance max-w-4xl">
           Your tools.{' '}
           <span className="bg-gradient-to-r from-cyan-400 via-violet-400 to-pink-500 bg-clip-text text-transparent">
             One workspace.
           </span>
         </h1>
 
-        <p className="text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-400 max-w-xl mx-auto leading-relaxed px-2">
+        <p className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
           A powerful collection of free tools for files, images, developers, students and everyday work. Fast, simple and designed to keep your workflow moving.
         </p>
 
-        <div className="flex flex-wrap items-center justify-center gap-2 pt-1"><button type="button" onClick={() => navigate('/tools')} className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-violet-600/20 hover:shadow-violet-500/30 hover:-translate-y-0.5"><Sparkles className="h-4 w-4" /> Explore all tools <ArrowRight className="h-4 w-4" /></button><button type="button" onClick={() => setSearchOpen(true)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300/80 bg-white/70 px-5 py-3 text-xs sm:text-sm font-bold text-slate-700 hover:border-violet-400 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200"><Search className="h-4 w-4" /> Find a tool</button></div>
+        <div className="flex flex-wrap items-center justify-start gap-3 pt-2"><button type="button" onClick={() => navigate('/tools')} className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-violet-600/20 hover:shadow-violet-500/30 hover:-translate-y-0.5"><Sparkles className="h-4 w-4" /> Explore all tools <ArrowRight className="h-4 w-4" /></button><button type="button" onClick={() => setSearchOpen(true)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300/80 bg-white/70 px-5 py-3 text-xs sm:text-sm font-bold text-slate-700 hover:border-violet-400 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200"><Search className="h-4 w-4" /> Find a tool</button></div>
 
         {/* Desktop Search Trigger (Visible on md+ screens) */}
-        <div className="hidden md:block pt-2 max-w-2xl mx-auto">
+        <div className="hidden md:block pt-3 max-w-3xl">
           <button
             onClick={() => setSearchOpen(true)}
             className="w-full flex items-center justify-between p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 shadow-xl hover:border-cyan-500/50 hover:shadow-cyan-500/10 transition-all text-left group"
@@ -89,20 +89,39 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
+      {/* Visible homepage redesign: feature strip beneath the hero */}
+      <section className="grid grid-cols-1 sm:grid-cols-3 gap-3" aria-label="NOVA Tools highlights">
+        <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 to-transparent p-4 sm:p-5">
+          <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-cyan-600 dark:text-cyan-300">Built for speed</div>
+          <div className="mt-2 text-lg sm:text-xl font-black text-slate-900 dark:text-white">Instant in-browser tools</div>
+          <p className="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">Work directly in your browser without a bulky workflow.</p>
+        </div>
+        <div className="rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-500/10 to-transparent p-4 sm:p-5">
+          <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-600 dark:text-violet-300">Privacy first</div>
+          <div className="mt-2 text-lg sm:text-xl font-black text-slate-900 dark:text-white">Your files stay yours</div>
+          <p className="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">Local processing for supported tools, with no account required.</p>
+        </div>
+        <div className="rounded-2xl border border-pink-500/20 bg-gradient-to-br from-pink-500/10 to-transparent p-4 sm:p-5">
+          <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-pink-600 dark:text-pink-300">One workspace</div>
+          <div className="mt-2 text-lg sm:text-xl font-black text-slate-900 dark:text-white">Tools for every task</div>
+          <p className="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">Explore utilities for students, creators and developers.</p>
+        </div>
+      </section>
+
       {/* 3. Quick Actions (Horizontal swipe chips on mobile) */}
-      <section className="space-y-2">
+      <section className="rounded-2xl border border-slate-200/80 dark:border-violet-400/20 bg-white/70 dark:bg-slate-950/40 p-3 sm:p-4 shadow-sm space-y-3">
         <div className="flex items-center justify-between px-0.5">
           <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">
             Quick Actions
           </span>
           <span className="text-[10px] text-slate-400 md:hidden">Swipe →</span>
         </div>
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 px-0.5 -mx-1 sm:mx-0 sm:flex-wrap sm:justify-center">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
           {quickActions.map((qa) => (
             <button
               key={qa.slug}
               onClick={() => navigate(`/tools/${qa.slug}`)}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 hover:border-cyan-500/50 hover:bg-slate-50 dark:hover:bg-slate-850 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all shadow-xs shrink-0 active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-2 px-3 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 hover:border-cyan-500/50 hover:bg-slate-50 dark:hover:bg-slate-850 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all shadow-xs active:scale-[0.98] cursor-pointer text-left"
             >
               <span>{qa.icon}</span>
               <span className="whitespace-nowrap">{qa.name}</span>
