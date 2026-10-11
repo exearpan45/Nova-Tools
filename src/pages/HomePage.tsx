@@ -9,17 +9,18 @@ import { FEATURED_TOOLS, TOOLS_DATA } from '../data/toolsData';
 export const HomePage: React.FC = () => {
   const { navigate, setSearchOpen, isFavorite, toggleFavorite } = useNova();
 
+  // Keep every shortcut aligned with a real tool slug in toolsData.
   const quickActions = [
-    { name: 'Compress', slug: 'image-compressor', icon: '🗜️' },
-    { name: 'Merge PDF', slug: 'pdf-merger', icon: '📑' },
+    { name: 'Calculator', slug: 'calculator', icon: '🧮' },
+    { name: 'Percentage', slug: 'percentage-calculator', icon: '％' },
+    { name: 'Unit Convert', slug: 'unit-converter', icon: '📏' },
+    { name: 'Temperature', slug: 'temperature-converter', icon: '🌡️' },
     { name: 'Format JSON', slug: 'json-formatter', icon: '🧩' },
     { name: 'QR Code', slug: 'qr-generator', icon: '📱' },
     { name: 'Password', slug: 'password-generator', icon: '🔒' },
-    { name: 'WebP Convert', slug: 'jpg-to-webp', icon: '⚡' },
-    { name: 'Resize', slug: 'image-resizer', icon: '📐' },
-    { name: 'Study Timer', slug: 'pomodoro-timer', icon: '⏱️' },
-    { name: 'Percentage', slug: 'percentage-calculator', icon: '🧮' },
-    { name: 'Unit Convert', slug: 'unit-converter', icon: '📏' },
+    { name: 'Word Counter', slug: 'word-counter', icon: '📝' },
+    { name: 'Base64', slug: 'base64', icon: '🔡' },
+    { name: 'UUID', slug: 'uuid-generator', icon: '🆔' },
   ];
 
   return (
