@@ -48,8 +48,22 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = Array.from(e.target.files || []);
     if (selected.length === 0) return;
+    if (toolSlug === 'jpg-to-pdf') {
+      const unsupported = selected.find((file) => {
+        const name = file.name.toLowerCase();
+        return !(file.type === 'image/jpeg' || file.type === 'image/png' || /\\.(jpe?g|png)$/.test(name));
+      });
+      if (unsupported) {
+        setErrorMsg('Please select only JPG, JPEG, or PNG images. WebP and other formats are not supported by this converter yet.');
+        e.target.value = '';
+        return;
+      }
+    }
     setErrorMsg(null);
-    setResultUrl(null);
+    setResultUrl((previous) => {
+      if (previous) URL.revokeObjectURL(previous);
+      return null;
+    });
     setFiles(selected);
 
     const first = selected[0];
@@ -279,8 +293,11 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
       } else if (toolSlug === 'pdf-page-deleter') {
         const buffer = await files[0].arrayBuffer();
         const doc = await PDFDocument.load(buffer);
+        if (doc.getPageCount() <= 1) {
+          throw new Error('This PDF has only one page. Deleting it would create an invalid empty PDF, so the page was kept.');
+        }
         const pageToDelete = Number(pageRange) - 1;
-        if (pageToDelete >= 0 && pageToDelete < doc.getPageCount()) {
+        if (Number.isInteger(pageToDelete) && pageToDelete >= 0 && pageToDelete < doc.getPageCount()) {
           doc.removePage(pageToDelete);
           const bytes = await doc.save();
           const blob = new Blob([bytes as any], { type: 'application/pdf' });
@@ -320,7 +337,7 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
             multiple={toolSlug === 'pdf-merger' || toolSlug === 'jpg-to-pdf'}
             accept={
               toolSlug.includes('jpg-to-pdf')
-                ? 'image/jpeg,image/png,image/webp'
+                ? 'image/jpeg,image/png,.jpg,.jpeg,.png'
                 : toolSlug.includes('file-')
                 ? '*/*'
                 : 'application/pdf'
