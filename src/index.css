@@ -371,7 +371,7 @@ html.dark body {
     radial-gradient(ellipse at 0% 68%, rgba(255, 79, 200, .055), transparent 32%);
   color: #F5F7FF;
 }
-html.dark main section.rounded-\\[1\\.75rem\\],
+html.dark main section[class~="rounded-[1.75rem]"],
 html.dark main section.rounded-3xl {
   border-color: rgba(118, 87, 255, .34);
   box-shadow: 0 18px 60px -34px rgba(0, 217, 255, .28), 0 14px 50px -35px rgba(118, 87, 255, .42);
