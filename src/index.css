@@ -492,3 +492,19 @@ html body main .nova-home-hero p {
 html body main .nova-home-hero > .inline-flex {
   align-self: flex-start;
 }
+
+/* Mobile comfort pass: avoid cramped two-column cards on narrow phones. */
+@media (max-width: 379px) {
+  main { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+  main .nova-home-hero { min-height: 0 !important; padding: 1.25rem !important; border-radius: 1.25rem !important; }
+  main .nova-home-hero h1 { font-size: clamp(2rem, 10vw, 2.6rem) !important; line-height: 1.04 !important; overflow-wrap: anywhere; }
+  main .nova-home-hero p { font-size: 0.875rem !important; }
+  main section { min-width: 0; }
+  main button, main input, main textarea, main select { max-width: 100%; }
+}
+@media (max-width: 767px) {
+  html, body, #root { max-width: 100%; overflow-x: clip; }
+  main { width: 100%; min-width: 0; }
+  main .grid > * { min-width: 0; }
+  main h1, main h2, main h3, main p { overflow-wrap: anywhere; }
+}
