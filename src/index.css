@@ -272,3 +272,91 @@ html.dark aside {
   html { scroll-behavior: auto; }
   button:active { transform: none; }
 }
+
+
+/* NOVA NEBULA: restrained premium motion and colour depth. */
+@keyframes novaAuroraDrift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(1.5%, -2%, 0) scale(1.04); }
+}
+@keyframes novaGradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes novaSoftReveal {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes novaBorderShimmer {
+  0%, 100% { border-color: rgba(118, 87, 255, .18); }
+  50% { border-color: rgba(0, 217, 255, .34); }
+}
+
+/* The homepage hero gets atmosphere without a heavy canvas or JS loop. */
+main section.rounded-\[1\.75rem\],
+main section.rounded-3xl {
+  isolation: isolate;
+}
+main section.rounded-\[1\.75rem\] > h1 span {
+  background-size: 200% 200%;
+  animation: novaGradientFlow 9s ease-in-out infinite;
+}
+main section.rounded-\[1\.75rem\] > div[aria-hidden="true"] {
+  animation: novaAuroraDrift 12s ease-in-out infinite;
+  will-change: transform;
+}
+main .grid > div[class*="rounded-2xl"][class*="border"],
+main .grid > button[class*="rounded-2xl"][class*="border"] {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+main .grid > div[class*="rounded-2xl"][class*="border"]:nth-child(4n + 1) { --nova-card-glow: rgba(118,87,255,.14); }
+main .grid > div[class*="rounded-2xl"][class*="border"]:nth-child(4n + 2) { --nova-card-glow: rgba(0,217,255,.12); }
+main .grid > div[class*="rounded-2xl"][class*="border"]:nth-child(4n + 3) { --nova-card-glow: rgba(255,79,200,.11); }
+main .grid > div[class*="rounded-2xl"][class*="border"]:nth-child(4n) { --nova-card-glow: rgba(52,211,153,.10); }
+
+@media (hover: hover) and (pointer: fine) {
+  main .grid > div[class*="rounded-2xl"][class*="border"]:hover {
+    transform: translate3d(0, -3px, 0);
+    box-shadow: 0 14px 34px -22px var(--nova-card-glow, rgba(118,87,255,.18));
+  }
+  main section.rounded-\[1\.75rem\]:hover {
+    animation: novaBorderShimmer 5s ease-in-out infinite;
+  }
+  main button:not(:disabled):hover,
+  header button:not(:disabled):hover {
+    transform: translateY(-1px);
+  }
+}
+main button:focus-visible,
+main a:focus-visible,
+header button:focus-visible {
+  outline: 2px solid #00bfe8;
+  outline-offset: 3px;
+}
+
+/* Keep motion short and staggered, rather than flashy or distracting. */
+main .grid > div[class*="rounded-2xl"][class*="border"] {
+  animation: novaSoftReveal 320ms cubic-bezier(.2,.75,.25,1) both;
+}
+main .grid > div[class*="rounded-2xl"][class*="border"]:nth-child(2) { animation-delay: 25ms; }
+main .grid > div[class*="rounded-2xl"][class*="border"]:nth-child(3) { animation-delay: 50ms; }
+main .grid > div[class*="rounded-2xl"][class*="border"]:nth-child(4) { animation-delay: 75ms; }
+main .grid > div[class*="rounded-2xl"][class*="border"]:nth-child(5) { animation-delay: 100ms; }
+main .grid > div[class*="rounded-2xl"][class*="border"]:nth-child(6) { animation-delay: 125ms; }
+main .grid > div[class*="rounded-2xl"][class*="border"]:nth-child(7) { animation-delay: 150ms; }
+main .grid > div[class*="rounded-2xl"][class*="border"]:nth-child(8) { animation-delay: 175ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  main section.rounded-\[1\.75rem\] > h1 span,
+  main section.rounded-\[1\.75rem\] > div[aria-hidden="true"],
+  main .grid > div[class*="rounded-2xl"][class*="border"] {
+    animation: none !important;
+    will-change: auto;
+  }
+  main .grid > div[class*="rounded-2xl"][class*="border"]:hover,
+  main button:not(:disabled):hover,
+  header button:not(:disabled):hover {
+    transform: none;
+  }
+}
