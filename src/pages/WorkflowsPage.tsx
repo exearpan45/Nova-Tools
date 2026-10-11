@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { PDFDocument } from 'pdf-lib';
 import {
   GitFork, Play, Plus, Trash2, ArrowRight, Clock, Sparkles, Check, ChevronRight,
   Upload, Download, AlertCircle, RefreshCw, Copy, FileText, FileImage, Layers
@@ -16,6 +17,7 @@ export const WorkflowsPage: React.FC = () => {
 
   // Execution states
   const [workflowInputFile, setWorkflowInputFile] = useState<File | null>(null);
+  const [workflowPdfFiles, setWorkflowPdfFiles] = useState<File[]>([]);
   const [workflowInputText, setWorkflowInputText] = useState<string>('');
   const [executingStep, setExecutingStep] = useState<number>(-1);
   const [stepLogs, setStepLogs] = useState<Array<{ stepIndex: number; status: 'pending' | 'running' | 'done' | 'error'; message: string }>>([]);
@@ -40,6 +42,7 @@ export const WorkflowsPage: React.FC = () => {
   const handleStartWorkflow = (wf: WorkflowDefinition) => {
     setActiveWorkflow(wf);
     setWorkflowInputFile(null);
+    setWorkflowPdfFiles([]);
     setWorkflowInputText(wf.category === 'developer' ? '{\n  "name": "NOVA TOOLS",\n  "status": "ready",\n  "features": ["local", "fast", "secure"]\n}' : (wf.category === 'data' ? 'id,name,role\n1,Alice,Engineer\n2,Bob,Designer\n1,Alice,Engineer\n' : ''));
     setExecutingStep(-1);
     setStepLogs([]);
@@ -54,11 +57,34 @@ export const WorkflowsPage: React.FC = () => {
     setPipelineError(null);
   };
 
+  const handlePdfFilesSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    const invalid = files.find((file) => file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf'));
+    if (invalid) {
+      setPipelineError('Please select PDF files only.');
+      e.target.value = '';
+      return;
+    }
+    setWorkflowPdfFiles(files);
+    setPipelineError(null);
+  };
+
+  useEffect(() => () => {
+    if (pipelineResult?.blobUrl) URL.revokeObjectURL(pipelineResult.blobUrl);
+  }, [pipelineResult?.blobUrl]);
+
   // True automated tool-to-tool pipeline execution
   const executePipeline = async () => {
     if (!activeWorkflow) return;
     setPipelineError(null);
     setPipelineResult(null);
+
+    const builtInWorkflowIds = new Set(['wf-web-image-optimizer', 'wf-pdf-bundle', 'wf-developer-cleaner', 'wf-data-pipeline']);
+    if (!builtInWorkflowIds.has(activeWorkflow.id)) {
+      setPipelineError('Custom workflows are saved as plans. Automatic execution is currently available for the built-in image, PDF, JSON, and CSV pipelines only.');
+      return;
+    }
 
     const logs: Array<{ stepIndex: number; status: 'pending' | 'running' | 'done' | 'error'; message: string }> = activeWorkflow.steps.map((_, i) => ({
       stepIndex: i,
@@ -117,30 +143,20 @@ export const WorkflowsPage: React.FC = () => {
         logs[0] = { stepIndex: 0, status: 'done', message: `Scaled to ${w} × ${h}px` };
         setStepLogs([...logs]);
 
-        // Step 2: Compress
+        // Step 2: Compress and export as WebP.
         setExecutingStep(1);
-        logs[1] = { stepIndex: 1, status: 'running', message: 'Applying optimal lossy compression (80% quality)...' };
+        logs[1] = { stepIndex: 1, status: 'running', message: 'Compressing and exporting optimized WebP at 80% quality...' };
         setStepLogs([...logs]);
-        await new Promise((r) => setTimeout(r, 400));
-
-        logs[1] = { stepIndex: 1, status: 'done', message: 'Perceptual optimization complete' };
-        setStepLogs([...logs]);
-
-        // Step 3: Convert to WebP
-        setExecutingStep(2);
-        logs[2] = { stepIndex: 2, status: 'running', message: 'Transcoding output stream to Google WebP...' };
-        setStepLogs([...logs]);
-        await new Promise((r) => setTimeout(r, 400));
 
         const blob = await new Promise<Blob>((resolve, reject) => {
-          canvas.toBlob((b) => {
-            if (b) resolve(b);
-            else reject(new Error('Canvas export to WebP failed.'));
+          canvas.toBlob((result) => {
+            if (result) resolve(result);
+            else reject(new Error('Canvas export to WebP failed. Your browser may not support WebP encoding.'));
           }, 'image/webp', 0.8);
         });
 
         const finalUrl = URL.createObjectURL(blob);
-        logs[2] = { stepIndex: 2, status: 'done', message: `Transcoded to WebP (${Math.round(blob.size / 1024)} KB)` };
+        logs[1] = { stepIndex: 1, status: 'done', message: `Exported WebP (${Math.round(blob.size / 1024)} KB)` };
         setStepLogs([...logs]);
         setExecutingStep(-1);
 
@@ -148,6 +164,38 @@ export const WorkflowsPage: React.FC = () => {
           blobUrl: finalUrl,
           filename: `optimized-${workflowInputFile.name.replace(/\.[^/.]+$/, '')}.webp`,
           originalSize,
+          finalSize: blob.size,
+        });
+        return;
+      }
+
+      // PDF workflow: merge the selected PDF documents in the browser.
+      if (activeWorkflow.category === 'pdf') {
+        if (workflowPdfFiles.length < 2) {
+          throw new Error('Please select at least two PDF files to merge.');
+        }
+        const totalInputSize = workflowPdfFiles.reduce((sum, file) => sum + file.size, 0);
+        setExecutingStep(0);
+        logs[0] = { stepIndex: 0, status: 'running', message: `Merging ${workflowPdfFiles.length} PDF documents...` };
+        setStepLogs([...logs]);
+
+        const merged = await PDFDocument.create();
+        for (const file of workflowPdfFiles) {
+          const sourcePdf = await PDFDocument.load(await file.arrayBuffer());
+          const pages = await merged.copyPages(sourcePdf, sourcePdf.getPageIndices());
+          pages.forEach((page) => merged.addPage(page));
+        }
+        const bytes = await merged.save();
+        const blob = new Blob([bytes as BlobPart], { type: 'application/pdf' });
+        const blobUrl = URL.createObjectURL(blob);
+
+        logs[0] = { stepIndex: 0, status: 'done', message: `Merged ${workflowPdfFiles.length} PDFs into ${merged.getPageCount()} pages` };
+        setStepLogs([...logs]);
+        setExecutingStep(-1);
+        setPipelineResult({
+          blobUrl,
+          filename: 'merged-documents.pdf',
+          originalSize: totalInputSize,
           finalSize: blob.size,
         });
         return;
@@ -259,18 +307,7 @@ export const WorkflowsPage: React.FC = () => {
         return;
       }
 
-      // 4. Default / Generic Pass-through
-      setExecutingStep(0);
-      logs.forEach((l, idx) => {
-        l.status = 'done';
-        l.message = `Processed Step ${idx + 1} successfully`;
-      });
-      setStepLogs([...logs]);
-      setExecutingStep(-1);
-      setPipelineResult({
-        textResult: workflowInputText || 'Pipeline completed successfully.',
-        filename: 'pipeline-output.txt',
-      });
+      throw new Error('This workflow does not have a supported execution adapter yet.');
     } catch (err: any) {
       setExecutingStep(-1);
       setPipelineError(err.message || 'An error occurred during pipeline execution.');
@@ -438,6 +475,27 @@ export const WorkflowsPage: React.FC = () => {
                 </p>
                 <p className="text-[11px] text-slate-400 mt-0.5">
                   {workflowInputFile ? `${Math.round(workflowInputFile.size / 1024)} KB · Click to change` : 'PNG, JPG, or WebP'}
+                </p>
+              </div>
+            ) : activeWorkflow.category === 'pdf' ? (
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="p-6 border-2 border-dashed border-slate-300 dark:border-slate-800 hover:border-cyan-500 rounded-xl cursor-pointer text-center transition-colors"
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="application/pdf,.pdf"
+                  multiple
+                  onChange={handlePdfFilesSelected}
+                  className="hidden"
+                />
+                <FileText className="w-8 h-8 text-rose-500 mx-auto mb-2" />
+                <p className="text-xs font-semibold text-slate-900 dark:text-white">
+                  {workflowPdfFiles.length ? `${workflowPdfFiles.length} PDF files selected` : 'Choose at least two PDF files to merge'}
+                </p>
+                <p className="text-[11px] text-slate-400 mt-0.5">
+                  {workflowPdfFiles.length ? workflowPdfFiles.map((file) => file.name).join(', ') : 'Select multiple PDF documents'}
                 </p>
               </div>
             ) : (

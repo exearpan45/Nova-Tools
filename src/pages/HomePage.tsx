@@ -275,7 +275,7 @@ export const HomePage: React.FC = () => {
             Sequential Automated Workflows
           </h3>
           <p className="text-xs text-slate-600 dark:text-slate-400 max-w-lg leading-relaxed">
-            Run chained tool operations (Resize → WebP → Compress) sequentially in memory with one download.
+            Run built-in image, PDF, JSON, and CSV workflows locally in your browser.
           </p>
         </div>
 

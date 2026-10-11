@@ -8,6 +8,7 @@ import { SUITES_DATA } from '../data/suitesData';
 import { TOOLS_DATA } from '../data/toolsData';
 import { ToolDispatcher } from '../tools/ToolDispatcher';
 import { copyToClipboard } from '../utils/clipboard';
+import { ToolRating } from '../components/ToolRating';
 
 interface ToolDetailPageProps {
   tool: ToolDefinition;
@@ -16,6 +17,7 @@ interface ToolDetailPageProps {
 export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
   const { navigate, isFavorite, toggleFavorite, addRecent } = useNova();
   const [copiedShare, setCopiedShare] = React.useState<boolean>(false);
+  const [shareFailed, setShareFailed] = React.useState<boolean>(false);
 
   // Record this tool in recently used
   useEffect(() => {
@@ -32,10 +34,14 @@ export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
     (t) => t.suite === tool.suite && t.slug !== tool.slug
   ).slice(0, 4);
 
-  const handleShare = () => {
-    copyToClipboard(window.location.href);
-    setCopiedShare(true);
-    setTimeout(() => setCopiedShare(false), 2000);
+  const handleShare = async () => {
+    const copied = await copyToClipboard(window.location.href);
+    setCopiedShare(copied);
+    setShareFailed(!copied);
+    window.setTimeout(() => {
+      setCopiedShare(false);
+      setShareFailed(false);
+    }, 2000);
   };
 
   return (
@@ -67,7 +73,7 @@ export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shadow-sm"
           >
             <Share2 className="w-3.5 h-3.5" />
-            {copiedShare ? 'Link Copied!' : 'Share Tool'}
+            {copiedShare ? 'Link Copied!' : shareFailed ? 'Copy failed' : 'Share Tool'}
           </button>
 
           <button
@@ -101,6 +107,10 @@ export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
             {tool.description}
           </p>
+          <div className="pt-2 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+            <span>Your rating on this device</span>
+            <ToolRating slug={tool.slug} toolName={tool.name} />
+          </div>
         </div>
 
         <div

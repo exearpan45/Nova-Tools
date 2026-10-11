@@ -46,23 +46,23 @@ export const SmartDropZone: React.FC = () => {
     const type = smartDropFile.type;
 
     if (type.startsWith('image/') || /\.(png|jpe?g|webp|gif|svg|avif)$/.test(name)) {
+      const supportsImageToPdf = type === 'image/jpeg' || type === 'image/png' || /\.(jpe?g|png)$/.test(name);
       return [
-        { name: 'Compress Image', slug: 'image-compressor', desc: 'Reduce file size with live preview' },
-        { name: 'Resize Dimensions', slug: 'image-resizer', desc: 'Scale pixels or percentage' },
-        { name: 'Convert to WebP', slug: 'jpg-to-webp', desc: 'Modern high-performance web format' },
-        { name: 'Crop Image', slug: 'image-cropper', desc: 'Preset aspect ratios or freeform' },
-        { name: 'Color Palette', slug: 'color-palette-generator', desc: 'Extract harmonious palette' },
-        { name: 'Image Metadata', slug: 'image-metadata', desc: 'Inspect EXIF details & dimensions' },
+        { name: 'Compress Image', slug: 'image-compressor', desc: 'Reduce file size with an adjustable quality setting' },
+        { name: 'Resize Image', slug: 'image-resizer', desc: 'Change pixel dimensions or scale' },
+        ...(supportsImageToPdf ? [{ name: 'Convert Images to PDF', slug: 'jpg-to-pdf', desc: 'Place supported JPG and PNG images in a PDF' }] : []),
+        { name: 'Check File Size', slug: 'file-size-checker', desc: 'Inspect exact bytes and file metadata' },
+        { name: 'Calculate File Hash', slug: 'file-hash-checker', desc: 'Create a checksum to compare file integrity' },
       ];
     }
 
     if (type === 'application/pdf' || name.endsWith('.pdf')) {
       return [
-        { name: 'Compress PDF', slug: 'pdf-compressor', desc: 'Optimize PDF streams locally' },
-        { name: 'Merge with Other PDFs', slug: 'pdf-merger', desc: 'Combine documents into one' },
-        { name: 'Split Pages', slug: 'pdf-splitter', desc: 'Extract page ranges or chapters' },
-        { name: 'Convert PDF to JPG', slug: 'pdf-to-jpg', desc: 'Render pages as high-res images' },
-        { name: 'Rotate Pages', slug: 'pdf-page-rotator', desc: 'Fix 90/180 degree orientations' },
+        { name: 'Merge PDFs', slug: 'pdf-merger', desc: 'Combine multiple PDF documents' },
+        { name: 'Split PDF', slug: 'pdf-splitter', desc: 'Split a document into smaller files' },
+        { name: 'Extract Pages', slug: 'pdf-page-extractor', desc: 'Save selected pages by page number or range' },
+        { name: 'Rotate Pages', slug: 'pdf-page-rotator', desc: 'Rotate PDF pages by a selected angle' },
+        { name: 'Delete a Page', slug: 'pdf-page-deleter', desc: 'Remove a page and save the remaining document' },
       ];
     }
 
@@ -77,9 +77,9 @@ export const SmartDropZone: React.FC = () => {
 
     if (name.endsWith('.csv') || type.includes('csv')) {
       return [
-        { name: 'Interactive CSV Viewer', slug: 'csv-viewer', desc: 'Search and sort spreadsheet table' },
-        { name: 'Convert CSV to JSON', slug: 'csv-to-json', desc: 'Parse records to structured JSON' },
-        { name: 'Clean Duplicate Rows', slug: 'data-cleaner', desc: 'Strip empty lines and whitespace' },
+        { name: 'View CSV Data', slug: 'csv-viewer', desc: 'Inspect rows and columns in a table' },
+        { name: 'Convert CSV to JSON', slug: 'csv-to-json', desc: 'Convert tabular rows into structured JSON' },
+        { name: 'Inspect File Size', slug: 'file-size-checker', desc: 'Check the exact file size and metadata' },
       ];
     }
 
