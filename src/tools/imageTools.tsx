@@ -23,6 +23,10 @@ export const ImageTools: React.FC<ImageProps> = ({ toolSlug }) => {
   const [outputFormat, setOutputFormat] = useState<'image/jpeg' | 'image/png' | 'image/webp'>('image/jpeg');
   const [processedUrl, setProcessedUrl] = useState<string | null>(null);
   const [processedSize, setProcessedSize] = useState<number>(0);
+  const [targetSizeValue, setTargetSizeValue] = useState<number>(200);
+  const [targetSizeUnit, setTargetSizeUnit] = useState<'KB' | 'MB'>('KB');
+  const [compressionMessage, setCompressionMessage] = useState<string>('');
+  const processSequenceRef = useRef<number>(0);
 
   // Resize states
   const [resizeWidth, setResizeWidth] = useState<number>(800);
@@ -99,54 +103,79 @@ export const ImageTools: React.FC<ImageProps> = ({ toolSlug }) => {
   };
 
   const processCanvas = (sourceImg?: HTMLImageElement) => {
-    if (!imageSrc) return;
+    const sequence = ++processSequenceRef.current;
     const img = sourceImg || new Image();
-    const run = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
+    const run = async () => {
+      const targetW = toolSlug === 'image-resizer' ? Math.max(1, Math.floor(resizeWidth)) : img.naturalWidth || img.width;
+      const targetH = toolSlug === 'image-resizer' ? Math.max(1, Math.floor(resizeHeight)) : img.naturalHeight || img.height;
+      const targetBytes = Math.max(1, targetSizeValue) * (targetSizeUnit === 'MB' ? 1024 * 1024 : 1024);
+      const isTargetCompression = toolSlug === 'image-compressor';
+      let bestBlob: Blob | null = null;
+      let bestWidth = targetW;
+      let bestHeight = targetH;
+      const baseQuality = Math.min(1, Math.max(0.1, quality / 100));
+      const scaleSteps = isTargetCompression ? [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.25] : [1];
+      const qualitySteps = isTargetCompression ? [baseQuality, 0.75, 0.6, 0.45, 0.3, 0.2] : [baseQuality];
 
-      const targetW = toolSlug === 'image-resizer' ? Math.max(1, resizeWidth) : img.naturalWidth || img.width;
-      const targetH = toolSlug === 'image-resizer' ? Math.max(1, resizeHeight) : img.naturalHeight || img.height;
-
-      // Swap dimensions if rotated 90 or 270
-      if (rotation % 180 !== 0) {
-        canvas.width = targetH;
-        canvas.height = targetW;
-      } else {
-        canvas.width = targetW;
-        canvas.height = targetH;
-      }
-
-      ctx.save();
-      ctx.translate(canvas.width / 2, canvas.height / 2);
-      ctx.rotate((rotation * Math.PI) / 180);
-      ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1);
-
-      if (toolSlug === 'image-blur') {
-        ctx.filter = `blur(${blurVal}px)`;
-      } else if (toolSlug === 'image-grayscale' || isGrayscale) {
-        ctx.filter = 'grayscale(100%)';
-      }
-
-      ctx.drawImage(img, -targetW / 2, -targetH / 2, targetW, targetH);
-      ctx.restore();
-
-      const mime = outputFormat;
-      const q = quality / 100;
-      canvas.toBlob((blob) => {
-        if (blob) {
-          setProcessedSize(blob.size);
-          const url = URL.createObjectURL(blob);
-          setProcessedUrl(url);
+      for (const scale of scaleSteps) {
+        const width = Math.max(1, Math.round(targetW * scale));
+        const height = Math.max(1, Math.round(targetH * scale));
+        const canvas = document.createElement('canvas');
+        const swapped = rotation % 180 !== 0;
+        canvas.width = swapped ? height : width;
+        canvas.height = swapped ? width : height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('Your browser could not create an image canvas.');
+        ctx.save();
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate((rotation * Math.PI) / 180);
+        ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1);
+        if (toolSlug === 'image-blur') ctx.filter = `blur(${blurVal}px)`;
+        else if (toolSlug === 'image-grayscale' || isGrayscale) ctx.filter = 'grayscale(100%)';
+        if (outputFormat === 'image/jpeg') {
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
         }
-      }, mime, q);
+        ctx.drawImage(img, -width / 2, -height / 2, width, height);
+        ctx.restore();
+
+        for (const q of qualitySteps) {
+          const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, outputFormat, q));
+          if (!blob) continue;
+          if (!bestBlob || blob.size < bestBlob.size) {
+            bestBlob = blob;
+            bestWidth = width;
+            bestHeight = height;
+          }
+          if (!isTargetCompression || blob.size <= targetBytes) {
+            bestBlob = blob;
+            bestWidth = width;
+            bestHeight = height;
+            break;
+          }
+        }
+        if (bestBlob && (!isTargetCompression || bestBlob.size <= targetBytes)) break;
+        if (!isTargetCompression) break;
+      }
+
+      if (sequence !== processSequenceRef.current || !bestBlob) return;
+      setProcessedSize(bestBlob.size);
+      setCompressionMessage(isTargetCompression
+        ? bestBlob.size <= targetBytes
+          ? `Target reached: ${formatBytes(bestBlob.size)} (target ${targetSizeValue} ${targetSizeUnit}). Dimensions may be reduced to meet the size.`
+          : `Smallest result found: ${formatBytes(bestBlob.size)}. This image could not reach ${targetSizeValue} ${targetSizeUnit} with the selected format and browser encoder.`
+        : '');
+      setProcessedUrl((previous) => {
+        if (previous) URL.revokeObjectURL(previous);
+        return URL.createObjectURL(bestBlob as Blob);
+      });
     };
 
     if (sourceImg) {
-      run();
-    } else {
-      img.onload = run;
+      void run().catch((error) => setCompressionMessage(error instanceof Error ? error.message : 'Could not process this image.'));
+    } else if (imageSrc) {
+      img.onload = () => { void run().catch((error) => setCompressionMessage(error instanceof Error ? error.message : 'Could not process this image.')); };
+      img.onerror = () => setCompressionMessage('This image format could not be opened by your browser. Try JPG, PNG, or WebP.');
       img.src = imageSrc;
     }
   };
@@ -155,7 +184,7 @@ export const ImageTools: React.FC<ImageProps> = ({ toolSlug }) => {
     if (imageSrc) {
       processCanvas();
     }
-  }, [quality, outputFormat, resizeWidth, resizeHeight, rotation, flipH, flipV, blurVal, isGrayscale]);
+  }, [quality, outputFormat, resizeWidth, resizeHeight, rotation, flipH, flipV, blurVal, isGrayscale, targetSizeValue, targetSizeUnit, toolSlug]);
 
   const extractPalette = (img: HTMLImageElement) => {
     const canvas = document.createElement('canvas');
@@ -381,6 +410,10 @@ export const ImageTools: React.FC<ImageProps> = ({ toolSlug }) => {
             </div>
           </div>
 
+          {compressionMessage && toolSlug === 'image-compressor' && (
+            <div role="status" className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 px-4 py-3 text-xs text-slate-700 dark:text-slate-200">{compressionMessage}</div>
+          )}
+
           {/* Tool Specific Config Controls */}
           {(toolSlug === 'image-compressor' || toolSlug === 'image-converter' || toolSlug.includes('to-')) && (
             <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 space-y-4">
@@ -400,6 +433,20 @@ export const ImageTools: React.FC<ImageProps> = ({ toolSlug }) => {
                 onChange={(e) => setQuality(Number(e.target.value))}
                 className="w-full accent-cyan-500 h-2 bg-slate-200 dark:bg-slate-800 rounded-lg cursor-pointer"
               />
+              {toolSlug === 'image-compressor' && (
+                <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3 rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">Target file size</label>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">NOVA will lower quality and, if needed, image dimensions to get as close as possible.</p>
+                  </div>
+                  <div className="flex gap-2 items-center">
+                    <input aria-label="Target image size" type="number" min="1" max={targetSizeUnit === 'MB' ? 100 : 102400} value={targetSizeValue} onChange={(e) => setTargetSizeValue(Math.max(1, Number(e.target.value) || 1))} className="w-24 px-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900" />
+                    <select aria-label="Target image size unit" value={targetSizeUnit} onChange={(e) => setTargetSizeUnit(e.target.value as 'KB' | 'MB')} className="px-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                      <option value="KB">KB</option><option value="MB">MB</option>
+                    </select>
+                  </div>
+                </div>
+              )}
               <div className="flex flex-wrap items-center gap-2 pt-2">
                 <span className="text-xs text-slate-500 mr-2">Target Format:</span>
                 {(['image/jpeg', 'image/png', 'image/webp'] as const).map((fmt) => (
