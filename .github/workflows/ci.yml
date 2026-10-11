@@ -32,6 +32,9 @@ jobs:
       - name: Audit tool registry
         run: npm run audit:registry
 
+      - name: Calculator regression tests
+        run: npm run test:math
+
       - name: Build
         run: npm run build
 
