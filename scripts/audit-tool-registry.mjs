@@ -69,12 +69,12 @@ for (const suite of declaredSuites) {
 }
 
 // Verify every registered tool is routed to a suite component that handles its slug.
-const implementationEntries = [...source.matchAll(/\\{\\s*id:\\s*'([^']+)'[\\s\\S]*?slug:\\s*'([^']+)'[\\s\\S]*?name:\\s*'([^']+)'[\\s\\S]*?description:\\s*'([^']+)'[\\s\\S]*?category:\\s*'([^']+)'/g)]
+const implementationEntries = [...source.matchAll(/\{\s*id:\s*'([^']+)'[\s\S]*?slug:\s*'([^']+)'[\s\S]*?name:\s*'([^']+)'[\s\S]*?description:\s*'([^']+)'[\s\S]*?category:\s*'([^']+)'/g)]
   .map((match) => ({ id: match[1], slug: match[2], name: match[3], category: match[5] }));
-const explicitSuiteBlock = source.match(/\\(\\(\\{([\\s\\S]*?)\\}\\s+as Record<string, ToolSuite>\\)\\[tool\\.id\\]/);
+const explicitSuiteBlock = source.match(/\(\(\{([\s\S]*?)\}\s+as Record<string, ToolSuite>\)\[tool\.id\]/);
 const explicitSuiteMap = new Map(
   explicitSuiteBlock
-    ? [...explicitSuiteBlock[1].matchAll(/'([^']+)':\\s*'([^']+)'/g)].map((match) => [match[1], match[2]])
+    ? [...explicitSuiteBlock[1].matchAll(/'([^']+)':\s*'([^']+)'/g)].map((match) => [match[1], match[2]])
     : []
 );
 const categorySuiteMap = {
