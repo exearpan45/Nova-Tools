@@ -13,7 +13,8 @@
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
     "verify:seo": "node scripts/verify-seo-build.mjs",
-    "audit:registry": "node scripts/audit-tool-registry.mjs"
+    "audit:registry": "node scripts/audit-tool-registry.mjs",
+    "test:math": "tsx scripts/test-math-expression.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
