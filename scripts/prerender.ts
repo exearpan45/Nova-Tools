@@ -33,7 +33,7 @@ const STATIC_PAGES = [
   {
     path: '/privacy',
     title: 'Privacy Policy — NOVA TOOLS',
-    description: 'NOVA TOOLS runs 100% in your browser. We never collect, store, or transmit your calculation or text inputs.'
+    description: 'Read how NOVA TOOLS handles browser-based tool inputs, locally saved preferences, hosting requests, analytics, advertising, and third-party services.'
   },
   {
     path: '/cookie-policy',
