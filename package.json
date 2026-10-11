@@ -14,7 +14,8 @@
     "lint": "tsc --noEmit",
     "verify:seo": "node scripts/verify-seo-build.mjs",
     "audit:registry": "node scripts/audit-tool-registry.mjs",
-    "test:math": "tsx scripts/test-math-expression.ts"
+    "test:math": "tsx scripts/test-math-expression.ts",
+    "test:routing": "tsx scripts/test-routing.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
