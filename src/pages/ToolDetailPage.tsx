@@ -92,7 +92,7 @@ export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
             </span>
             <div className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>100% Client-side</span>
+              <span>Browser-based tool</span>
             </div>
           </div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
