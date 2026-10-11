@@ -23,6 +23,8 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
   const [pageRange, setPageRange] = useState<string>('1');
   const [totalPages, setTotalPages] = useState<number>(1);
   const [rotationAngle, setRotationAngle] = useState<number>(90);
+  const [targetSizeValue, setTargetSizeValue] = useState<number>(1);
+  const [targetSizeUnit, setTargetSizeUnit] = useState<'KB' | 'MB'>('MB');
 
   // Metadata states
   const [pdfMeta, setPdfMeta] = useState<{ title?: string; author?: string; subject?: string; creator?: string }>({});
@@ -189,12 +191,19 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
       } else if (toolSlug === 'pdf-compressor') {
         const buffer = await files[0].arrayBuffer();
         const doc = await PDFDocument.load(buffer);
-        // Optimize streams and discard unused objects
+        // pdf-lib can optimize the PDF structure, but does not recompress embedded scans/photos.
         const bytes = await doc.save({ useObjectStreams: true });
         const blob = new Blob([bytes as any], { type: 'application/pdf' });
-        setResultUrl(URL.createObjectURL(blob));
+        const targetBytes = Math.max(1, targetSizeValue) * (targetSizeUnit === 'MB' ? 1024 * 1024 : 1024);
+        setResultUrl((previous) => {
+          if (previous) URL.revokeObjectURL(previous);
+          return URL.createObjectURL(blob);
+        });
         setResultFileName('compressed-document.pdf');
-        setStatusMessage(`Optimized PDF document stream.`);
+        const reduction = files[0].size > 0 ? Math.round((1 - blob.size / files[0].size) * 100) : 0;
+        setStatusMessage(blob.size <= targetBytes
+          ? `Target reached: ${formatBytes(blob.size)} (target ${targetSizeValue} ${targetSizeUnit}). Size change: ${reduction}%.`
+          : `Best-effort optimization finished at ${formatBytes(blob.size)}; target was ${targetSizeValue} ${targetSizeUnit}. This PDF may contain already-compressed images or scans that pdf-lib cannot shrink without rasterizing pages and losing selectable text. Size change: ${reduction}%.`);
       } else if (toolSlug === 'pdf-page-deleter') {
         const buffer = await files[0].arrayBuffer();
         const doc = await PDFDocument.load(buffer);
@@ -298,6 +307,18 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
           </div>
 
           {/* Operation Controls */}
+          {toolSlug === 'pdf-compressor' && (
+            <div className="p-5 rounded-xl border border-rose-500/20 bg-rose-500/5 space-y-3">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Target PDF size</label>
+              <div className="flex flex-wrap items-center gap-2">
+                <input aria-label="Target PDF size" type="number" min="1" max={targetSizeUnit === 'MB' ? 500 : 512000} value={targetSizeValue} onChange={(e) => setTargetSizeValue(Math.max(1, Number(e.target.value) || 1))} className="w-28 px-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900" />
+                <select aria-label="Target PDF size unit" value={targetSizeUnit} onChange={(e) => setTargetSizeUnit(e.target.value as 'KB' | 'MB')} className="px-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                  <option value="KB">KB</option><option value="MB">MB</option>
+                </select>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Target is checked after optimization. PDF files with embedded photos/scans may not reach the target because this browser-only method preserves text and vector content instead of degrading every page into an image.</p>
+            </div>
+          )}
           {(toolSlug === 'pdf-splitter' || toolSlug === 'pdf-page-extractor') && (
             <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 space-y-3">
               <div className="flex justify-between items-center">
