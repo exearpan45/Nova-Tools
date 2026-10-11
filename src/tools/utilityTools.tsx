@@ -157,6 +157,24 @@ export const UtilityTools: React.FC<UtilityProps> = ({ toolSlug }) => {
     setPickedChoice(arr[Math.floor(Math.random() * arr.length)]);
   };
 
+  // Digital storage unit converter
+  const [dataSize, setDataSize] = useState<string>('1024');
+  const [dataUnit, setDataUnit] = useState<'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'PB'>('KB');
+  const [dataBase, setDataBase] = useState<1000 | 1024>(1024);
+  const dataBytes = useMemo(() => {
+    const value = Number(dataSize);
+    if (!Number.isFinite(value) || value < 0) return null;
+    const exponent = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'].indexOf(dataUnit);
+    return value * Math.pow(dataBase, exponent);
+  }, [dataSize, dataUnit, dataBase]);
+  const dataConversions = useMemo(() => {
+    if (dataBytes === null) return [];
+    return ['B', 'KB', 'MB', 'GB', 'TB', 'PB'].map((unit, exponent) => ({
+      unit,
+      value: dataBytes / Math.pow(dataBase, exponent),
+    }));
+  }, [dataBytes, dataBase]);
+
   // ================= 4. NUMBER BASE CONVERTER =================
   const [decInput, setDecInput] = useState<string>('255');
   const baseOutputs = useMemo(() => {
@@ -375,6 +393,40 @@ export const UtilityTools: React.FC<UtilityProps> = ({ toolSlug }) => {
               <div className="text-3xl font-extrabold text-[#00D9FF] font-mono">{pickedChoice}</div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* DIGITAL STORAGE CONVERTER */}
+      {toolSlug === 'data-converter' && (
+        <div className="p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#10182B] space-y-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 mb-1.5">Amount</label>
+              <input type="number" min="0" value={dataSize} onChange={(e) => setDataSize(e.target.value)} inputMode="decimal" className="w-full min-h-11 px-3 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white" />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 mb-1.5">Input unit</label>
+              <select value={dataUnit} onChange={(e) => setDataUnit(e.target.value as typeof dataUnit)} className="w-full min-h-11 px-3 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white">
+                {(['B', 'KB', 'MB', 'GB', 'TB', 'PB'] as const).map((unit) => <option key={unit} value={unit}>{unit}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2" aria-label="Conversion base">
+            <button type="button" onClick={() => setDataBase(1000)} className={`flex-1 min-h-11 rounded-xl px-3 py-2 text-sm font-semibold ${dataBase === 1000 ? 'bg-cyan-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>Decimal (1000)</button>
+            <button type="button" onClick={() => setDataBase(1024)} className={`flex-1 min-h-11 rounded-xl px-3 py-2 text-sm font-semibold ${dataBase === 1024 ? 'bg-violet-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>Binary (1024)</button>
+          </div>
+          {dataBytes === null ? <p className="text-sm text-rose-500">Enter a valid non-negative amount.</p> : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {dataConversions.map(({unit, value}) => (
+                <button type="button" key={unit} onClick={() => handleCopy(Number(value.toPrecision(10)).toString())} className="min-w-0 text-left p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/70 hover:border-cyan-500/50 transition-colors">
+                  <span className="block text-xs text-slate-500">{unit}</span>
+                  <span className="block mt-1 font-mono text-sm font-bold text-slate-900 dark:text-white break-all">{Number(value.toPrecision(8)).toLocaleString('en-US', { maximumSignificantDigits: 8 })}</span>
+                  <span className="block mt-1 text-[10px] text-cyan-600 dark:text-cyan-400">Tap to copy</span>
+                </button>
+              ))}
+            </div>
+          )}
+          <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400">Decimal units use 1000-based steps. Binary units use 1024-based steps. This converter calculates locally in your browser.</p>
         </div>
       )}
 
