@@ -1149,11 +1149,12 @@ export const TOOLS_DATA: ToolDefinition[] = RAW_TOOLS_DATA.map((tool) => ({
   suite: (({
     'image-compressor': 'image', 'image-resizer': 'image',
     'pdf-merger': 'pdf', 'pdf-splitter': 'pdf',
-    'text-diff': 'text', 'lorem-ipsum-generator': 'writing',
-    'regex-tester': 'developer', 'cgpa-calculator': 'student',
-    'scientific-calculator': 'calculators', 'gradient-generator': 'design',
-    'hash-generator': 'security', 'csv-viewer': 'data',
-    'readability-checker': 'writing', 'random-number': 'utility'
+    'text-diff': 'text', 'word-counter': 'text', 'character-counter': 'text',
+    'lorem-ipsum-generator': 'text', 'readability-checker': 'text',
+    'regex-tester': 'developer', 'hash-generator': 'developer', 'base64': 'developer',
+    'cgpa-calculator': 'student', 'scientific-calculator': 'student',
+    'gradient-generator': 'design', 'csv-viewer': 'data',
+    'data-converter': 'utility', 'random-number': 'utility'
   } as Record<string, ToolSuite>)[tool.id] || (tool.id === 'qr-generator'
     ? 'web'
     : tool.id === 'data-converter'
