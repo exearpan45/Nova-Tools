@@ -47,11 +47,9 @@ export const PdfTools: React.FC<PdfProps> = ({ toolSlug }) => {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => () => {
-    if (sourcePdfUrl) URL.revokeObjectURL(sourcePdfUrl);
-    if (resultUrl) URL.revokeObjectURL(resultUrl);
-    imagePreviewUrls.forEach((url) => URL.revokeObjectURL(url));
-  }, [sourcePdfUrl, resultUrl, imagePreviewUrls]);
+  useEffect(() => () => { if (sourcePdfUrl) URL.revokeObjectURL(sourcePdfUrl); }, [sourcePdfUrl]);
+  useEffect(() => () => { if (resultUrl) URL.revokeObjectURL(resultUrl); }, [resultUrl]);
+  useEffect(() => () => { imagePreviewUrls.forEach((url) => URL.revokeObjectURL(url)); }, [imagePreviewUrls]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = Array.from(e.target.files || []);
