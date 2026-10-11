@@ -23,15 +23,19 @@ import {
 
 // Data
 import { TOOLS_BY_SLUG } from './data/toolsData';
+import { normalizeRoutePath } from './utils/routing';
 
 const AppContent: React.FC = () => {
   const { currentPath, navigate, sidebarCollapsed } = useNova();
 
+  // Normalize the pathname before routing. Cloudflare Pages may serve directory routes with a trailing slash.
+  const normalizedPath = normalizeRoutePath(currentPath);
+
   // Router resolver
   const renderCurrentView = () => {
     // 1. Tool detail page: /tools/:slug
-    if (currentPath.startsWith('/tools/')) {
-      const slug = currentPath.replace('/tools/', '').split('?')[0].split('#')[0];
+    if (normalizedPath.startsWith('/tools/')) {
+      const slug = normalizedPath.slice('/tools/'.length);
       const tool = TOOLS_BY_SLUG.get(slug);
       if (tool) {
         return <ToolDetailPage tool={tool} />;
@@ -41,7 +45,7 @@ const AppContent: React.FC = () => {
     }
 
     // 2. Main routes
-    switch (currentPath.split('?')[0]) {
+    switch (normalizedPath) {
       case '/':
         return <HomePage />;
       case '/tools':
