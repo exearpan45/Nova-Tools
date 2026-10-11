@@ -482,3 +482,13 @@ html.dark .nova-workflow-banner {
   border-color: rgba(118, 87, 255, .40) !important;
   box-shadow: 0 20px 50px -38px rgba(118,87,255,.65) !important;
 }
+
+/* Final hero alignment fix: override any inherited or competing centered styles. */
+html body main .nova-home-hero,
+html body main .nova-home-hero h1,
+html body main .nova-home-hero p {
+  text-align: left !important;
+}
+html body main .nova-home-hero > .inline-flex {
+  align-self: flex-start;
+}
