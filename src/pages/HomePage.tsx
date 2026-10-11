@@ -44,7 +44,7 @@ export const HomePage: React.FC = () => {
       </div>
 
       {/* 2. Compact Hero Section */}
-      <section className="relative isolate overflow-hidden pt-7 pb-6 px-3 sm:px-6 md:pt-12 md:pb-10 text-center max-w-5xl mx-auto space-y-3 sm:space-y-4 md:space-y-6 rounded-[1.75rem] border border-violet-500/15 bg-gradient-to-br from-white via-violet-50/70 to-cyan-50/70 dark:from-[#10182B] dark:via-[#11142B] dark:to-[#0B1B2A] shadow-xl shadow-violet-950/5 dark:shadow-black/20"><div aria-hidden="true" className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-56 w-56 -translate-x-1/2 rounded-full bg-violet-500/15 blur-3xl" /><div aria-hidden="true" className="pointer-events-none absolute -bottom-24 right-0 -z-10 h-48 w-48 rounded-full bg-cyan-400/10 blur-3xl" />
+      <section className="relative isolate overflow-hidden pt-7 pb-6 px-3 sm:px-6 md:pt-12 md:pb-10 text-center max-w-5xl mx-auto space-y-3 sm:space-y-4 md:space-y-6 nova-home-hero rounded-[1.75rem] border border-violet-500/20 bg-gradient-to-br from-white via-violet-50/70 to-cyan-50/70 dark:from-[#090E1D] dark:via-[#10132A] dark:to-[#071B2A] shadow-2xl shadow-violet-950/5 dark:shadow-black/20"><div aria-hidden="true" className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-56 w-56 -translate-x-1/2 rounded-full bg-violet-500/15 blur-3xl" /><div aria-hidden="true" className="pointer-events-none absolute -bottom-24 right-0 -z-10 h-48 w-48 rounded-full bg-cyan-400/10 blur-3xl" />
         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-cyan-500/20 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 text-[10px] sm:text-xs font-semibold">
           <Sparkles className="w-3 h-3" />
           <span>NOVA TOOLS · YOUR EVERYDAY TOOLKIT</span>
@@ -140,7 +140,7 @@ export const HomePage: React.FC = () => {
               <div
                 key={tool.slug}
                 onClick={() => navigate(`/tools/${tool.slug}`)}
-                className="p-3 sm:p-4 rounded-2xl border border-slate-200/90 dark:border-slate-800/90 bg-white dark:bg-slate-900/60 hover:border-cyan-500/40 hover:shadow-md cursor-pointer transition-all active:scale-[0.98] group flex flex-col justify-between"
+                className="nova-tool-card p-3 sm:p-4 rounded-2xl border border-slate-200/90 dark:border-violet-400/20 bg-white dark:bg-gradient-to-br dark:from-[#141D35] dark:to-[#090F20] shadow-sm dark:shadow-[0_10px_30px_-22px_rgba(0,217,255,0.5)] hover:border-cyan-500/60 hover:shadow-lg cursor-pointer transition-all active:scale-[0.98] group flex flex-col justify-between"
               >
                 <div className="space-y-1.5 sm:space-y-2">
                   <div className="flex items-center justify-between">
@@ -211,7 +211,7 @@ export const HomePage: React.FC = () => {
               <div
                 key={suite.id}
                 onClick={() => navigate(`/tools?suite=${suite.id}`)}
-                className="p-3 sm:p-5 rounded-2xl border border-slate-200/90 dark:border-slate-800/90 bg-white dark:bg-slate-900/50 hover:border-cyan-500/40 hover:shadow-md cursor-pointer transition-all active:scale-[0.98] group flex flex-col justify-between"
+                className="nova-suite-card p-3 sm:p-5 rounded-2xl border border-slate-200/90 dark:border-violet-400/20 bg-white dark:bg-gradient-to-br dark:from-[#111B32] dark:to-[#090F20] shadow-sm dark:shadow-[0_10px_28px_-22px_rgba(118,87,255,0.55)] hover:border-violet-400/60 hover:shadow-lg cursor-pointer transition-all active:scale-[0.98] group flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">
@@ -246,7 +246,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 6. Workflows Banner */}
-      <section className="p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-cyan-500/10 via-violet-600/10 to-pink-500/10 border border-cyan-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <section className="nova-workflow-banner p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-cyan-500/10 via-violet-600/10 to-pink-500/10 dark:from-cyan-500/15 dark:via-violet-600/15 dark:to-pink-500/10 border border-cyan-500/25 dark:border-cyan-400/30 shadow-sm dark:shadow-[0_18px_50px_-35px_rgba(0,217,255,0.6)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="space-y-1 sm:space-y-1.5">
           <div className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider">
             <GitFork className="w-3.5 h-3.5" />
