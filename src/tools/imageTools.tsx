@@ -81,7 +81,6 @@ export const ImageTools: React.FC<ImageProps> = ({ toolSlug }) => {
         setResizeHeight(img.height);
         setBase64String(dataUrl);
         extractPalette(img);
-        processCanvas(img);
       };
       img.src = dataUrl;
     };
@@ -115,7 +114,7 @@ export const ImageTools: React.FC<ImageProps> = ({ toolSlug }) => {
       let bestHeight = targetH;
       const baseQuality = Math.min(1, Math.max(0.1, quality / 100));
       const scaleSteps = isTargetCompression ? [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.25] : [1];
-      const qualitySteps = isTargetCompression ? [baseQuality, 0.75, 0.6, 0.45, 0.3, 0.2] : [baseQuality];
+      const qualitySteps = isTargetCompression ? [...new Set([baseQuality, Math.min(baseQuality, 0.75), Math.min(baseQuality, 0.6), Math.min(baseQuality, 0.45), Math.min(baseQuality, 0.3), Math.min(baseQuality, 0.2)])] : [baseQuality];
 
       for (const scale of scaleSteps) {
         const width = Math.max(1, Math.round(targetW * scale));
@@ -184,7 +183,7 @@ export const ImageTools: React.FC<ImageProps> = ({ toolSlug }) => {
     if (imageSrc) {
       processCanvas();
     }
-  }, [quality, outputFormat, resizeWidth, resizeHeight, rotation, flipH, flipV, blurVal, isGrayscale, targetSizeValue, targetSizeUnit, toolSlug]);
+  }, [imageSrc, quality, outputFormat, resizeWidth, resizeHeight, rotation, flipH, flipV, blurVal, isGrayscale, targetSizeValue, targetSizeUnit, toolSlug]);
 
   const extractPalette = (img: HTMLImageElement) => {
     const canvas = document.createElement('canvas');
