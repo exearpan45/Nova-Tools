@@ -4,98 +4,10 @@ import {
   RotateCcw, Copy, Check, Clock, TrendingUp, Sparkles, Delete, ArrowRight
 } from 'lucide-react';
 import { copyToClipboard } from '../utils/clipboard';
+import { evaluateMathExpression } from '../utils/mathExpression';
 
 interface CalcProps {
   toolSlug: string;
-}
-
-// Deterministic safe arithmetic parser (No eval)
-function evaluateMathExpression(expr: string): { success: boolean; result: number | string; error?: string } {
-  try {
-    const sanitized = expr.replace(/\s+/g, '').replace(/×/g, '*').replace(/÷/g, '/');
-    if (!sanitized) return { success: true, result: 0 };
-    // Only allow numbers, decimal, parentheses, and + - * / %
-    if (!/^[0-9+\-*/().%]+$/.test(sanitized)) {
-      return { success: false, result: '', error: 'Invalid characters in expression' };
-    }
-    // Simple tokenizer & Shunting-yard evaluator
-    const tokens: (string | number)[] = [];
-    let numBuf = '';
-    for (let i = 0; i < sanitized.length; i++) {
-      const c = sanitized[i];
-      if ((c >= '0' && c <= '9') || c === '.') {
-        numBuf += c;
-      } else {
-        if (numBuf) {
-          tokens.push(parseFloat(numBuf));
-          numBuf = '';
-        }
-        if (c === '-' && (i === 0 || ['+', '-', '*', '/', '('].includes(sanitized[i - 1]))) {
-          numBuf = '-';
-        } else {
-          tokens.push(c);
-        }
-      }
-    }
-    if (numBuf) tokens.push(parseFloat(numBuf));
-
-    // Convert to RPN
-    const outputQueue: (number | string)[] = [];
-    const opStack: string[] = [];
-    const precedence: Record<string, number> = { '+': 1, '-': 1, '*': 2, '/': 2, '%': 2 };
-
-    for (const t of tokens) {
-      if (typeof t === 'number') {
-        outputQueue.push(t);
-      } else if (t in precedence) {
-        while (opStack.length && opStack[opStack.length - 1] in precedence &&
-          precedence[opStack[opStack.length - 1]] >= precedence[t]) {
-          outputQueue.push(opStack.pop()!);
-        }
-        opStack.push(t);
-      } else if (t === '(') {
-        opStack.push(t);
-      } else if (t === ')') {
-        while (opStack.length && opStack[opStack.length - 1] !== '(') {
-          outputQueue.push(opStack.pop()!);
-        }
-        opStack.pop(); // pop '('
-      }
-    }
-    while (opStack.length) {
-      outputQueue.push(opStack.pop()!);
-    }
-
-    // Evaluate RPN
-    const evalStack: number[] = [];
-    for (const token of outputQueue) {
-      if (typeof token === 'number') {
-        evalStack.push(token);
-      } else {
-        const b = evalStack.pop() ?? 0;
-        const a = evalStack.pop() ?? 0;
-        switch (token) {
-          case '+': evalStack.push(a + b); break;
-          case '-': evalStack.push(a - b); break;
-          case '*': evalStack.push(a * b); break;
-          case '/':
-            if (b === 0) return { success: false, result: 'Cannot divide by zero', error: 'Divide by zero' };
-            evalStack.push(a / b);
-            break;
-          case '%': evalStack.push(a % b); break;
-        }
-      }
-    }
-    const finalVal = evalStack[0];
-    if (typeof finalVal !== 'number' || isNaN(finalVal)) {
-      return { success: false, result: '', error: 'Calculation error' };
-    }
-    // Normalize floating precision
-    const rounded = Math.round((finalVal + Number.EPSILON) * 1e8) / 1e8;
-    return { success: true, result: rounded };
-  } catch (err: any) {
-    return { success: false, result: '', error: err?.message || 'Error' };
-  }
 }
 
 export const CalculatorTools: React.FC<CalcProps> = ({ toolSlug }) => {
