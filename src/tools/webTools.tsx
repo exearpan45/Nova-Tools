@@ -12,7 +12,7 @@ interface WebProps {
 
 export const WebTools: React.FC<WebProps> = ({ toolSlug }) => {
   // QR Code states
-  const [qrContent, setQrContent] = useState<string>('https://novatools.2bd.net');
+  const [qrContent, setQrContent] = useState<string>('https://nova-tools2.pages.dev');
   const [qrSize, setQrSize] = useState<number>(300);
   const [qrDataUrl, setQrDataUrl] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);
@@ -25,13 +25,13 @@ export const WebTools: React.FC<WebProps> = ({ toolSlug }) => {
   // Meta Tags Builder
   const [metaTitle, setMetaTitle] = useState<string>('NOVA TOOLS — Production-Ready Toolbox');
   const [metaDesc, setMetaDesc] = useState<string>('100+ fast, private browser-based utilities for everyday productivity.');
-  const [metaUrl, setMetaUrl] = useState<string>('https://novatools.2bd.net');
-  const [metaImage, setMetaImage] = useState<string>('https://novatools.2bd.net/og-image.png');
+  const [metaUrl, setMetaUrl] = useState<string>('https://nova-tools2.pages.dev');
+  const [metaImage, setMetaImage] = useState<string>('https://nova-tools2.pages.dev/og-image.png');
 
   // Robots.txt states
   const [robotAgent, setRobotAgent] = useState<string>('*');
   const [robotDisallow, setRobotDisallow] = useState<string>('/admin/\n/api/\n/private/');
-  const [robotSitemap, setRobotSitemap] = useState<string>('https://novatools.2bd.net/sitemap.xml');
+  const [robotSitemap, setRobotSitemap] = useState<string>('https://nova-tools2.pages.dev/sitemap.xml');
 
   // Contrast Checker states
   const [fgColor, setFgColor] = useState<string>('#ffffff');

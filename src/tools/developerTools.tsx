@@ -16,7 +16,7 @@ export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
       : toolSlug.includes('jwt')
       ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFycGFuIEdvc3dhbWkiLCJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTgwMDAwMDAwMH0.signature'
       : toolSlug.includes('regex')
-      ? 'hello from nova@novatools.2bd.net and support@novatools.com'
+      ? 'hello from nova@example.com and support@example.com'
       : 'Hello NOVA TOOLS!'
   );
 
