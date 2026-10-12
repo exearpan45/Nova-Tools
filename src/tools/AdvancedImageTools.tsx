@@ -346,7 +346,7 @@ export const AdvancedImageTools: React.FC<AdvancedImageToolsProps> = ({ toolSlug
               </div>
             )}
 
-            {isConverter && toolSlug !== 'image-to-pdf' && toolSlug !== 'webp-converter' && (
+            {toolSlug === 'image-format-converter' && (
               <div className="flex flex-wrap items-center gap-2">
                 <span className="mr-1 text-xs font-semibold text-slate-500">Output format</span>
                 {(['image/png', 'image/jpeg', 'image/webp'] as ImageMime[]).map((mime) => (
