@@ -104,6 +104,34 @@ export const TextTools: React.FC<TextProps> = ({ toolSlug }) => {
           .replace(/[—–]/g, '-')
           .trim();
       }
+      case 'word-frequency-analyzer': {
+        const counts = new Map<string, number>();
+        const words = inputText.toLocaleLowerCase().match(/[\\p{L}\\p{N}]+(?:['’][\\p{L}\\p{N}]+)*/gu) || [];
+        for (const word of words) counts.set(word, (counts.get(word) || 0) + 1);
+        return [...counts.entries()]
+          .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+          .map(([word, count]) => `${word}: ${count}`)
+          .join('\\n');
+      }
+      case 'text-to-slug':
+        return inputText
+          .normalize('NFKD')
+          .replace(/[\\u0300-\\u036f]/g, '')
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+      case 'repeated-word-remover':
+        return inputText.replace(/\\b([\\p{L}\\p{N}]+)(\\s+)\\1\\b/giu, '$1');
+      case 'line-number-adder':
+        return inputText.split(/\\r\\n|\\r|\\n/).map((line, index) => `${index + 1}. ${line}`).join('\\n');
+      case 'reading-time-estimator':
+        return [
+          `Words: ${stats.words.toLocaleString()}`,
+          `Estimated reading time: about ${Math.max(1, stats.readingTimeMinutes)} minute(s) at 200 words/minute`,
+          `Estimated speaking time: about ${Math.max(1, stats.speakingTimeMinutes)} minute(s) at 130 words/minute`,
+          'Estimates only; actual pace varies.'
+        ].join('\\n');
       case 'find-and-replace': {
         if (!findStr) return inputText;
         try {
