@@ -126,8 +126,14 @@ export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
         <ToolDispatcher tool={tool} />
       </div>
 
-      {/* Search-friendly, practical guide for this specific tool */}
-      <article className="space-y-6 sm:space-y-8" aria-labelledby="tool-guide-title">
+      {/* Full tool guide is collapsible to keep the workspace compact. */}
+      <details id="tool-guide" className="group rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/30 overflow-hidden">
+        <summary className="cursor-pointer list-none flex items-center justify-between gap-3 p-4 sm:p-5 text-sm font-bold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-900/60">
+          <span>Full guide: instructions, examples, privacy & FAQs</span>
+          <span className="text-xs font-semibold text-cyan-600 dark:text-cyan-400 group-open:hidden">Show details +</span>
+          <span className="hidden text-xs font-semibold text-cyan-600 dark:text-cyan-400 group-open:inline">Hide details −</span>
+        </summary>
+        <article className="space-y-6 sm:space-y-8 border-t border-slate-200 dark:border-slate-800 p-4 sm:p-6" aria-labelledby="tool-guide-title">
         <header className="max-w-3xl space-y-2">
           <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-600 dark:text-violet-300">Tool guide</p>
           <h2 id="tool-guide-title" className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white">
@@ -208,7 +214,8 @@ export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
             </div>
           </section>
         )}
-      </article>
+        </article>
+      </details>
 
       {/* Related Suite Tools */}
       {relatedTools.length > 0 && (

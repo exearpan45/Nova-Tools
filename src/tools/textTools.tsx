@@ -104,6 +104,62 @@ export const TextTools: React.FC<TextProps> = ({ toolSlug }) => {
           .replace(/[—–]/g, '-')
           .trim();
       }
+      case 'word-frequency-analyzer': {
+        const counts = new Map<string, number>();
+        const words = inputText.toLocaleLowerCase().match(/[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu) || [];
+        for (const word of words) counts.set(word, (counts.get(word) || 0) + 1);
+        return [...counts.entries()]
+          .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+          .map(([word, count]) => `${word}: ${count}`)
+          .join('\n');
+      }
+      case 'text-to-slug':
+        return inputText
+          .normalize('NFKD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+      case 'repeated-word-remover':
+        return inputText.replace(/\b([\p{L}\p{N}]+)(\s+)\1\b/giu, '$1');
+      case 'line-number-adder':
+        return inputText.split(/\r\n|\r|\n/).map((line, index) => `${index + 1}. ${line}`).join('\n');
+      case 'reading-time-estimator':
+        return [
+          `Words: ${stats.words.toLocaleString()}`,
+          `Estimated reading time: about ${Math.max(1, stats.readingTimeMinutes)} minute(s) at 200 words/minute`,
+          `Estimated speaking time: about ${Math.max(1, stats.speakingTimeMinutes)} minute(s) at 130 words/minute`,
+          'Estimates only; actual pace varies.'
+        ].join('\n');
+      case 'remove-blank-lines':
+        return inputText.split(/\r\n|\r|\n/).filter((line) => line.trim().length > 0).join('\n');
+      case 'sentence-case-converter': {
+        const lowered = inputText.toLocaleLowerCase();
+        return lowered.replace(/(^|[.!?]\s+)([\p{L}])/gu, (_match, prefix: string, letter: string) => prefix + letter.toLocaleUpperCase());
+      }
+      case 'paragraph-counter':
+        return [
+          `Paragraphs: ${stats.paragraphs}`,
+          `Words: ${stats.words}`,
+          `Sentences: ${stats.sentences}`,
+          `Characters: ${stats.characters}`
+        ].join('\n');
+      case 'text-to-binary':
+        return Array.from(new TextEncoder().encode(inputText), (byte) => byte.toString(2).padStart(8, '0')).join(' ');
+      case 'binary-to-text': {
+        const binary = inputText.trim();
+        if (!binary) return '';
+        const groups = binary.split(/\s+/);
+        if (groups.some((group) => !/^[01]{8}$/.test(group))) {
+          return 'Invalid binary input. Enter 8-bit groups such as 01001000 01101001.';
+        }
+        try {
+          return new TextDecoder('utf-8', { fatal: true }).decode(new Uint8Array(groups.map((group) => parseInt(group, 2))));
+        } catch {
+          return 'These binary bytes are not valid UTF-8 text.';
+        }
+      }
       case 'find-and-replace': {
         if (!findStr) return inputText;
         try {
