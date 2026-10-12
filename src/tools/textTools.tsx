@@ -122,7 +122,7 @@ export const TextTools: React.FC<TextProps> = ({ toolSlug }) => {
           .replace(/[^a-z0-9]+/g, '-')
           .replace(/^-+|-+$/g, '');
       case 'repeated-word-remover':
-        return inputText.replace(/\b([\p{L}\p{N}]+)(\\s+)\\1\b/giu, '$1');
+        return inputText.replace(/\b([\p{L}\p{N}]+)(\s+)\1\b/giu, '$1');
       case 'line-number-adder':
         return inputText.split(/\r\n|\r|\n/).map((line, index) => `${index + 1}. ${line}`).join('\n');
       case 'reading-time-estimator':
