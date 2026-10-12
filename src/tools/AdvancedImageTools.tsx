@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Download, ImagePlus, RotateCcw, RotateCw, FlipHorizontal, FlipVertical, Sparkles, Upload } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
+import { clampCropRectangle, getDefaultImageMime, isSupportedImageMime, type OutputImageMime } from './imageAlgorithms';
 
-type ImageMime = 'image/png' | 'image/jpeg' | 'image/webp';
+type ImageMime = OutputImageMime;
 
 const imageTools = new Set([
   'image-cropper', 'image-format-converter', 'png-to-jpg', 'jpg-to-png', 'webp-converter',
@@ -32,12 +33,7 @@ const titles: Record<string, string> = {
   'image-pixelator': 'Pixelate image'
 };
 
-const defaultMime = (slug: string): ImageMime => {
-  if (slug === 'jpg-to-png') return 'image/png';
-  if (slug === 'webp-converter') return 'image/webp';
-  if (slug === 'image-to-pdf' || slug === 'png-to-jpg') return 'image/jpeg';
-  return 'image/png';
-};
+
 
 const loadImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
   const image = new Image();
@@ -63,7 +59,7 @@ export const AdvancedImageTools: React.FC<AdvancedImageToolsProps> = ({ toolSlug
   const [overlayUrl, setOverlayUrl] = useState<string | null>(null);
   const [outputUrl, setOutputUrl] = useState<string | null>(null);
   const [outputBlob, setOutputBlob] = useState<Blob | null>(null);
-  const [outputMime, setOutputMime] = useState<ImageMime>(defaultMime(toolSlug));
+  const [outputMime, setOutputMime] = useState<ImageMime>(getDefaultImageMime(toolSlug));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [cropX, setCropX] = useState(0);
@@ -84,7 +80,7 @@ export const AdvancedImageTools: React.FC<AdvancedImageToolsProps> = ({ toolSlug
   const [background, setBackground] = useState('#ffffff');
 
   useEffect(() => {
-    setOutputMime(defaultMime(toolSlug));
+    setOutputMime(getDefaultImageMime(toolSlug));
     setRotation(0);
     setFlipX(false);
     setFlipY(false);
@@ -127,10 +123,13 @@ export const AdvancedImageTools: React.FC<AdvancedImageToolsProps> = ({ toolSlug
         if (!width || !height || width * height > 25000000) {
           throw new Error('For smooth performance, use an image smaller than 25 megapixels.');
         }
-        const sx = toolSlug === 'image-cropper' ? Math.max(0, Math.min(width - 1, Math.floor(cropX))) : 0;
-        const sy = toolSlug === 'image-cropper' ? Math.max(0, Math.min(height - 1, Math.floor(cropY))) : 0;
-        const sw = toolSlug === 'image-cropper' ? Math.max(1, Math.min(width - sx, Math.floor(cropW || width))) : width;
-        const sh = toolSlug === 'image-cropper' ? Math.max(1, Math.min(height - sy, Math.floor(cropH || height))) : height;
+        const crop = toolSlug === 'image-cropper'
+          ? clampCropRectangle(width, height, cropX, cropY, cropW || width, cropH || height)
+          : { x: 0, y: 0, width, height };
+        const sx = crop.x;
+        const sy = crop.y;
+        const sw = crop.width;
+        const sh = crop.height;
         const turn = ((rotation % 360) + 360) % 360;
         const swap = turn === 90 || turn === 270;
         const canvas = document.createElement('canvas');
@@ -220,7 +219,7 @@ export const AdvancedImageTools: React.FC<AdvancedImageToolsProps> = ({ toolSlug
 
         const blob = await asBlob(canvas, outputMime, quality / 100);
         if (cancelled) return;
-        if (toolSlug === 'webp-converter' && blob.type !== 'image/webp') {
+        if (toolSlug === 'webp-converter' && !isSupportedImageMime('image/webp', blob.type)) {
           throw new Error('This browser cannot export WebP from canvas. Try Chrome or choose PNG/JPG in the format converter.');
         }
         setOutputBlob(blob);
@@ -258,13 +257,16 @@ export const AdvancedImageTools: React.FC<AdvancedImageToolsProps> = ({ toolSlug
     setOutputUrl(null);
     setError('');
     const probe = new Image();
+    const probeUrl = URL.createObjectURL(file);
     probe.onload = () => {
       setCropX(0);
       setCropY(0);
       setCropW(probe.naturalWidth);
       setCropH(probe.naturalHeight);
+      URL.revokeObjectURL(probeUrl);
     };
-    probe.src = URL.createObjectURL(file);
+    probe.onerror = () => URL.revokeObjectURL(probeUrl);
+    probe.src = probeUrl;
   };
 
   const chooseOverlay = (file?: File) => {
