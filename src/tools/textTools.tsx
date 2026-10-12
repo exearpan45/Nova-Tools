@@ -140,10 +140,10 @@ export const TextTools: React.FC<TextProps> = ({ toolSlug }) => {
       }
       case 'paragraph-counter':
         return [
-          \`Paragraphs: \${stats.paragraphs}\`,
-          \`Words: \${stats.words}\`,
-          \`Sentences: \${stats.sentences}\`,
-          \`Characters: \${stats.characters}\`
+          `Paragraphs: ${stats.paragraphs}`,
+          `Words: ${stats.words}`,
+          `Sentences: ${stats.sentences}`,
+          `Characters: ${stats.characters}`
         ].join('\n');
       case 'text-to-binary':
         return Array.from(new TextEncoder().encode(inputText), (byte) => byte.toString(2).padStart(8, '0')).join(' ');
