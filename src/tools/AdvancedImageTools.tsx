@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Download, ImagePlus, RotateCcw, RotateCw, FlipHorizontal, FlipVertical, Sparkles, Upload } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 import { clampCropRectangle, getDefaultImageMime, isSupportedImageMime, type OutputImageMime } from './imageAlgorithms';
@@ -103,8 +103,6 @@ export const AdvancedImageTools: React.FC<AdvancedImageToolsProps> = ({ toolSlug
   useEffect(() => () => {
     if (outputUrl) URL.revokeObjectURL(outputUrl);
   }, [outputUrl]);
-
-  const isConverter = useMemo(() => ['image-format-converter', 'png-to-jpg', 'jpg-to-png', 'webp-converter', 'image-to-pdf'].includes(toolSlug), [toolSlug]);
 
   useEffect(() => {
     let cancelled = false;
