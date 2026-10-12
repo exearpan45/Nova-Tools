@@ -1,4 +1,5 @@
 import { TOOLS_DATA, TOOLS_BY_SLUG } from '../src/data/toolsData';
+import { clampCropRectangle, getDefaultImageMime, isSupportedImageMime } from '../src/tools/imageAlgorithms';
 
 interface TestResult {
   name: string;
@@ -88,6 +89,28 @@ assert(charCount === 44, 'Character counter: 44 chars in pangram');
 const sampleUuid = 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 assert(uuidRegex.test(sampleUuid), 'UUID regex validator matches standard UUID');
+
+// F. Batch 3 image tool registry and deterministic image helper tests
+const batch3ImageSlugs = [
+  'image-cropper', 'image-format-converter', 'png-to-jpg', 'jpg-to-png',
+  'webp-converter', 'image-to-pdf', 'image-rotator', 'image-flipper',
+  'image-watermark', 'image-overlay', 'background-color-changer',
+  'image-grayscale', 'image-brightness', 'image-contrast', 'image-saturation', 'image-blur'
+];
+assert(
+  batch3ImageSlugs.every((slug) => TOOLS_BY_SLUG.get(slug)?.suite === 'image'),
+  'Batch 3: all 16 new image tools are registered in the image suite'
+);
+assert(getDefaultImageMime('jpg-to-png') === 'image/png', 'Image format: JPG to PNG selects PNG');
+assert(getDefaultImageMime('png-to-jpg') === 'image/jpeg', 'Image format: PNG to JPG selects JPEG');
+assert(getDefaultImageMime('webp-converter') === 'image/webp', 'Image format: WebP converter selects WebP');
+assert(getDefaultImageMime('image-to-pdf') === 'image/jpeg', 'Image to PDF starts with PDF-compatible JPEG');
+assert(isSupportedImageMime('image/webp', 'image/webp'), 'Image format: browser WebP export is recognized');
+assert(!isSupportedImageMime('image/webp', 'image/png'), 'Image format: unsupported WebP export is rejected');
+const boundedCrop = clampCropRectangle(100, 80, 95, 79, 50, 20);
+assert(boundedCrop.x === 95 && boundedCrop.y === 79 && boundedCrop.width === 5 && boundedCrop.height === 1, 'Image crop: crop bounds are clamped to source dimensions');
+const negativeCrop = clampCropRectangle(100, 80, -10, -4, 30, 20);
+assert(negativeCrop.x === 0 && negativeCrop.y === 0 && negativeCrop.width === 30 && negativeCrop.height === 20, 'Image crop: negative origin is safely normalized');
 
 // Summary
 const passedCount = results.filter((r) => r.passed).length;
