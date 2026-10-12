@@ -221,7 +221,7 @@ export const ToolsPage: React.FC = () => {
                 <div className="pt-2 mt-2 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between text-[10px] sm:text-[11px] text-slate-400">
                   <span className="text-emerald-600 dark:text-emerald-400 font-medium">Local</span>
                   <span className="group-hover:text-cyan-500 font-semibold flex items-center gap-0.5">
-                    Open <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-0.5 transition-transform" />
+                    Open tool <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-0.5 transition-transform" />
                   </span>
                 </div>
               </div>
