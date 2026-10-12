@@ -1796,7 +1796,7 @@ const RAW_TOOLS_DATA: Omit<ToolDefinition, 'suite'>[] = [
     example: { input: 'Blur 6px', output: 'Softened image' },
     howItWorks: 'Applies the Canvas 2D blur filter.',
     privacyInfo: 'The image is processed locally.',
-    relatedSlugs: ['image-sharpen', 'image-grayscale', 'image-contrast']
+    relatedSlugs: ['image-compressor', 'image-grayscale', 'image-contrast']
   },
 
 ];
