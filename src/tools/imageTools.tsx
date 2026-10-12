@@ -6,6 +6,7 @@ import {
   FileCode, Sparkles, FileImage, Image as ImageIcon
 } from 'lucide-react';
 import { copyToClipboard } from '../utils/clipboard';
+import { AdvancedImageTools } from './AdvancedImageTools';
 
 interface ImageProps {
   toolSlug: string;
@@ -276,6 +277,10 @@ export const ImageTools: React.FC<ImageProps> = ({ toolSlug }) => {
   };
 
   // Special case: SVG previewer
+  if (['image-cropper', 'image-format-converter', 'png-to-jpg', 'jpg-to-png', 'webp-converter', 'image-to-pdf', 'image-rotator', 'image-flipper', 'image-watermark', 'image-overlay', 'background-color-changer', 'image-grayscale', 'image-brightness', 'image-contrast', 'image-saturation', 'image-blur'].includes(toolSlug)) {
+    return <AdvancedImageTools toolSlug={toolSlug} />;
+  }
+
   if (toolSlug === 'svg-previewer') {
     return (
       <div className="space-y-6">

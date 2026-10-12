@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund
 
+      - name: Tool functional and registry tests
+        run: npm test
+
       - name: Audit tool registry
         run: npm run audit:registry
 
