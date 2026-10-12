@@ -296,7 +296,7 @@ export const AdvancedImageTools: React.FC<AdvancedImageToolsProps> = ({ toolSlug
       const page = pdf.addPage([embedded.width * 0.75, embedded.height * 0.75]);
       page.drawImage(embedded, { x: 0, y: 0, width: page.getWidth(), height: page.getHeight() });
       const pdfBytes = await pdf.save();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const blob = new Blob([pdfBytes.slice().buffer as ArrayBuffer], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
