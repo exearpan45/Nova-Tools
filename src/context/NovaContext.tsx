@@ -394,7 +394,7 @@ export const NovaProvider: React.FC<{ children: React.ReactNode }> = ({ children
         addRecent,
         clearRecent,
         workflows,
-        addWorkflow
+        addWorkflow,
         deleteWorkflow,
         searchOpen,
         setSearchOpen,
