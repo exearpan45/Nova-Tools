@@ -11,6 +11,21 @@ const BASE_URL = 'https://nova-tools2.pages.dev';
 
 const STATIC_PAGES = [
   {
+    path: '/dashboard',
+    title: 'Command Dashboard — NOVA TOOLS',
+    description: 'Personalized utility dashboard with pinned favorites, recent operations, and quick launchpad for 100+ browser-based tools.'
+  },
+  {
+    path: '/workspace',
+    title: 'Workspace & Notes — NOVA TOOLS',
+    description: 'Private browser-local workspace for notes, task checklists, and quick scratchpad calculations with zero server tracking.'
+  },
+  {
+    path: '/changelog',
+    title: "What's New & Changelog — NOVA TOOLS",
+    description: 'Read the latest updates, release notes, and newly launched features in NOVA TOOLS 2.0.'
+  },
+  {
     path: '/tools',
     title: 'All Tools — NOVA TOOLS',
     description: 'Explore free browser-based calculators, converters, PDF and image utilities, text tools, developer helpers, and everyday productivity tools.'

@@ -213,6 +213,128 @@ export const CalculatorTools: React.FC<CalcProps> = ({ toolSlug }) => {
     };
   }, [celsius]);
 
+  // ================= 7. GST CALCULATOR =================
+  const [gstAmount, setGstAmount] = useState<number>(5000);
+  const [gstRate, setGstRate] = useState<number>(18);
+  const [gstType, setGstType] = useState<'exclusive' | 'inclusive'>('exclusive');
+
+  const gstCalc = useMemo(() => {
+    const rate = Math.max(0, gstRate);
+    const amount = Math.max(0, gstAmount);
+    if (gstType === 'exclusive') {
+      const gstVal = (amount * rate) / 100;
+      const total = amount + gstVal;
+      return {
+        netAmount: amount,
+        gstAmount: gstVal,
+        cgst: gstVal / 2,
+        sgst: gstVal / 2,
+        totalAmount: total,
+      };
+    } else {
+      const net = amount / (1 + rate / 100);
+      const gstVal = amount - net;
+      return {
+        netAmount: net,
+        gstAmount: gstVal,
+        cgst: gstVal / 2,
+        sgst: gstVal / 2,
+        totalAmount: amount,
+      };
+    }
+  }, [gstAmount, gstRate, gstType]);
+
+  // ================= 8. EMI CALCULATOR =================
+  const [emiPrincipal, setEmiPrincipal] = useState<number>(100000);
+  const [emiRate, setEmiRate] = useState<number>(8.5);
+  const [emiTenureMonths, setEmiTenureMonths] = useState<number>(24);
+
+  const emiCalc = useMemo(() => {
+    const p = Math.max(0, emiPrincipal);
+    const r = (Math.max(0, emiRate) / 12) / 100;
+    const n = Math.max(1, emiTenureMonths);
+    if (r === 0) {
+      const emi = p / n;
+      return { monthlyEmi: emi, totalInterest: 0, totalPayment: p };
+    }
+    const factor = Math.pow(1 + r, n);
+    const monthlyEmi = (p * r * factor) / (factor - 1);
+    const totalPayment = monthlyEmi * n;
+    const totalInterest = totalPayment - p;
+    return { monthlyEmi, totalInterest, totalPayment };
+  }, [emiPrincipal, emiRate, emiTenureMonths]);
+
+  // ================= 9. DATE DIFFERENCE CALCULATOR =================
+  const [dateStart, setDateStart] = useState<string>('2026-01-01');
+  const [dateEnd, setDateEnd] = useState<string>(new Date().toISOString().split('T')[0]);
+
+  const dateDiffCalc = useMemo(() => {
+    const d1 = new Date(dateStart);
+    const d2 = new Date(dateEnd);
+    if (isNaN(d1.getTime()) || isNaN(d2.getTime())) {
+      return null;
+    }
+    const [early, late] = d1 < d2 ? [d1, d2] : [d2, d1];
+    const diffTime = late.getTime() - early.getTime();
+    const totalDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+    const weeks = Math.floor(totalDays / 7);
+    const remainingDays = totalDays % 7;
+
+    // Count business days
+    let businessDays = 0;
+    const cur = new Date(early);
+    while (cur < late) {
+      const day = cur.getDay();
+      if (day !== 0 && day !== 6) businessDays++;
+      cur.setDate(cur.getDate() + 1);
+    }
+
+    return { totalDays, weeks, remainingDays, businessDays, isSame: totalDays === 0 };
+  }, [dateStart, dateEnd]);
+
+  // ================= 10. ROMAN NUMERAL CONVERTER =================
+  const [romanInput, setRomanInput] = useState<string>('2026');
+  const romanOutput = useMemo(() => {
+    const str = romanInput.trim().toUpperCase();
+    if (!str) return '';
+
+    // If numeric, convert to Roman
+    if (/^\d+$/.test(str)) {
+      let num = parseInt(str, 10);
+      if (num <= 0 || num > 3999) return 'Enter a number between 1 and 3999';
+      const map: [number, string][] = [
+        [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'],
+        [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'],
+        [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']
+      ];
+      let res = '';
+      for (const [val, roman] of map) {
+        while (num >= val) {
+          res += roman;
+          num -= val;
+        }
+      }
+      return res;
+    }
+
+    // Convert Roman to Integer
+    const romanMap: Record<string, number> = {
+      I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000
+    };
+    if (!/^[IVXLCDM]+$/.test(str)) return 'Invalid Roman numeral characters';
+    let total = 0;
+    for (let i = 0; i < str.length; i++) {
+      const cur = romanMap[str[i]] || 0;
+      const next = romanMap[str[i + 1]] || 0;
+      if (cur < next) {
+        total -= cur;
+      } else {
+        total += cur;
+      }
+    }
+    return String(total);
+  }, [romanInput]);
+
   return (
     <div className="space-y-6">
       {/* 1. INTERACTIVE ARITHMETIC / EXPRESSION CALCULATOR */}
@@ -666,6 +788,251 @@ export const CalculatorTools: React.FC<CalcProps> = ({ toolSlug }) => {
                 </button>
               ))}
             </div>
+          </div>
+        </div>
+      )}
+      {/* 7. GST CALCULATOR */}
+      {toolSlug === 'gst-calculator' && (
+        <div className="p-6 rounded-2xl border border-slate-200 dark:border-[rgba(170,190,255,0.15)] bg-white dark:bg-[#10182B] space-y-6">
+          <div className="flex gap-2">
+            <button
+              onClick={() => setGstType('exclusive')}
+              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+                gstType === 'exclusive'
+                  ? 'bg-[#7657FF] text-white shadow-md'
+                  : 'bg-slate-100 dark:bg-[#16213A] text-slate-600 dark:text-slate-300'
+              }`}
+            >
+              Add GST (Exclusive)
+            </button>
+            <button
+              onClick={() => setGstType('inclusive')}
+              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+                gstType === 'inclusive'
+                  ? 'bg-[#7657FF] text-white shadow-md'
+                  : 'bg-slate-100 dark:bg-[#16213A] text-slate-600 dark:text-slate-300'
+              }`}
+            >
+              Remove GST (Inclusive)
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="text-xs font-semibold text-slate-400 block mb-1">
+                {gstType === 'exclusive' ? 'Base Amount ($)' : 'Total Amount ($)'}
+              </label>
+              <input
+                type="number"
+                value={gstAmount}
+                onChange={(e) => setGstAmount(Number(e.target.value))}
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#16213A] text-slate-900 dark:text-white font-mono"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-slate-400 block mb-1">GST Rate (%)</label>
+              <div className="flex gap-1.5 mb-1.5">
+                {[5, 12, 18, 28].map((rate) => (
+                  <button
+                    key={rate}
+                    onClick={() => setGstRate(rate)}
+                    className={`flex-1 py-1 text-xs font-semibold rounded-lg ${
+                      gstRate === rate
+                        ? 'bg-[#00D9FF] text-slate-950 font-bold'
+                        : 'bg-slate-100 dark:bg-[#16213A] text-slate-700 dark:text-slate-300'
+                    }`}
+                  >
+                    {rate}%
+                  </button>
+                ))}
+              </div>
+              <input
+                type="number"
+                value={gstRate}
+                onChange={(e) => setGstRate(Number(e.target.value))}
+                className="w-full px-4 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#16213A] text-slate-900 dark:text-white font-mono text-xs"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#16213A] border border-slate-200 dark:border-slate-800 text-center">
+              <span className="text-[11px] text-slate-400 block mb-0.5">Net Amount</span>
+              <span className="text-base font-bold font-mono text-slate-900 dark:text-white">
+                ${gstCalc.netAmount.toFixed(2)}
+              </span>
+            </div>
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#16213A] border border-slate-200 dark:border-slate-800 text-center">
+              <span className="text-[11px] text-slate-400 block mb-0.5">CGST ({gstRate / 2}%)</span>
+              <span className="text-base font-bold font-mono text-[#7657FF]">
+                ${gstCalc.cgst.toFixed(2)}
+              </span>
+            </div>
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#16213A] border border-slate-200 dark:border-slate-800 text-center">
+              <span className="text-[11px] text-slate-400 block mb-0.5">SGST ({gstRate / 2}%)</span>
+              <span className="text-base font-bold font-mono text-[#7657FF]">
+                ${gstCalc.sgst.toFixed(2)}
+              </span>
+            </div>
+            <div className="p-3.5 rounded-xl bg-[#00D9FF]/10 border border-[#00D9FF]/30 text-center">
+              <span className="text-[11px] text-[#00D9FF] font-semibold block mb-0.5">Total Amount</span>
+              <span className="text-xl font-extrabold font-mono text-[#00D9FF]">
+                ${gstCalc.totalAmount.toFixed(2)}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 8. EMI LOAN CALCULATOR */}
+      {toolSlug === 'emi-calculator' && (
+        <div className="p-6 rounded-2xl border border-slate-200 dark:border-[rgba(170,190,255,0.15)] bg-white dark:bg-[#10182B] space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label className="text-xs font-semibold text-slate-400 block mb-1">Loan Amount ($)</label>
+              <input
+                type="number"
+                value={emiPrincipal}
+                onChange={(e) => setEmiPrincipal(Number(e.target.value))}
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#16213A] text-slate-900 dark:text-white font-mono"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-slate-400 block mb-1">Annual Interest Rate (%)</label>
+              <input
+                type="number"
+                step="0.1"
+                value={emiRate}
+                onChange={(e) => setEmiRate(Number(e.target.value))}
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#16213A] text-slate-900 dark:text-white font-mono"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-slate-400 block mb-1">Tenure (Months)</label>
+              <input
+                type="number"
+                value={emiTenureMonths}
+                onChange={(e) => setEmiTenureMonths(Number(e.target.value))}
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#16213A] text-slate-900 dark:text-white font-mono"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="p-5 rounded-2xl bg-gradient-to-r from-[#7657FF]/15 to-[#00D9FF]/15 border border-[#7657FF]/30 text-center space-y-1">
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+                Monthly EMI
+              </span>
+              <span className="text-3xl font-extrabold font-mono text-[#00D9FF]">
+                ${emiCalc.monthlyEmi.toFixed(2)}
+              </span>
+            </div>
+            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-[#16213A] border border-slate-200 dark:border-slate-800 text-center space-y-1">
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+                Total Interest Payable
+              </span>
+              <span className="text-2xl font-bold font-mono text-amber-500">
+                ${emiCalc.totalInterest.toFixed(2)}
+              </span>
+            </div>
+            <div className="p-5 rounded-2xl bg-slate-50 dark:bg-[#16213A] border border-slate-200 dark:border-slate-800 text-center space-y-1">
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+                Total Payment (Principal + Interest)
+              </span>
+              <span className="text-2xl font-bold font-mono text-slate-900 dark:text-white">
+                ${emiCalc.totalPayment.toFixed(2)}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 9. DATE DIFFERENCE CALCULATOR */}
+      {toolSlug === 'date-difference-calculator' && (
+        <div className="p-6 rounded-2xl border border-slate-200 dark:border-[rgba(170,190,255,0.15)] bg-white dark:bg-[#10182B] space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="text-xs font-semibold text-slate-400 block mb-1">Start Date</label>
+              <input
+                type="date"
+                value={dateStart}
+                onChange={(e) => setDateStart(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#16213A] text-slate-900 dark:text-white font-mono"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-slate-400 block mb-1">End Date</label>
+              <input
+                type="date"
+                value={dateEnd}
+                onChange={(e) => setDateEnd(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#16213A] text-slate-900 dark:text-white font-mono"
+              />
+            </div>
+          </div>
+
+          {dateDiffCalc && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#16213A] border border-slate-200 dark:border-slate-800">
+                <span className="text-xs text-slate-400 block mb-1">Total Days</span>
+                <span className="text-2xl font-bold font-mono text-[#00D9FF]">
+                  {dateDiffCalc.totalDays.toLocaleString()}
+                </span>
+              </div>
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#16213A] border border-slate-200 dark:border-slate-800">
+                <span className="text-xs text-slate-400 block mb-1">Weeks & Days</span>
+                <span className="text-lg font-bold font-mono text-slate-900 dark:text-white">
+                  {dateDiffCalc.weeks}w {dateDiffCalc.remainingDays}d
+                </span>
+              </div>
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#16213A] border border-slate-200 dark:border-slate-800">
+                <span className="text-xs text-slate-400 block mb-1">Business Days</span>
+                <span className="text-2xl font-bold font-mono text-emerald-500">
+                  {dateDiffCalc.businessDays.toLocaleString()}
+                </span>
+              </div>
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-[#16213A] border border-slate-200 dark:border-slate-800">
+                <span className="text-xs text-slate-400 block mb-1">Weekend Days</span>
+                <span className="text-2xl font-bold font-mono text-purple-400">
+                  {(dateDiffCalc.totalDays - dateDiffCalc.businessDays).toLocaleString()}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 10. ROMAN NUMERAL CONVERTER */}
+      {toolSlug === 'roman-numeral-converter' && (
+        <div className="p-6 rounded-2xl border border-slate-200 dark:border-[rgba(170,190,255,0.15)] bg-white dark:bg-[#10182B] space-y-6">
+          <div>
+            <label className="text-xs font-semibold text-slate-400 block mb-1">
+              Enter Integer (1 - 3999) OR Roman Numeral (e.g. MMXXVI)
+            </label>
+            <input
+              type="text"
+              value={romanInput}
+              onChange={(e) => setRomanInput(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#16213A] text-slate-900 dark:text-white font-mono uppercase text-lg"
+            />
+          </div>
+
+          <div className="p-6 rounded-2xl bg-gradient-to-r from-[#7657FF]/10 to-[#00D9FF]/10 border border-[#7657FF]/30 flex items-center justify-between">
+            <div>
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">
+                Converted Output
+              </span>
+              <span className="text-3xl font-extrabold font-mono text-[#00D9FF]">
+                {romanOutput}
+              </span>
+            </div>
+            <button
+              onClick={() => handleCopy(romanOutput)}
+              className="p-2.5 rounded-xl bg-slate-100 dark:bg-[#16213A] hover:text-[#00D9FF] text-slate-700 dark:text-slate-300 transition-colors"
+              title="Copy Result"
+            >
+              {copied ? <Check className="w-5 h-5 text-emerald-400" /> : <Copy className="w-5 h-5" />}
+            </button>
           </div>
         </div>
       )}

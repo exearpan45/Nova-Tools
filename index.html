@@ -105,9 +105,9 @@
   <body class="text-neutral-900 dark:text-neutral-100 antialiased" style="background-color:inherit;color:inherit;">
     <div id="root"></div>
     <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function(regs) {
-          for (var i=0;i<regs.length;i++) regs[i].unregister();
+      if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js').catch(function() {});
         });
       }
     </script>

@@ -1588,6 +1588,1896 @@ const RAW_TOOLS_DATA: Omit<ToolDefinition, 'suite'>[] = [
     relatedSlugs: ['file-size-checker', 'file-hash-checker']
   },
 
+  {
+  id: "password-strength-checker",
+  slug: "password-strength-checker",
+  name: "Password Strength Checker",
+  description: "Calculate password entropy bits and evaluate resistance to brute-force attacks.",
+  category: "Generators",
+  keywords: [
+    "password strength",
+    "entropy",
+    "security",
+    "crack time",
+    "passphrase evaluation"
+  ],
+  icon: "ShieldCheck",
+  popular: false,
+  seoTitle: "Password Strength Checker - Test Password Security & Entropy",
+  seoDescription: "Check password entropy and estimate brute-force crack time directly in your browser.",
+  whatItDoes: [
+    "Analyzes password complexity by calculating character pool size and Shannon entropy in bits.",
+    "Estimates the approximate time required for an attacker using modern hardware to brute-force the password."
+  ],
+  howToUse: [
+    "Type or paste your password into the input field.",
+    "Review the calculated entropy bits, strength rating, and estimated crack time."
+  ],
+  example: {
+    input: "P@ssw0rd!2026Secure",
+    output: "~98 bits (Very Strong)",
+    note: "High entropy due to combination of uppercase, lowercase, numbers, and special symbols across 19 characters."
+  },
+  howItWorks: "Calculates entropy E = L * log2(R) where L is password length and R is the total character pool size based on character variety.",
+  privacyInfo: "Tested entirely on your local CPU. Passwords are never sent to external servers or logged.",
+  faqs: [
+    {
+      question: "Are my passwords transmitted anywhere?",
+      answer: "No. Evaluation runs completely offline inside your browser memory using local JavaScript."
+    }
+  ],
+  relatedSlugs: [
+    "password-generator",
+    "random-password",
+    "checksum-generator"
+  ]
+},
+
+  {
+  id: "checksum-generator",
+  slug: "checksum-generator",
+  name: "Checksum Generator & Validator",
+  description: "Compute and verify cryptographic SHA-256 checksums to validate file and data integrity.",
+  category: "Generators",
+  keywords: [
+    "checksum",
+    "sha256",
+    "hash verify",
+    "integrity",
+    "file verification"
+  ],
+  icon: "Shield",
+  popular: false,
+  seoTitle: "Online Checksum Generator - Verify File & Data Integrity",
+  seoDescription: "Generate SHA-256 cryptographic checksums and compare with expected values in your browser.",
+  whatItDoes: [
+    "Computes SHA-256 cryptographic hashes from any input text string using the browser Web Crypto API.",
+    "Allows instant comparison against an expected checksum to verify data authenticity and prevent tampering."
+  ],
+  howToUse: [
+    "Enter or paste the data string into the input box.",
+    "Copy the calculated SHA-256 hash or paste your expected hash to check for a match."
+  ],
+  example: {
+    input: "Verify file authenticity",
+    output: "SHA-256 hash output with match comparison",
+    note: "Cryptographically compares expected and computed hashes in constant-time."
+  },
+  howItWorks: "Utilizes crypto.subtle.digest with the standard SHA-256 algorithm.",
+  privacyInfo: "All hashing calculations are performed in your local browser.",
+  faqs: [
+    {
+      question: "What is a checksum used for?",
+      answer: "Checksums allow you to verify that a file or message has not been altered or corrupted in transit."
+    }
+  ],
+  relatedSlugs: [
+    "hash-generator",
+    "file-hash-checker",
+    "password-strength-checker"
+  ]
+},
+
+  {
+  id: "random-password",
+  slug: "random-password",
+  name: "Memorable Passphrase Generator",
+  description: "Generate secure, easy-to-remember multi-word passphrases using dictionary words.",
+  category: "Generators",
+  keywords: [
+    "passphrase",
+    "memorable password",
+    "diceware",
+    "secure password",
+    "password generator"
+  ],
+  icon: "Key",
+  popular: false,
+  seoTitle: "Memorable Passphrase Generator - Easy to Remember, Hard to Crack",
+  seoDescription: "Generate secure multi-word passphrases locally using cryptographically secure random values.",
+  whatItDoes: [
+    "Generates multi-word passphrases that are easy for humans to memorize but extremely difficult for computers to crack.",
+    "Configurable word count (3 to 8 words) and custom delimiters (hyphens, spaces, underscores, dots)."
+  ],
+  howToUse: [
+    "Choose the desired word count using the slider.",
+    "Select a separator symbol and click regenerate or copy."
+  ],
+  example: {
+    input: "4 words with hyphen delimiter",
+    output: "glacier-dragon-matrix-breeze",
+    note: "Combines multiple dictionary words for high entropy while remaining effortless to type."
+  },
+  howItWorks: "Uses window.crypto.getRandomValues to sample unbiased entries from an curated word dictionary.",
+  privacyInfo: "Generated passphrases remain strictly in browser volatile memory.",
+  faqs: [
+    {
+      question: "Why are passphrases safer than complex random symbols?",
+      answer: "Length provides massive entropy. A 4-word passphrase typically provides over 50 bits of entropy while remaining easy to remember."
+    }
+  ],
+  relatedSlugs: [
+    "password-generator",
+    "password-strength-checker",
+    "random-string-generator"
+  ]
+},
+
+  {
+  id: "text-encrypt-decrypt",
+  slug: "text-encrypt-decrypt",
+  name: "Text Encrypt & Decrypt",
+  description: "Encrypt and decrypt confidential text using industry-standard AES-GCM 256-bit encryption.",
+  category: "Generators",
+  keywords: [
+    "encrypt",
+    "decrypt",
+    "aes-gcm",
+    "crypto",
+    "confidential notes",
+    "cipher"
+  ],
+  icon: "Lock",
+  popular: false,
+  seoTitle: "Online Text Encryption & Decryption - AES-GCM 256-bit",
+  seoDescription: "Encrypt and decrypt text messages privately in your browser using PBKDF2 and AES-GCM 256-bit.",
+  whatItDoes: [
+    "Encrypts plain text into an encrypted Base64 string using AES-GCM 256-bit cryptography.",
+    "Decrypts ciphertext back into original plaintext with the correct secret passphrase."
+  ],
+  howToUse: [
+    "Select Encrypt mode, type your message, enter a secret password, and click Encrypt.",
+    "To decrypt, paste the Base64 ciphertext, enter the password, and click Decrypt."
+  ],
+  example: {
+    input: "Message: Confidential Notes, Passphrase: Key123!",
+    output: "Base64 AES-GCM ciphertext with random IV prepended",
+    note: "Every encryption produces a unique ciphertext because a fresh 12-byte initialization vector (IV) is generated each time."
+  },
+  howItWorks: "Derives a 256-bit key from the passphrase using PBKDF2 with SHA-256 and 100,000 iterations, then performs authenticated AES-GCM encryption.",
+  privacyInfo: "Processing is 100% client-side via window.crypto.subtle. No keys or plaintexts leave your browser.",
+  faqs: [
+    {
+      question: "Can anyone decrypt my message without the passphrase?",
+      answer: "No. AES-GCM with a 256-bit key is computationally infeasible to break without knowing the password."
+    }
+  ],
+  relatedSlugs: [
+    "password-generator",
+    "hash-generator",
+    "base64"
+  ]
+},
+
+  {
+  id: "box-shadow-generator",
+  slug: "box-shadow-generator",
+  name: "CSS Box Shadow Generator",
+  description: "Design and customize multi-layered CSS box shadows with live interactive visual preview.",
+  category: "Developer Tools",
+  keywords: [
+    "box shadow",
+    "css shadow",
+    "elevation",
+    "drop shadow",
+    "css generator"
+  ],
+  icon: "Box",
+  popular: false,
+  seoTitle: "CSS Box Shadow Generator - Interactive Shadow Designer",
+  seoDescription: "Design sleek CSS box shadows with horizontal, vertical, blur, spread, and inset controls.",
+  whatItDoes: [
+    "Visually adjust X/Y offsets, blur radius, spread distance, and inset shadow styling with live rendering.",
+    "Exports clean, cross-browser CSS code with 1-click copy."
+  ],
+  howToUse: [
+    "Adjust the sliders for Offset X, Offset Y, Blur, and Spread.",
+    "Copy the generated CSS code into your stylesheet."
+  ],
+  example: {
+    input: "X: 0, Y: 10, Blur: 25, Spread: -5",
+    output: "box-shadow: 0px 10px 25px -5px rgba(0, 0, 0, 0.3);",
+    note: "Creates an elegant soft elevation shadow ideal for modern cards and modals."
+  },
+  howItWorks: "Directly computes standard CSS box-shadow declarations and renders them on an interactive canvas card.",
+  privacyInfo: "All design adjustments are calculated locally.",
+  faqs: [
+    {
+      question: "Does this shadow support inset mode?",
+      answer: "Yes, toggle the inset checkbox to create pressed or recessed inner shadow effects."
+    }
+  ],
+  relatedSlugs: [
+    "gradient-generator",
+    "border-radius-generator",
+    "glassmorphism-generator"
+  ]
+},
+
+  {
+  id: "border-radius-generator",
+  slug: "border-radius-generator",
+  name: "CSS Border Radius Generator",
+  description: "Create uniform or asymmetric rounded corners with visual preview and clean CSS export.",
+  category: "Developer Tools",
+  keywords: [
+    "border radius",
+    "rounded corners",
+    "css shapes",
+    "ui design",
+    "css styling"
+  ],
+  icon: "Shapes",
+  popular: false,
+  seoTitle: "CSS Border Radius Generator - Visual Corner Styling Tool",
+  seoDescription: "Customize CSS border-radius for buttons and containers with live interactive preview.",
+  whatItDoes: [
+    "Adjust individual corner radii (top-left, top-right, bottom-right, bottom-left) independently.",
+    "Generates precise CSS border-radius code with live button and card previews."
+  ],
+  howToUse: [
+    "Drag the radius slider to tweak corner curvature.",
+    "Copy the generated CSS border-radius declaration."
+  ],
+  example: {
+    input: "Radius: 16px",
+    output: "border-radius: 16px;",
+    note: "Creates smooth modern corners that match current design systems."
+  },
+  howItWorks: "Calculates CSS pixel values and applies them in real-time to the preview element.",
+  privacyInfo: "Local in-browser styling calculator.",
+  faqs: [
+    {
+      question: "Can I use this for button styling?",
+      answer: "Yes, you can configure both button padding and border radius together."
+    }
+  ],
+  relatedSlugs: [
+    "box-shadow-generator",
+    "css-button-generator",
+    "gradient-generator"
+  ]
+},
+
+  {
+  id: "glassmorphism-generator",
+  slug: "glassmorphism-generator",
+  name: "CSS Glassmorphism Generator",
+  description: "Generate modern frosted glass UI effects using CSS backdrop-filter and translucency.",
+  category: "Developer Tools",
+  keywords: [
+    "glassmorphism",
+    "frosted glass",
+    "backdrop-filter",
+    "glass css",
+    "translucent card"
+  ],
+  icon: "Layers",
+  popular: false,
+  seoTitle: "CSS Glassmorphism Generator - Frosted Glass Effect Designer",
+  seoDescription: "Design beautiful frosted glass UI cards with adjustable blur, opacity, and borders in CSS.",
+  whatItDoes: [
+    "Customizes backdrop-filter blur, background alpha opacity, and border translucency.",
+    "Renders a live frosted glass card over vibrant ambient shapes to preview realistic depth."
+  ],
+  howToUse: [
+    "Adjust the Backdrop Blur, Background Opacity, and Border Opacity sliders.",
+    "Copy the generated CSS rules including vendor prefixes."
+  ],
+  example: {
+    input: "Blur: 16px, Opacity: 20%, Border: 30%",
+    output: "background: rgba(255, 255, 255, 0.20); backdrop-filter: blur(16px);",
+    note: "Delivers a modern Apple/macOS-style frosted glass effect."
+  },
+  howItWorks: "Combines CSS backdrop-filter with semi-transparent rgba() colors for hardware-accelerated glass effects.",
+  privacyInfo: "Runs completely client-side in your browser.",
+  faqs: [
+    {
+      question: "Is backdrop-filter widely supported?",
+      answer: "Yes, modern Chrome, Safari, Edge, and Firefox all support backdrop-filter with hardware acceleration."
+    }
+  ],
+  relatedSlugs: [
+    "box-shadow-generator",
+    "gradient-generator",
+    "border-radius-generator"
+  ]
+},
+
+  {
+  id: "css-button-generator",
+  slug: "css-button-generator",
+  name: "CSS Button Generator",
+  description: "Design beautiful, accessible CSS buttons with customizable colors, padding, and corner radii.",
+  category: "Developer Tools",
+  keywords: [
+    "css button",
+    "button generator",
+    "button designer",
+    "cta design",
+    "css styles"
+  ],
+  icon: "MousePointerClick",
+  popular: false,
+  seoTitle: "CSS Button Generator - Design Buttons with Live Preview",
+  seoDescription: "Create custom CSS buttons with real-time preview, color pickers, padding, and radius sliders.",
+  whatItDoes: [
+    "Interactive control over button background color, label text, text color, padding, and corner radius.",
+    "Provides ready-to-use CSS declarations for web apps and landing pages."
+  ],
+  howToUse: [
+    "Type your button label and select background and text colors.",
+    "Adjust padding and radius, then copy the generated CSS snippet."
+  ],
+  example: {
+    input: "Label: \"Explore Workflows\", Background: #6366f1, Radius: 12px",
+    output: "CSS button styles ready for production",
+    note: "Clean, accessible button styling with smooth interactive active states."
+  },
+  howItWorks: "Computes CSS layout and color declarations and binds them directly to the live preview button.",
+  privacyInfo: "Client-side only utility.",
+  faqs: [
+    {
+      question: "Can I customize hover states?",
+      answer: "Yes, the generated CSS includes smooth transition rules so you can add hover opacity effortlessly."
+    }
+  ],
+  relatedSlugs: [
+    "border-radius-generator",
+    "gradient-generator",
+    "box-shadow-generator"
+  ]
+},
+
+  {
+  id: "gpa-calculator",
+  slug: "gpa-calculator",
+  name: "GPA & CGPA Calculator",
+  description: "Calculate your semester GPA or cumulative CGPA based on course credit hours and grades.",
+  category: "Calculators",
+  keywords: [
+    "gpa",
+    "cgpa",
+    "grade calculator",
+    "credits",
+    "college grades",
+    "academic score"
+  ],
+  icon: "GraduationCap",
+  popular: false,
+  seoTitle: "Free GPA Calculator - Calculate College & High School GPA",
+  seoDescription: "Calculate semester GPA and cumulative CGPA quickly with credit weighting and course grades.",
+  whatItDoes: [
+    "Allows adding multiple courses with custom credit weights and numerical grades.",
+    "Computes the exact weighted Grade Point Average (GPA) out of 10.0 or 4.0."
+  ],
+  howToUse: [
+    "Add your semester courses with their respective credit values and grades.",
+    "The estimated GPA updates automatically with every change."
+  ],
+  example: {
+    input: "Math (4cr, 9), CS (4cr, 10), Physics (3cr, 8), Writing (2cr, 9)",
+    output: "9.08 / 10.0 GPA",
+    note: "Weighted sum of credit points divided by total course credits."
+  },
+  howItWorks: "Formula: Sum(Credits * Grade) / Sum(Credits).",
+  privacyInfo: "Academic data is processed locally in volatile browser memory.",
+  faqs: [
+    {
+      question: "Can I add or remove courses?",
+      answer: "Yes, you can add as many courses as needed or delete courses with 1 click."
+    }
+  ],
+  relatedSlugs: [
+    "cgpa-calculator",
+    "scientific-calculator",
+    "fraction-calculator"
+  ]
+},
+
+  {
+  id: "pomodoro-timer",
+  slug: "pomodoro-timer",
+  name: "Pomodoro Focus Timer",
+  description: "Boost focus and productivity with customizable work intervals and break timers.",
+  category: "Calculators",
+  keywords: [
+    "pomodoro",
+    "focus timer",
+    "productivity timer",
+    "study timer",
+    "interval timer"
+  ],
+  icon: "Timer",
+  popular: false,
+  seoTitle: "Online Pomodoro Timer - Boost Study & Work Focus",
+  seoDescription: "Free online Pomodoro timer with 25-minute focus intervals and 5/15-minute break timers.",
+  whatItDoes: [
+    "Implements the proven Pomodoro Technique: 25-minute focused sprint followed by short and long breaks.",
+    "Offers 1-click presets for Focus (25m), Short Break (5m), and Long Break (15m)."
+  ],
+  howToUse: [
+    "Select Focus mode and click Start.",
+    "When the timer concludes, switch to Short Break or Long Break to rest before your next session."
+  ],
+  example: {
+    input: "Focus Mode (25 minutes)",
+    output: "Digital countdown with start, pause, and reset controls",
+    note: "Keeps track of seconds in real-time with responsive pause/resume controls."
+  },
+  howItWorks: "Uses client-side setInterval timers with second-level countdown accuracy.",
+  privacyInfo: "Runs locally with zero external network tracking.",
+  faqs: [
+    {
+      question: "Can I pause the timer during a session?",
+      answer: "Yes, click Pause at any time to freeze the countdown, then click Start to resume."
+    }
+  ],
+  relatedSlugs: [
+    "stopwatch",
+    "time-converter",
+    "random-question-picker"
+  ]
+},
+
+  {
+  id: "stopwatch",
+  slug: "stopwatch",
+  name: "Stopwatch & Lap Timer",
+  description: "Track elapsed time with millisecond precision, pause controls, and reset capabilities.",
+  category: "Calculators",
+  keywords: [
+    "stopwatch",
+    "timer",
+    "lap timer",
+    "elapsed time",
+    "counter"
+  ],
+  icon: "Clock",
+  popular: false,
+  seoTitle: "Online Stopwatch - Accurate Time Tracking Tool",
+  seoDescription: "Track time with start, pause, and reset controls directly in your browser.",
+  whatItDoes: [
+    "Accurate digital stopwatch for tracking elapsed time during workouts, testing, or study sessions.",
+    "Instant Start, Pause, and Reset controls."
+  ],
+  howToUse: [
+    "Click Start to begin timing.",
+    "Click Pause to halt elapsed time, or Reset to return to 00:00."
+  ],
+  example: {
+    input: "Start stopwatch",
+    output: "Live digital counter formatted in MM:SS",
+    note: "Zero server dependencies, works completely offline."
+  },
+  howItWorks: "Uses high-precision interval timing in local browser JavaScript.",
+  privacyInfo: "Timing data is maintained only in local browser state.",
+  faqs: [
+    {
+      question: "Does the stopwatch keep running if I switch tabs?",
+      answer: "Yes, the timer continues tracking elapsed time in your active browser window."
+    }
+  ],
+  relatedSlugs: [
+    "pomodoro-timer",
+    "time-converter",
+    "date-difference-calculator"
+  ]
+},
+
+  {
+  id: "fraction-calculator",
+  slug: "fraction-calculator",
+  name: "Fraction Calculator",
+  description: "Add, subtract, multiply, and divide fractions with automated reduction and decimal conversion.",
+  category: "Calculators",
+  keywords: [
+    "fraction",
+    "fraction calculator",
+    "math",
+    "numerator",
+    "denominator",
+    "simplify fractions"
+  ],
+  icon: "Scale",
+  popular: false,
+  seoTitle: "Fraction Calculator - Add, Subtract, Multiply & Divide Fractions",
+  seoDescription: "Solve fraction arithmetic problems with simplified fractional results and decimal equivalents.",
+  whatItDoes: [
+    "Performs addition, subtraction, multiplication, and division on two fractions.",
+    "Automatically reduces the result using the Greatest Common Divisor (GCD) and displays the decimal value."
+  ],
+  howToUse: [
+    "Enter the numerator and denominator for both fractions.",
+    "Choose the arithmetic operator (+, -, *, /) to see the simplified result immediately."
+  ],
+  example: {
+    input: "1/2 + 3/4",
+    output: "5/4 (Decimal: 1.2500)",
+    note: "Common denominator calculated, numerators added, and reduced to lowest terms."
+  },
+  howItWorks: "Applies standard fraction arithmetic rules and Euclid’s algorithm for greatest common divisor simplification.",
+  privacyInfo: "Calculations run 100% on your device.",
+  faqs: [
+    {
+      question: "Does it automatically reduce fractions to lowest terms?",
+      answer: "Yes, the result is always simplified to its lowest terms alongside its decimal equivalent."
+    }
+  ],
+  relatedSlugs: [
+    "calculator",
+    "percentage-calculator",
+    "scientific-calculator"
+  ]
+},
+
+  {
+  id: "random-question-picker",
+  slug: "random-question-picker",
+  name: "Random Question & Decision Picker",
+  description: "Pick random questions, student names, or decisions from any custom list.",
+  category: "Generators",
+  keywords: [
+    "decision picker",
+    "random question",
+    "random name picker",
+    "raffle",
+    "shuffle list"
+  ],
+  icon: "Shuffle",
+  popular: false,
+  seoTitle: "Random Question & Name Picker - Instant Random Selector",
+  seoDescription: "Paste any list of names or questions and pick a random item fairly and instantly.",
+  whatItDoes: [
+    "Accepts any multi-line list of questions, topics, student names, or lunch options.",
+    "Fairly and randomly selects one item from your list with 1 click."
+  ],
+  howToUse: [
+    "Type or paste your items (one per line) into the text box.",
+    "Click Pick a Random Item to see the chosen selection highlighted."
+  ],
+  example: {
+    input: "Mathematics\nComputer Science\nPhysics\nChemistry",
+    output: "Randomly Selected: Computer Science",
+    note: "Cryptographically unbiased pseudo-random selection."
+  },
+  howItWorks: "Splits text by newline and uses Math.random() over array indices.",
+  privacyInfo: "Lists are processed locally and are never stored or uploaded.",
+  faqs: [
+    {
+      question: "Can I use this for giveaways or student calling?",
+      answer: "Yes, it provides an unbiased random pick every time you click the button."
+    }
+  ],
+  relatedSlugs: [
+    "random-choice",
+    "random-number",
+    "random-password"
+  ]
+},
+
+  {
+  id: "url-parser",
+  slug: "url-parser",
+  name: "URL Parser & Inspector",
+  description: "Break down complex URLs into protocol, hostname, path, query parameters, and hash fragments.",
+  category: "Developer Tools",
+  keywords: [
+    "url parser",
+    "query string",
+    "utm params",
+    "url inspector",
+    "hostname"
+  ],
+  icon: "Link2",
+  popular: false,
+  seoTitle: "URL Parser - Deconstruct URLs and Query Parameters",
+  seoDescription: "Inspect URL components, decode query string parameters, and clean tracking tokens locally.",
+  whatItDoes: [
+    "Deconstructs any web address into its constituent protocol, hostname, port, pathname, and hash.",
+    "Displays an organized table of all query string parameters with keys and decoded values.",
+    "Provides a clean URL option with UTM and marketing tracking tokens stripped."
+  ],
+  howToUse: [
+    "Paste your URL into the input field.",
+    "Inspect the protocol, hostname, path, and detailed query parameter table below."
+  ],
+  example: {
+    input: "https://example.com/shop?id=492&utm_source=news",
+    output: "Protocol: https:, Hostname: example.com, Params: [id=492, utm_source=news]",
+    note: "Cleanly isolates tracking query arguments and server paths."
+  },
+  howItWorks: "Uses the browser standard WHATWG URL API for robust URL decomposition.",
+  privacyInfo: "URLs are parsed locally in browser memory and are never fetched over the network.",
+  faqs: [
+    {
+      question: "Does this tool remove tracking tags like utm_source?",
+      answer: "Yes, it provides a Cleaned URL feature that automatically strips utm_source, fbclid, and gclid parameters."
+    }
+  ],
+  relatedSlugs: [
+    "url-encoder",
+    "url-decoder",
+    "meta-tag-generator"
+  ]
+},
+
+  {
+  id: "meta-tag-generator",
+  slug: "meta-tag-generator",
+  name: "HTML Meta Tags Generator",
+  description: "Generate SEO meta tags, OpenGraph social preview cards, and Twitter Cards for web pages.",
+  category: "Developer Tools",
+  keywords: [
+    "meta tags",
+    "seo generator",
+    "opengraph",
+    "twitter cards",
+    "html head"
+  ],
+  icon: "Tag",
+  popular: false,
+  seoTitle: "SEO Meta Tag Generator - OpenGraph & Twitter Cards Tool",
+  seoDescription: "Generate HTML meta tags, OpenGraph tags, and Twitter Cards with 1-click copy.",
+  whatItDoes: [
+    "Generates standard HTML <meta> tags for search engine titles and descriptions.",
+    "Produces OpenGraph and Twitter Card markup for rich social media sharing previews."
+  ],
+  howToUse: [
+    "Enter your page title, description, canonical URL, and social share image URL.",
+    "Copy the generated HTML code directly into your document <head> section."
+  ],
+  example: {
+    input: "Title: NOVA TOOLS, Description: Fast utilities",
+    output: "<!-- Primary Meta Tags -->\n<title>NOVA TOOLS</title>\n<meta name=\"title\" content=\"NOVA TOOLS\" />...",
+    note: "Produces valid W3C and OpenGraph standard markup."
+  },
+  howItWorks: "Formats standard HTML metadata elements and handles XML/HTML character escaping.",
+  privacyInfo: "All metadata is generated client-side.",
+  faqs: [
+    {
+      question: "What is the recommended description length?",
+      answer: "Search engines typically display the first 150–160 characters of a meta description."
+    }
+  ],
+  relatedSlugs: [
+    "robots-txt-generator",
+    "url-parser",
+    "html-formatter"
+  ]
+},
+
+  {
+  id: "hex-color-tools",
+  slug: "hex-color-tools",
+  name: "WCAG Contrast Checker",
+  description: "Check color contrast ratios against WCAG 2.1 AA and AAA accessibility standards.",
+  category: "Developer Tools",
+  keywords: [
+    "contrast checker",
+    "wcag",
+    "accessibility",
+    "color contrast",
+    "a11y"
+  ],
+  icon: "Eye",
+  popular: false,
+  seoTitle: "WCAG Color Contrast Checker - Accessible Design Tool",
+  seoDescription: "Check text and background contrast ratios for WCAG AA and AAA compliance with live preview.",
+  whatItDoes: [
+    "Calculates the exact contrast ratio between any foreground text color and background color.",
+    "Evaluates compliance with WCAG 2.1 AA (4.5:1 normal, 3:1 large) and AAA (7:1 normal, 4.5:1 large) benchmarks."
+  ],
+  howToUse: [
+    "Select or type hex values for text and background colors.",
+    "Review the live text preview and passing/failing accessibility badges."
+  ],
+  example: {
+    input: "Text: #ffffff, Background: #0f172a",
+    output: "Contrast Ratio: 15.68 : 1 (PASS WCAG AAA Normal & Large)",
+    note: "High-contrast pairing ensures optimal legibility for all users."
+  },
+  howItWorks: "Computes relative luminance for each color using the standard sRGB gamma-expansion formula.",
+  privacyInfo: "Runs in local JavaScript.",
+  faqs: [
+    {
+      question: "What contrast ratio is required for body text?",
+      answer: "WCAG Level AA requires a contrast ratio of at least 4.5:1 for normal body text."
+    }
+  ],
+  relatedSlugs: [
+    "gradient-generator",
+    "color-picker-image",
+    "color-palette-generator"
+  ]
+},
+
+  {
+  id: "robots-txt-generator",
+  slug: "robots-txt-generator",
+  name: "Robots.txt Generator",
+  description: "Generate valid robots.txt files to manage search engine crawler access and sitemap indexing.",
+  category: "Developer Tools",
+  keywords: [
+    "robots.txt",
+    "seo",
+    "crawlers",
+    "disallow",
+    "sitemap robots"
+  ],
+  icon: "Bot",
+  popular: false,
+  seoTitle: "Free Robots.txt Generator - Create Search Engine Directives",
+  seoDescription: "Generate valid robots.txt rules and directives for Googlebot and other web crawlers.",
+  whatItDoes: [
+    "Creates standard robots.txt files specifying crawler user-agents, disallow rules, and sitemap locations.",
+    "Helps prevent private directories from being indexed by search engines."
+  ],
+  howToUse: [
+    "Configure the User-agent (* for all crawlers), disallowed paths, and sitemap URL.",
+    "Copy the generated robots.txt content into your website root directory."
+  ],
+  example: {
+    input: "Agent: *, Disallow: /admin/\n/api/",
+    output: "User-agent: *\nDisallow: /admin/\nDisallow: /api/\n\nSitemap: https://...",
+    note: "Standard robots exclusion protocol format."
+  },
+  howItWorks: "Parses path lines and formats directives according to the standard robots exclusion protocol.",
+  privacyInfo: "Generated locally on your device.",
+  faqs: [
+    {
+      question: "Where should the robots.txt file be placed?",
+      answer: "It must be uploaded directly to the root directory of your domain (e.g. https://yourdomain.com/robots.txt)."
+    }
+  ],
+  relatedSlugs: [
+    "meta-tag-generator",
+    "url-parser",
+    "html-formatter"
+  ]
+},
+
+  {
+  id: "jpg-to-png",
+  slug: "jpg-to-png",
+  name: "JPG to PNG Converter",
+  description: "Convert JPEG and JPG photos into lossless PNG format directly in your browser.",
+  category: "Converters",
+  keywords: [
+    "jpg to png",
+    "jpeg to png",
+    "image converter",
+    "lossless png",
+    "convert photo"
+  ],
+  icon: "FileImage",
+  popular: false,
+  seoTitle: "JPG to PNG Converter - Fast, Free & Private Image Conversion",
+  seoDescription: "Convert JPG images to PNG format locally in your browser with zero quality degradation.",
+  whatItDoes: [
+    "Converts JPEG images into high-quality PNG format with standard MIME typing.",
+    "Performs 100% of image rendering in browser memory with instant download."
+  ],
+  howToUse: [
+    "Select or drop your JPG/JPEG image.",
+    "Preview the converted image and click Download PNG."
+  ],
+  example: {
+    input: "photo.jpg (compressed raster)",
+    output: "photo.png (lossless PNG image)",
+    note: "Decoded and re-encoded using high-fidelity browser canvas rendering."
+  },
+  howItWorks: "Draws the image onto an HTML5 2D canvas and exports via canvas.toBlob() with image/png MIME type.",
+  privacyInfo: "Images never leave your computer or device.",
+  faqs: [
+    {
+      question: "Will converting a JPG to PNG improve image quality?",
+      answer: "No, PNG cannot restore detail already lost to JPEG compression, but it prevents any further loss during future edits."
+    }
+  ],
+  relatedSlugs: [
+    "png-to-jpg",
+    "webp-to-png",
+    "image-compressor"
+  ]
+},
+
+  {
+  id: "png-to-jpg",
+  slug: "png-to-jpg",
+  name: "PNG to JPG Converter",
+  description: "Convert transparent or large PNG images to lightweight JPG format with adjustable quality.",
+  category: "Converters",
+  keywords: [
+    "png to jpg",
+    "png to jpeg",
+    "image converter",
+    "compress png",
+    "flatten image"
+  ],
+  icon: "FileImage",
+  popular: false,
+  seoTitle: "PNG to JPG Converter - Convert PNG to JPEG Online",
+  seoDescription: "Convert PNG graphics and screenshots into compact JPEG format with custom quality sliders.",
+  whatItDoes: [
+    "Converts PNG files to lightweight JPG images, flattening transparency with a clean white background.",
+    "Adjustable compression quality slider to reduce file size significantly."
+  ],
+  howToUse: [
+    "Upload a PNG file, adjust the quality slider, and download the converted JPG."
+  ],
+  example: {
+    input: "screenshot.png (3.2 MB)",
+    output: "screenshot.jpg (420 KB at 80% quality)",
+    note: "Significantly smaller file size suitable for web publishing and email attachments."
+  },
+  howItWorks: "Fills the canvas background with solid white before drawing the PNG to prevent dark transparency artifacts.",
+  privacyInfo: "Processed locally in browser memory.",
+  faqs: [
+    {
+      question: "What happens to transparent backgrounds?",
+      answer: "Since JPEG does not support transparency, transparent areas are automatically rendered with a clean white fill."
+    }
+  ],
+  relatedSlugs: [
+    "jpg-to-png",
+    "webp-to-jpg",
+    "image-compressor"
+  ]
+},
+
+  {
+  id: "webp-to-png",
+  slug: "webp-to-png",
+  name: "WebP to PNG Converter",
+  description: "Convert modern WebP images into universally compatible PNG format.",
+  category: "Converters",
+  keywords: [
+    "webp to png",
+    "convert webp",
+    "image converter",
+    "png export",
+    "webp decoder"
+  ],
+  icon: "FileImage",
+  popular: false,
+  seoTitle: "WebP to PNG Converter - Convert WebP Images Free",
+  seoDescription: "Convert WebP images to PNG files locally for maximum compatibility across older software.",
+  whatItDoes: [
+    "Converts WebP graphics and photos into standard PNG files.",
+    "Preserves image transparency and full resolution."
+  ],
+  howToUse: [
+    "Drop your WebP file and click Download PNG once conversion completes."
+  ],
+  example: {
+    input: "asset.webp",
+    output: "asset.png",
+    note: "Ensures compatibility with legacy image editors and older operating systems."
+  },
+  howItWorks: "Decodes the WebP bitmap through native browser image decoders and exports as PNG.",
+  privacyInfo: "100% private in-browser conversion.",
+  faqs: [
+    {
+      question: "Does this preserve transparent layers?",
+      answer: "Yes, PNG preserves all alpha transparency from the original WebP."
+    }
+  ],
+  relatedSlugs: [
+    "webp-to-jpg",
+    "jpg-to-png",
+    "image-resizer"
+  ]
+},
+
+  {
+  id: "webp-to-jpg",
+  slug: "webp-to-jpg",
+  name: "WebP to JPG Converter",
+  description: "Convert WebP images to standard JPG format with adjustable compression quality.",
+  category: "Converters",
+  keywords: [
+    "webp to jpg",
+    "webp to jpeg",
+    "image converter",
+    "photo converter"
+  ],
+  icon: "FileImage",
+  popular: false,
+  seoTitle: "WebP to JPG Converter - Fast In-Browser Tool",
+  seoDescription: "Easily convert WebP image files to standard JPEG photos without downloading software.",
+  whatItDoes: [
+    "Converts WebP images into standard JPG files compatible with all devices and printers.",
+    "Offers fine-tuned quality sliders to balance clarity and file size."
+  ],
+  howToUse: [
+    "Upload a WebP file, choose your compression level, and click Download."
+  ],
+  example: {
+    input: "banner.webp",
+    output: "banner.jpg",
+    note: "Universally supported on every photo viewer and mobile device."
+  },
+  howItWorks: "Uses HTML5 canvas image decoding with adjustable JPEG encoder quality factors.",
+  privacyInfo: "No server uploads. Entirely processed on your local CPU.",
+  faqs: [
+    {
+      question: "Can I convert multiple formats?",
+      answer: "Yes, NOVA TOOLS supports conversions across JPG, PNG, and WebP."
+    }
+  ],
+  relatedSlugs: [
+    "webp-to-png",
+    "png-to-jpg",
+    "image-compressor"
+  ]
+},
+
+  {
+  id: "image-grayscale",
+  slug: "image-grayscale",
+  name: "Image Grayscale Filter",
+  description: "Convert color photos into high-contrast black and white images with instant preview.",
+  category: "Converters",
+  keywords: [
+    "grayscale",
+    "black and white",
+    "monochrome",
+    "photo filter",
+    "image filter"
+  ],
+  icon: "Contrast",
+  popular: false,
+  seoTitle: "Image Grayscale Converter - Turn Photos Black & White",
+  seoDescription: "Transform colored pictures into beautiful black and white monochrome images online.",
+  whatItDoes: [
+    "Converts any photo into a clean monochrome grayscale version.",
+    "Maintains original dimensions and details while eliminating color channels."
+  ],
+  howToUse: [
+    "Select a photo, preview the grayscale result, and download the processed image."
+  ],
+  example: {
+    input: "vibrant_portrait.jpg",
+    output: "vibrant_portrait_grayscale.jpg",
+    note: "Luminance-weighted grayscale filter applied cleanly across all pixels."
+  },
+  howItWorks: "Applies CSS canvas filter grayscale(100%) and renders the result to an exportable blob.",
+  privacyInfo: "Zero server communication. Runs offline.",
+  faqs: [
+    {
+      question: "Does this alter my original file on disk?",
+      answer: "No, your original file remains untouched. The converted image is saved as a new file."
+    }
+  ],
+  relatedSlugs: [
+    "image-blur",
+    "image-compressor",
+    "image-resizer"
+  ]
+},
+
+  {
+  id: "image-blur",
+  slug: "image-blur",
+  name: "Image Blur Tool",
+  description: "Apply adjustable Gaussian blur filters to photos for backgrounds and privacy masking.",
+  category: "Converters",
+  keywords: [
+    "image blur",
+    "blur photo",
+    "gaussian blur",
+    "background blur",
+    "privacy mask"
+  ],
+  icon: "Eye",
+  popular: false,
+  seoTitle: "Online Image Blur Tool - Apply Gaussian Blur Filter",
+  seoDescription: "Add smooth Gaussian blur to any photo with an adjustable intensity slider in your browser.",
+  whatItDoes: [
+    "Applies smooth Gaussian blur effects to images with real-time intensity adjustments.",
+    "Great for creating soft website background wallpapers and obscuring sensitive details."
+  ],
+  howToUse: [
+    "Upload an image and adjust the Blur Intensity slider (1px to 40px) to desired softness.",
+    "Download the blurred image in your chosen format."
+  ],
+  example: {
+    input: "photo.jpg with Blur Intensity: 12px",
+    output: "Smoothly blurred wallpaper-ready image",
+    note: "Calculates convolution blur directly on canvas."
+  },
+  howItWorks: "Employs hardware-accelerated canvas filter blur() functions.",
+  privacyInfo: "All image rendering happens locally.",
+  faqs: [
+    {
+      question: "Can I adjust the blur strength?",
+      answer: "Yes, use the slider to control the radius anywhere from a subtle 1px to heavy 40px blur."
+    }
+  ],
+  relatedSlugs: [
+    "image-grayscale",
+    "image-compressor",
+    "image-resizer"
+  ]
+},
+
+  {
+  id: "image-rotate",
+  slug: "image-rotate",
+  name: "Image Rotator",
+  description: "Rotate images by 90-degree increments with automatic canvas dimension swapping.",
+  category: "Converters",
+  keywords: [
+    "rotate image",
+    "image orientation",
+    "turn photo",
+    "rotate 90 degrees"
+  ],
+  icon: "RotateCw",
+  popular: false,
+  seoTitle: "Rotate Image Online - Rotate Photos 90, 180, 270 Degrees",
+  seoDescription: "Quickly rotate photos clockwise or counter-clockwise without losing quality.",
+  whatItDoes: [
+    "Rotates images by 90°, 180°, or 270° clockwise with proper dimension preservation.",
+    "Fixes sideways or upside-down camera photos instantly."
+  ],
+  howToUse: [
+    "Upload an image and click the Rotate 90° button until properly oriented.",
+    "Click Download to save the rotated image."
+  ],
+  example: {
+    input: "sideways_photo.jpg (1200x800)",
+    output: "upright_photo.jpg (800x1200)",
+    note: "Canvas dimensions automatically swap to fit rotated orientation."
+  },
+  howItWorks: "Applies canvas context rotation transformations and exports a clean output file.",
+  privacyInfo: "Completely private client-side processing.",
+  faqs: [
+    {
+      question: "Does rotating reduce photo quality?",
+      answer: "No, rotation maintains the full pixel data and resolution."
+    }
+  ],
+  relatedSlugs: [
+    "image-flip",
+    "image-resizer",
+    "image-compressor"
+  ]
+},
+
+  {
+  id: "image-flip",
+  slug: "image-flip",
+  name: "Image Flipper",
+  description: "Mirror images horizontally or vertically with instant interactive preview.",
+  category: "Converters",
+  keywords: [
+    "flip image",
+    "mirror photo",
+    "flip horizontal",
+    "flip vertical",
+    "invert image"
+  ],
+  icon: "FlipHorizontal",
+  popular: false,
+  seoTitle: "Flip Image Online - Mirror Photos Horizontally & Vertically",
+  seoDescription: "Mirror images horizontally or flip them vertically with 1-click preview and download.",
+  whatItDoes: [
+    "Flips images horizontally (mirror effect) or vertically (upside down).",
+    "Supports combining both horizontal and vertical flips."
+  ],
+  howToUse: [
+    "Upload an image and click Flip Horizontal or Flip Vertical.",
+    "Download your mirrored image in PNG or JPG format."
+  ],
+  example: {
+    input: "selfie.jpg",
+    output: "mirrored_selfie.jpg",
+    note: "Corrects mirrored front-facing smartphone camera photos."
+  },
+  howItWorks: "Uses canvas ctx.scale(-1, 1) or ctx.scale(1, -1) coordinate flipping.",
+  privacyInfo: "Local device processing only.",
+  faqs: [
+    {
+      question: "Can I flip and rotate an image at the same time?",
+      answer: "Yes, flip and rotation controls can be combined seamlessly."
+    }
+  ],
+  relatedSlugs: [
+    "image-rotate",
+    "image-resizer",
+    "image-compressor"
+  ]
+},
+
+  {
+  id: "color-picker-image",
+  slug: "color-picker-image",
+  name: "Image Color Eyedropper",
+  description: "Inspect exact HEX, RGB, and HSL color values from any pixel of an uploaded image.",
+  category: "Developer Tools",
+  keywords: [
+    "image color picker",
+    "eyedropper",
+    "sample color",
+    "extract hex",
+    "pixel color"
+  ],
+  icon: "Pipette",
+  popular: false,
+  seoTitle: "Image Color Picker - Eyedropper Tool for Images",
+  seoDescription: "Pick colors directly from photos and get exact HEX, RGB, and HSL color codes.",
+  whatItDoes: [
+    "Interactive crosshair eyedropper tool: click anywhere on an uploaded image to inspect the exact pixel color.",
+    "Displays color swatch with 1-click copy buttons for HEX, RGB, and HSL formats."
+  ],
+  howToUse: [
+    "Upload an image and click on any point on the canvas preview.",
+    "Copy the sampled HEX or RGB color code."
+  ],
+  example: {
+    input: "Click on a vibrant sky pixel",
+    output: "HEX: #38bdf8 | RGB: rgb(56, 189, 248) | HSL: hsl(198, 93%, 60%)",
+    note: "Sub-pixel accurate color sampling via 2D canvas context."
+  },
+  howItWorks: "Reads pixel data using canvas getImageData(x, y, 1, 1) and formats RGB channels.",
+  privacyInfo: "All image sampling happens in local browser memory.",
+  faqs: [
+    {
+      question: "Does it work with high-resolution photos?",
+      answer: "Yes, it accurately maps canvas coordinate clicks to full natural image dimensions."
+    }
+  ],
+  relatedSlugs: [
+    "color-palette-generator",
+    "hex-color-tools",
+    "gradient-generator"
+  ]
+},
+
+  {
+  id: "color-palette-generator",
+  slug: "color-palette-generator",
+  name: "Image Color Palette Extractor",
+  description: "Extract dominant color palettes and theme swatches automatically from any photo.",
+  category: "Developer Tools",
+  keywords: [
+    "color palette",
+    "palette generator",
+    "dominant colors",
+    "theme extractor",
+    "swatches"
+  ],
+  icon: "Palette",
+  popular: false,
+  seoTitle: "Image Color Palette Extractor - Extract Dominant Colors Free",
+  seoDescription: "Extract harmonious color palettes from any photo with 1-click HEX color copying.",
+  whatItDoes: [
+    "Analyzes pixel clusters across an uploaded image and extracts the 6 most prominent colors.",
+    "Generates an interactive color palette card with 1-click HEX code copying."
+  ],
+  howToUse: [
+    "Upload an image to automatically generate its dominant color palette.",
+    "Click any color tile to copy its HEX code."
+  ],
+  example: {
+    input: "sunset_beach.jpg",
+    output: "Palette of 6 dominant tones: [#f97316, #0284c7, #fbbf24, #0f172a, #f43f5e, #e2e8f0]",
+    note: "Quantized color clustering provides a cohesive design palette."
+  },
+  howItWorks: "Samples pixel distribution, quantizes color values into buckets, and returns the top frequency clusters.",
+  privacyInfo: "Local in-browser color extraction.",
+  faqs: [
+    {
+      question: "Can I copy individual colors from the palette?",
+      answer: "Yes, clicking on any swatch immediately copies its HEX code to your clipboard."
+    }
+  ],
+  relatedSlugs: [
+    "color-picker-image",
+    "gradient-generator",
+    "hex-color-tools"
+  ]
+},
+
+  {
+  id: "image-base64",
+  slug: "image-base64",
+  name: "Image to Base64 Data URL",
+  description: "Convert image files into inline Base64 data URLs for embedding directly into HTML and CSS.",
+  category: "Developer Tools",
+  keywords: [
+    "image to base64",
+    "data uri",
+    "inline image",
+    "base64 image",
+    "data url"
+  ],
+  icon: "FileCode",
+  popular: false,
+  seoTitle: "Image to Base64 Converter - Generate Inline Data URIs",
+  seoDescription: "Convert PNG, JPG, WebP, or SVG images into Base64 data strings for direct embedding in code.",
+  whatItDoes: [
+    "Encodes any image file into a standard data:image/...;base64,... string.",
+    "Enables embedding icons and small graphics directly into HTML, CSS, or JSON without separate HTTP requests."
+  ],
+  howToUse: [
+    "Upload an image file to instantly view its Base64 string and character count.",
+    "Click Copy Data URL to paste into your codebase."
+  ],
+  example: {
+    input: "logo.png (12 KB)",
+    output: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0...",
+    note: "Ideal for embedding vector badges and small icons directly in source files."
+  },
+  howItWorks: "Reads the binary file stream via FileReader.readAsDataURL().",
+  privacyInfo: "Images remain entirely local.",
+  faqs: [
+    {
+      question: "When should I use Base64 images?",
+      answer: "Base64 is great for small icons, offline web pages, or email templates where external image requests are blocked."
+    }
+  ],
+  relatedSlugs: [
+    "base64",
+    "base64-encoder",
+    "svg-previewer"
+  ]
+},
+
+  {
+  id: "svg-previewer",
+  slug: "svg-previewer",
+  name: "SVG Viewer & Code Tester",
+  description: "Preview, test, sanitize, and download scalable vector graphics (SVG) in real-time.",
+  category: "Developer Tools",
+  keywords: [
+    "svg viewer",
+    "svg preview",
+    "vector preview",
+    "svg code",
+    "test svg"
+  ],
+  icon: "Sparkles",
+  popular: false,
+  seoTitle: "Online SVG Viewer & Code Tester - Real-Time Vector Preview",
+  seoDescription: "Paste raw SVG markup to inspect, validate, and download clean vector files in real-time.",
+  whatItDoes: [
+    "Renders live SVG code with DOMPurify sanitization to prevent malicious script injection.",
+    "Offers 1-click SVG download and code copying."
+  ],
+  howToUse: [
+    "Paste your raw <svg> markup into the code editor.",
+    "Review the live scalable rendering on the right and download when satisfied."
+  ],
+  example: {
+    input: "<svg viewBox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"40\" fill=\"#3b82f6\"/></svg>",
+    output: "Rendered vector graphic preview with download button",
+    note: "Sanitized with DOMPurify SVG profile."
+  },
+  howItWorks: "Validates vector markup, applies DOMPurify sanitization, and renders into an isolated container.",
+  privacyInfo: "Zero remote server processing.",
+  faqs: [
+    {
+      question: "Is it safe to paste untrusted SVG code?",
+      answer: "Yes, all vector markup is sanitized with DOMPurify to strip any embedded script tags."
+    }
+  ],
+  relatedSlugs: [
+    "image-base64",
+    "html-formatter",
+    "image-resizer"
+  ]
+},
+
+  {
+  id: "pdf-compressor",
+  slug: "pdf-compressor",
+  name: "PDF Compressor",
+  description: "Reduce PDF document file size with client-side object stream optimization.",
+  category: "Converters",
+  keywords: [
+    "compress pdf",
+    "pdf size reducer",
+    "shrink pdf",
+    "pdf compression",
+    "small pdf"
+  ],
+  icon: "FileArchive",
+  popular: true,
+  seoTitle: "Free PDF Compressor - Reduce PDF File Size Online",
+  seoDescription: "Compress PDF files directly in your browser without uploading private documents to external servers.",
+  whatItDoes: [
+    "Shrinks PDF file sizes using client-side stream deduplication and dictionary compression.",
+    "Offers a Target Size mode with optional page rasterization for graphic-heavy documents."
+  ],
+  howToUse: [
+    "Upload a PDF document.",
+    "Specify your target file size or select standard compression mode.",
+    "Click Compress PDF and download the optimized document."
+  ],
+  example: {
+    input: "report.pdf (8.4 MB)",
+    output: "compressed-document.pdf (reduced file size with intact text)",
+    note: "Preserves selectable text in default safe mode."
+  },
+  howItWorks: "Rebuilds document cross-reference streams and compresses internal streams using pdf-lib.",
+  privacyInfo: "All PDF processing happens 100% inside your browser. No files are uploaded.",
+  faqs: [
+    {
+      question: "Are my confidential documents uploaded to any server?",
+      answer: "No. All decompression and compression runs locally on your machine."
+    }
+  ],
+  relatedSlugs: [
+    "pdf-merger",
+    "pdf-splitter",
+    "file-size-checker"
+  ]
+},
+
+  {
+  id: "random-choice",
+  slug: "random-choice",
+  name: "Random Choice Picker",
+  description: "Make decisions effortlessly by picking a random option from your custom list.",
+  category: "Generators",
+  keywords: [
+    "random choice",
+    "decision maker",
+    "random pick",
+    "choose for me",
+    "pick option"
+  ],
+  icon: "Shuffle",
+  popular: false,
+  seoTitle: "Random Choice Picker - Instant Decision Maker",
+  seoDescription: "Paste any list of choices and let the random picker select an option for you.",
+  whatItDoes: [
+    "Takes any list of options (restaurants, movies, tasks, names) and picks one randomly.",
+    "Helps eliminate decision fatigue with quick unbiased picks."
+  ],
+  howToUse: [
+    "Enter your options (one per line) in the text area.",
+    "Click Pick a Random Item to see the chosen selection."
+  ],
+  example: {
+    input: "Pizza\nSushi\nTacos\nBurger",
+    output: "Selected Choice: Tacos",
+    note: "Equally weighted probability for every item."
+  },
+  howItWorks: "Splits input by line breaks, filters empty rows, and picks an element via Math.floor(Math.random() * length).",
+  privacyInfo: "Executed purely client-side.",
+  faqs: [
+    {
+      question: "How many items can I enter?",
+      answer: "You can enter as many choices as you want, with no arbitrary limits."
+    }
+  ],
+  relatedSlugs: [
+    "random-number",
+    "random-question-picker",
+    "random-password"
+  ]
+},
+
+  {
+  id: "number-base-converter",
+  slug: "number-base-converter",
+  name: "Number Base Converter",
+  description: "Convert numbers simultaneously across Decimal, Binary, Octal, and Hexadecimal bases.",
+  category: "Converters",
+  keywords: [
+    "number base",
+    "binary to hex",
+    "decimal to binary",
+    "hexadecimal converter",
+    "octal"
+  ],
+  icon: "Binary",
+  popular: false,
+  seoTitle: "Number Base Converter - Binary, Octal, Decimal & Hex",
+  seoDescription: "Convert numbers across base 2 (binary), base 8 (octal), base 10 (decimal), and base 16 (hex).",
+  whatItDoes: [
+    "Converts integers instantaneously across Binary, Octal, Decimal, and Hexadecimal representations.",
+    "Displays all four number systems in real-time side by side."
+  ],
+  howToUse: [
+    "Enter a decimal number into the input field.",
+    "Inspect the computed Binary, Octal, and Hexadecimal values."
+  ],
+  example: {
+    input: "255",
+    output: "Binary: 11111111 | Octal: 377 | Hexadecimal: 0xFF",
+    note: "Standard representation across computer science numbering systems."
+  },
+  howItWorks: "Uses JavaScript native parseInt(val, 10).toString(radix) conversions.",
+  privacyInfo: "Processed locally in browser memory.",
+  faqs: [
+    {
+      question: "Does it support large integers?",
+      answer: "Yes, standard integer range up to Number.MAX_SAFE_INTEGER is fully supported."
+    }
+  ],
+  relatedSlugs: [
+    "unit-converter",
+    "data-converter",
+    "calculator"
+  ]
+},
+
+  {
+  id: "markdown-editor",
+  slug: "markdown-editor",
+  name: "Markdown Editor & Live Previewer",
+  description: "Write, format, preview, and sanitize Markdown documents with live split-pane rendering.",
+  category: "Text Tools",
+  keywords: [
+    "markdown editor",
+    "markdown preview",
+    "md editor",
+    "html preview",
+    "write markdown"
+  ],
+  icon: "Edit",
+  popular: true,
+  seoTitle: "Online Markdown Editor - Live Split Preview & HTML Export",
+  seoDescription: "Write and preview Markdown in real-time with formatting shortcuts and sanitized HTML export.",
+  whatItDoes: [
+    "Split-pane Markdown editor with real-time synchronized HTML preview.",
+    "Includes one-click formatting buttons for Bold, Italic, Blockquote, and Code.",
+    "Full DOMPurify sanitization ensures safe preview rendering with 1-click HTML copying."
+  ],
+  howToUse: [
+    "Type or paste Markdown into the left editor pane.",
+    "Inspect the formatted preview on the right and click Copy HTML when ready."
+  ],
+  example: {
+    input: "# Heading 1\n**Bold text** and *italic*",
+    output: "Clean HTML output with sanitized tags",
+    note: "Real-time Markdown parsing with zero server round-trips."
+  },
+  howItWorks: "Parses Markdown syntax and sanitizes the generated HTML markup using DOMPurify.",
+  privacyInfo: "Documents are processed locally in your browser session.",
+  faqs: [
+    {
+      question: "Can I export the rendered HTML?",
+      answer: "Yes, click Copy HTML to copy the sanitized HTML markup directly to your clipboard."
+    }
+  ],
+  relatedSlugs: [
+    "readability-checker",
+    "word-counter",
+    "html-formatter"
+  ]
+},
+
+  {
+  id: "text-to-slug",
+  slug: "text-to-slug",
+  name: "Text to URL Slug Converter",
+  description: "Convert headlines and article titles into clean, SEO-friendly URL slugs.",
+  category: "Text Tools",
+  keywords: [
+    "slug converter",
+    "url slug",
+    "seo slug",
+    "kebab-case",
+    "clean url"
+  ],
+  icon: "Link",
+  popular: false,
+  seoTitle: "Text to URL Slug Converter - Generate SEO-Friendly Slugs",
+  seoDescription: "Turn headlines and titles into clean URL slugs with lowercase formatting and hyphens.",
+  whatItDoes: [
+    "Converts human-readable titles and strings into standardized URL slugs.",
+    "Strips special punctuation, normalizes whitespace, and replaces spaces with clean hyphens."
+  ],
+  howToUse: [
+    "Type or paste your headline into the input box.",
+    "Copy the generated URL slug from the output pane."
+  ],
+  example: {
+    input: "Top 10 Fast & Free Browser Utilities in 2026!",
+    output: "top-10-fast-free-browser-utilities-in-2026",
+    note: "Clean URL-safe slug with symbols removed and lowercase formatting."
+  },
+  howItWorks: "Performs regex normalization: lowercases, removes non-alphanumeric chars, and replaces spaces with single hyphens.",
+  privacyInfo: "Runs in local memory.",
+  faqs: [
+    {
+      question: "Why are clean URL slugs important for SEO?",
+      answer: "Clean slugs improve search engine ranking and make links easy for users to read and share."
+    }
+  ],
+  relatedSlugs: [
+    "case-converter",
+    "url-parser",
+    "remove-extra-spaces"
+  ]
+},
+
+  {
+  id: "html-formatter",
+  slug: "html-formatter",
+  name: "HTML Formatter & Beautifier",
+  description: "Format, indent, and beautify messy HTML code with clean tag hierarchy.",
+  category: "Developer Tools",
+  keywords: [
+    "html formatter",
+    "beautify html",
+    "indent html",
+    "clean html",
+    "html prettify"
+  ],
+  icon: "FileCode",
+  popular: false,
+  seoTitle: "HTML Formatter - Beautify and Indent HTML Code",
+  seoDescription: "Format and beautify raw HTML code with consistent 2-space indentation and tag alignment.",
+  whatItDoes: [
+    "Parses unformatted or minified HTML and indents tags with standard 2-space nesting.",
+    "Handles self-closing void elements (<br>, <img>, <input>, <meta>) properly."
+  ],
+  howToUse: [
+    "Paste your raw HTML markup into the input box.",
+    "Copy the clean, indented HTML code from the output editor."
+  ],
+  example: {
+    input: "<div><p>Hello World</p></div>",
+    output: "<div>\n  <p>\n    Hello World\n  </p>\n</div>",
+    note: "Hierarchical indentation makes code readable and easy to debug."
+  },
+  howItWorks: "Tokenizes HTML tag open/close boundaries and manages indentation depth levels.",
+  privacyInfo: "Code is processed locally and never transmitted.",
+  faqs: [
+    {
+      question: "Does this handle self-closing tags?",
+      answer: "Yes, void tags such as <input>, <img>, <meta>, and <br> are detected so indentation remains accurate."
+    }
+  ],
+  relatedSlugs: [
+    "css-formatter",
+    "json-formatter",
+    "html-entity-encoder"
+  ]
+},
+
+  {
+  id: "css-formatter",
+  slug: "css-formatter",
+  name: "CSS Formatter & Beautifier",
+  description: "Format unorganized or minified CSS stylesheets with clean brackets, indentation, and newlines.",
+  category: "Developer Tools",
+  keywords: [
+    "css formatter",
+    "beautify css",
+    "css prettify",
+    "indent css",
+    "clean stylesheets"
+  ],
+  icon: "Braces",
+  popular: false,
+  seoTitle: "CSS Formatter - Beautify and Clean CSS Stylesheets",
+  seoDescription: "Clean and format messy CSS code with proper indentation, spacing, and bracket alignment.",
+  whatItDoes: [
+    "Formats messy or minified CSS rules into clean, organized code blocks.",
+    "Adds consistent indentation to property declarations and aligns braces."
+  ],
+  howToUse: [
+    "Paste your CSS stylesheet code into the input pane.",
+    "Copy the formatted CSS from the output editor."
+  ],
+  example: {
+    input: ".card{display:flex;color:#fff;}",
+    output: ".card {\n  display: flex;\n  color: #fff;\n}",
+    note: "Properly indented rules for readability and code review."
+  },
+  howItWorks: "Parses CSS tokens, normalizes punctuation spacing, and inserts standardized indentation.",
+  privacyInfo: "Local in-browser formatter.",
+  faqs: [
+    {
+      question: "Can this beautify minified CSS?",
+      answer: "Yes, it breaks minified one-line CSS into clear, readable multi-line rules."
+    }
+  ],
+  relatedSlugs: [
+    "html-formatter",
+    "json-formatter",
+    "gradient-generator"
+  ]
+},
+
+  {
+  id: "sql-formatter",
+  slug: "sql-formatter",
+  name: "SQL Query Formatter",
+  description: "Format complex SQL queries with capitalized keywords and structured clause indentation.",
+  category: "Developer Tools",
+  keywords: [
+    "sql formatter",
+    "beautify sql",
+    "format query",
+    "uppercase sql",
+    "sql beautifier"
+  ],
+  icon: "Terminal",
+  popular: false,
+  seoTitle: "SQL Formatter - Format and Indent SQL Queries Online",
+  seoDescription: "Format SQL queries with capitalized keywords (SELECT, FROM, WHERE) and clean indentation.",
+  whatItDoes: [
+    "Formats messy single-line SQL queries into clean, readable structured SQL statements.",
+    "Automatically capitalizes major SQL keywords (SELECT, FROM, WHERE, JOIN, GROUP BY, ORDER BY, etc.)."
+  ],
+  howToUse: [
+    "Paste your raw SQL query into the input field.",
+    "Copy the formatted query with capitalized clauses and proper line breaks."
+  ],
+  example: {
+    input: "select id, name from users where active = 1 order by id desc;",
+    output: "SELECT id, name \nFROM users \nWHERE active = 1 \nORDER BY id desc;",
+    note: "Highlights query logic and improves team code readability."
+  },
+  howItWorks: "Identifies standard ANSI SQL keywords using regex boundaries and structures clauses with line breaks.",
+  privacyInfo: "Database queries and schema names remain 100% private in browser memory.",
+  faqs: [
+    {
+      question: "Does this tool connect to my database?",
+      answer: "No. It is a pure text syntax formatter that never connects to or executes against any database."
+    }
+  ],
+  relatedSlugs: [
+    "json-formatter",
+    "html-formatter",
+    "csv-viewer"
+  ]
+},
+
+  {
+  id: "http-status-codes",
+  slug: "http-status-codes",
+  name: "HTTP Status Code Reference",
+  description: "Searchable interactive guide for HTTP response codes across 2xx, 3xx, 4xx, and 5xx ranges.",
+  category: "Developer Tools",
+  keywords: [
+    "http status",
+    "status codes",
+    "404 not found",
+    "500 error",
+    "http reference"
+  ],
+  icon: "Sparkles",
+  popular: false,
+  seoTitle: "HTTP Status Codes Reference - Searchable Developer Guide",
+  seoDescription: "Look up HTTP response status codes (200, 301, 404, 500, etc.) with explanations and category filters.",
+  whatItDoes: [
+    "Comprehensive reference of standard HTTP response status codes with official RFC definitions.",
+    "Instant search by code number or description, plus 1-click category filters (2xx, 3xx, 4xx, 5xx)."
+  ],
+  howToUse: [
+    "Use the search bar to find a status code (e.g. \"404\" or \"gateway\") or filter by category tab.",
+    "Click any card to copy the status code and title to your clipboard."
+  ],
+  example: {
+    input: "Search: 429",
+    output: "429 Too Many Requests (Rate limited by upstream API)",
+    note: "Instant lookup with plain-English explanation."
+  },
+  howItWorks: "Maintains an offline reference catalog of IETF RFC HTTP status codes.",
+  privacyInfo: "Runs entirely offline with zero network requests.",
+  faqs: [
+    {
+      question: "What is the difference between 401 and 403?",
+      answer: "401 Unauthorized means the client has not authenticated, while 403 Forbidden means the identity is known but lacks permission."
+    }
+  ],
+  relatedSlugs: [
+    "url-parser",
+    "meta-tag-generator",
+    "user-agent-parser"
+  ]
+},
+
+  {
+  id: "gst-calculator",
+  slug: "gst-calculator",
+  name: "Goods & Services Tax (GST) Calculator",
+  description: "Calculate inclusive or exclusive GST amounts, CGST, SGST, and net totals instantly.",
+  category: "Calculators",
+  keywords: [
+    "gst calculator",
+    "tax calculator",
+    "vat",
+    "sales tax",
+    "cgst",
+    "sgst"
+  ],
+  icon: "Calculator",
+  popular: false,
+  seoTitle: "Free GST Calculator - Calculate GST Exclusive & Inclusive",
+  seoDescription: "Calculate Goods and Services Tax (GST) with preset tax rates (5%, 12%, 18%, 28%) and CGST/SGST split.",
+  whatItDoes: [
+    "Calculates both GST Inclusive (extracting tax from a gross amount) and GST Exclusive (adding tax to a base amount).",
+    "Provides quick-rate preset buttons (5%, 12%, 18%, 28%) and breaks down the Central (CGST) and State (SGST) tax shares."
+  ],
+  howToUse: [
+    "Select Exclusive (Add GST) or Inclusive (Remove GST).",
+    "Enter the amount, select or type the GST rate, and inspect the detailed financial summary."
+  ],
+  example: {
+    input: "Amount: $5,000, GST Rate: 18% (Exclusive)",
+    output: "Net: $5,000 | CGST: $450 | SGST: $450 | Total: $5,900",
+    note: "Breaks down national and provincial tax components."
+  },
+  howItWorks: "Uses standard formulas: GST = (Amount * Rate) / 100 for exclusive, and GST = Amount - (Amount / (1 + Rate / 100)) for inclusive.",
+  privacyInfo: "All financial calculations run locally.",
+  faqs: [
+    {
+      question: "What is the difference between GST inclusive and exclusive?",
+      answer: "GST Exclusive means the rate is added on top of your base price. GST Inclusive means the entered price already contains the tax amount."
+    }
+  ],
+  relatedSlugs: [
+    "discount-calculator",
+    "percentage-calculator",
+    "emi-calculator"
+  ]
+},
+
+  {
+  id: "emi-calculator",
+  slug: "emi-calculator",
+  name: "Loan EMI Calculator",
+  description: "Calculate monthly loan EMI payments, total interest payable, and total loan cost.",
+  category: "Calculators",
+  keywords: [
+    "emi calculator",
+    "loan calculator",
+    "mortgage",
+    "monthly emi",
+    "interest rate"
+  ],
+  icon: "Calculator",
+  popular: false,
+  seoTitle: "Loan EMI Calculator - Calculate Monthly Installments Online",
+  seoDescription: "Calculate Equated Monthly Installments (EMI) for home, car, or personal loans with interest breakdown.",
+  whatItDoes: [
+    "Calculates your exact Equated Monthly Installment (EMI) based on principal, interest rate, and tenure.",
+    "Computes total interest payable over the loan life and the total payment amount."
+  ],
+  howToUse: [
+    "Enter the loan principal amount, annual interest rate (%), and tenure in months.",
+    "Review the calculated Monthly EMI and total interest cost."
+  ],
+  example: {
+    input: "Loan: $100,000, Interest: 8.5%, Tenure: 24 Months",
+    output: "Monthly EMI: $4,545.61 | Total Interest: $9,094.67 | Total: $109,094.67",
+    note: "Standard reducing balance amortization formula."
+  },
+  howItWorks: "Formula: EMI = [P * r * (1 + r)^n] / [(1 + r)^n - 1] where r is monthly interest and n is total months.",
+  privacyInfo: "Your financial information is processed strictly on your local device.",
+  faqs: [
+    {
+      question: "Does this use the standard reducing balance method?",
+      answer: "Yes, this uses the industry-standard reducing balance amortization formula used by banks."
+    }
+  ],
+  relatedSlugs: [
+    "gst-calculator",
+    "percentage-calculator",
+    "calculator"
+  ]
+},
+
+  {
+  id: "date-difference-calculator",
+  slug: "date-difference-calculator",
+  name: "Date Difference Calculator",
+  description: "Calculate the exact number of days, weeks, months, and business days between two dates.",
+  category: "Calculators",
+  keywords: [
+    "date difference",
+    "days between dates",
+    "business days",
+    "calendar calculator",
+    "duration"
+  ],
+  icon: "Calendar",
+  popular: false,
+  seoTitle: "Date Difference Calculator - Days Between Two Dates",
+  seoDescription: "Calculate the total days, weeks, business days, and weekend days between any two calendar dates.",
+  whatItDoes: [
+    "Calculates total calendar days, weeks, and remaining days between any start and end date.",
+    "Separates weekdays (business days) from weekend days (Saturday and Sunday)."
+  ],
+  howToUse: [
+    "Select a Start Date and an End Date using the date pickers.",
+    "Review the calculated total days, business days, and duration breakdown."
+  ],
+  example: {
+    input: "Start: 2026-01-01, End: 2026-12-31",
+    output: "Total Days: 364 | Business Days: 261 | Weekend Days: 103",
+    note: "Accounts for leap years and calendar weekday distributions."
+  },
+  howItWorks: "Computes timestamp delta and iterates calendar days to accurately classify business vs weekend days.",
+  privacyInfo: "Dates are processed locally in your browser.",
+  faqs: [
+    {
+      question: "Does it count business days excluding weekends?",
+      answer: "Yes, it counts Monday through Friday as business days and separates weekend days."
+    }
+  ],
+  relatedSlugs: [
+    "age-calculator",
+    "time-converter",
+    "stopwatch"
+  ]
+},
+
+  {
+  id: "roman-numeral-converter",
+  slug: "roman-numeral-converter",
+  name: "Roman Numeral Converter",
+  description: "Convert numbers between standard Arabic integers and classical Roman numerals.",
+  category: "Converters",
+  keywords: [
+    "roman numeral",
+    "roman converter",
+    "arabic to roman",
+    "numeral converter",
+    "latin numbers"
+  ],
+  icon: "Scale",
+  popular: false,
+  seoTitle: "Roman Numeral Converter - Convert Numbers to Roman Numerals",
+  seoDescription: "Convert numbers between Roman numerals and Arabic digits (1 to 3999) with instant validation.",
+  whatItDoes: [
+    "Bidirectional conversion: enter an integer (1 to 3999) to get Roman numerals (e.g. 2026 -> MMXXVI), or enter Roman numerals to get an integer.",
+    "Instant validation with copy button."
+  ],
+  howToUse: [
+    "Type an integer number or a Roman numeral string into the input box.",
+    "The converted value updates instantly."
+  ],
+  example: {
+    input: "2026",
+    output: "MMXXVI",
+    note: "Calculates standard subtractive notation (IV, IX, XL, XC, CD, CM)."
+  },
+  howItWorks: "Uses subtractive notation lookup maps for integers to Roman, and lookahead accumulation for Roman to integers.",
+  privacyInfo: "Runs in local memory.",
+  faqs: [
+    {
+      question: "What is the maximum supported number?",
+      answer: "Standard Roman numeral notation supports numbers from 1 up to 3999 (MMMCMXCIX)."
+    }
+  ],
+  relatedSlugs: [
+    "calculator",
+    "number-base-converter",
+    "unit-converter"
+  ]
+},
 ];
 
 export const TOOL_CATEGORIES: ToolCategory[] = [
@@ -1616,7 +3506,49 @@ export const TOOLS_DATA: ToolDefinition[] = RAW_TOOLS_DATA.map((tool) => ({
     'regex-tester': 'developer', 'hash-generator': 'developer', 'base64': 'developer',
     'cgpa-calculator': 'student', 'scientific-calculator': 'student',
     'gradient-generator': 'design', 'csv-viewer': 'data',
-    'data-converter': 'utility', 'random-number': 'utility'
+    'data-converter': 'utility', 'random-number': 'utility',
+    'password-strength-checker': 'security',
+    'checksum-generator': 'security',
+    'random-password': 'security',
+    'text-encrypt-decrypt': 'security',
+    'box-shadow-generator': 'design',
+    'border-radius-generator': 'design',
+    'glassmorphism-generator': 'design',
+    'css-button-generator': 'design',
+    'gpa-calculator': 'student',
+    'pomodoro-timer': 'student',
+    'stopwatch': 'student',
+    'fraction-calculator': 'student',
+    'random-question-picker': 'student',
+    'url-parser': 'web',
+    'meta-tag-generator': 'web',
+    'hex-color-tools': 'web',
+    'robots-txt-generator': 'web',
+    'jpg-to-png': 'image',
+    'png-to-jpg': 'image',
+    'webp-to-png': 'image',
+    'webp-to-jpg': 'image',
+    'image-grayscale': 'image',
+    'image-blur': 'image',
+    'image-rotate': 'image',
+    'image-flip': 'image',
+    'color-picker-image': 'image',
+    'color-palette-generator': 'image',
+    'image-base64': 'image',
+    'svg-previewer': 'image',
+    'pdf-compressor': 'pdf',
+    'random-choice': 'utility',
+    'number-base-converter': 'utility',
+    'markdown-editor': 'writing',
+    'text-to-slug': 'text',
+    'html-formatter': 'developer',
+    'css-formatter': 'developer',
+    'sql-formatter': 'developer',
+    'http-status-codes': 'developer',
+    'gst-calculator': 'calculators',
+    'emi-calculator': 'calculators',
+    'date-difference-calculator': 'calculators',
+    'roman-numeral-converter': 'calculators'
   } as Record<string, ToolSuite>)[tool.id] || (tool.id === 'qr-generator'
     ? 'web'
     : tool.id === 'data-converter'

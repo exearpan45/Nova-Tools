@@ -4,6 +4,7 @@ import {
 } from 'lucide-react';
 import { useNova } from '../context/NovaContext';
 import { NovaLogo } from './NovaLogo';
+import { ScrollProgressBar } from './ScrollProgressBar';
 
 export const Navbar: React.FC = () => {
   const {
@@ -21,7 +22,7 @@ export const Navbar: React.FC = () => {
 
   return (
     <header
-      className="sticky top-0 z-30 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl transition-colors"
+      className="sticky top-0 z-30 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl transition-colors relative"
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
     >
       <div className="h-14 sm:h-16 px-3 sm:px-6 md:px-8 flex items-center justify-between gap-3 max-w-7xl mx-auto w-full">
@@ -96,6 +97,9 @@ export const Navbar: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Scroll-linked progress bar anchored to the bottom edge of Navbar / top of main content */}
+      <ScrollProgressBar />
     </header>
   );
 };

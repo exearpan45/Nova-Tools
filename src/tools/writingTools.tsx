@@ -110,7 +110,7 @@ export const WritingTools: React.FC<WritingProps> = ({ toolSlug }) => {
         </div>
       )}
 
-      {/* Editor & Preview Split View */}
+      {/* Editor & Preview Split View for 'markdown-editor' and 'readability-checker' */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2 p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">

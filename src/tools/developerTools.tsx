@@ -17,6 +17,12 @@ export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
       ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFycGFuIEdvc3dhbWkiLCJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTgwMDAwMDAwMH0.signature'
       : toolSlug.includes('regex')
       ? 'hello from nova@example.com and support@example.com'
+      : toolSlug === 'html-formatter'
+      ? '<div class="container"><header><h1>NOVA TOOLS</h1><nav><a href="/tools">All Tools</a></nav></header><main><p>Fast client-side utilities.</p></main></div>'
+      : toolSlug === 'css-formatter'
+      ? '.card{display:flex;align-items:center;background:#080D1C;color:#F5F7FF;padding:16px;border-radius:12px;border:1px solid rgba(170,190,255,0.15);}'
+      : toolSlug === 'sql-formatter'
+      ? 'select u.id, u.name, count(o.id) as total_orders from users u left join orders o on u.id = o.user_id where u.active = 1 and o.status = "completed" group by u.id order by total_orders desc limit 20;'
       : 'Hello NOVA TOOLS!'
   );
 
@@ -49,6 +55,49 @@ export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
 
   // Color converter states
   const [hexInput, setHexInput] = useState<string>('#3b82f6');
+
+  // HTTP Status codes states
+  const [httpSearch, setHttpSearch] = useState<string>('');
+  const [httpFilter, setHttpFilter] = useState<'all' | '2xx' | '3xx' | '4xx' | '5xx'>('all');
+
+  const httpStatusCatalog = useMemo(() => [
+    { code: 200, name: 'OK', desc: 'Standard successful HTTP response for request.' },
+    { code: 201, name: 'Created', desc: 'The request has succeeded and a new resource has been created.' },
+    { code: 204, name: 'No Content', desc: 'The server successfully processed the request, but is not returning any content.' },
+    { code: 301, name: 'Moved Permanently', desc: 'The requested resource has been assigned a new permanent URI.' },
+    { code: 302, name: 'Found', desc: 'The resource resides temporarily under a different URI.' },
+    { code: 304, name: 'Not Modified', desc: 'Indicates the client has the latest version cached and no body needs to be retransmitted.' },
+    { code: 400, name: 'Bad Request', desc: 'The server cannot process the request due to client syntax error or malformed frame.' },
+    { code: 401, name: 'Unauthorized', desc: 'Authentication is required and has failed or has not yet been provided.' },
+    { code: 403, name: 'Forbidden', desc: 'The client does not have access rights to the requested content.' },
+    { code: 404, name: 'Not Found', desc: 'The server cannot find the requested resource.' },
+    { code: 405, name: 'Method Not Allowed', desc: 'The request method is known by the server but not supported by the target resource.' },
+    { code: 409, name: 'Conflict', desc: 'The request could not be completed due to a conflict with the current state of the resource.' },
+    { code: 422, name: 'Unprocessable Entity', desc: 'The request was well-formed but was unable to be followed due to semantic errors.' },
+    { code: 429, name: 'Too Many Requests', desc: 'The user has sent too many requests in a given amount of time (rate limited).' },
+    { code: 500, name: 'Internal Server Error', desc: 'The server encountered an unexpected condition that prevented it from fulfilling the request.' },
+    { code: 502, name: 'Bad Gateway', desc: 'The server, while acting as a gateway or proxy, received an invalid response.' },
+    { code: 503, name: 'Service Unavailable', desc: 'The server is currently unable to handle the request due to maintenance or overload.' },
+    { code: 504, name: 'Gateway Timeout', desc: 'The server acting as a gateway or proxy did not receive a timely response from an upstream server.' }
+  ], []);
+
+  const filteredHttpStatuses = useMemo(() => {
+    return httpStatusCatalog.filter((item) => {
+      const matchFilter =
+        httpFilter === 'all' ||
+        (httpFilter === '2xx' && item.code >= 200 && item.code < 300) ||
+        (httpFilter === '3xx' && item.code >= 300 && item.code < 400) ||
+        (httpFilter === '4xx' && item.code >= 400 && item.code < 500) ||
+        (httpFilter === '5xx' && item.code >= 500 && item.code < 600);
+      const q = httpSearch.toLowerCase().trim();
+      const matchSearch =
+        !q ||
+        String(item.code).includes(q) ||
+        item.name.toLowerCase().includes(q) ||
+        item.desc.toLowerCase().includes(q);
+      return matchFilter && matchSearch;
+    });
+  }, [httpStatusCatalog, httpFilter, httpSearch]);
 
   // Trigger hash calculation when input changes for hash-generator
   React.useEffect(() => {
@@ -186,6 +235,68 @@ export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
             online: navigator.onLine,
           };
           return { outputText: JSON.stringify(info, null, 2), error: null };
+        }
+        case 'html-formatter': {
+          let formatted = '';
+          let indent = 0;
+          const tab = '  ';
+          const clean = inputVal.replace(/>\s*</g, '><').trim();
+          const tokens = clean.split(/(<[^>]+>)/g).filter(Boolean);
+          for (const token of tokens) {
+            if (token.startsWith('</')) {
+              indent = Math.max(0, indent - 1);
+              formatted += `${tab.repeat(indent)}${token}\n`;
+            } else if (
+              token.startsWith('<') &&
+              !token.endsWith('/>') &&
+              !token.startsWith('<!') &&
+              !token.startsWith('<?') &&
+              !['<area', '<base', '<br', '<col', '<embed', '<hr', '<img', '<input', '<link', '<meta', '<param', '<source', '<track', '<wbr'].some((vt) => token.toLowerCase().startsWith(vt))
+            ) {
+              formatted += `${tab.repeat(indent)}${token}\n`;
+              indent += 1;
+            } else if (token.startsWith('<')) {
+              formatted += `${tab.repeat(indent)}${token}\n`;
+            } else {
+              const text = token.trim();
+              if (text) {
+                formatted += `${tab.repeat(indent)}${text}\n`;
+              }
+            }
+          }
+          return { outputText: formatted.trim(), error: null };
+        }
+        case 'css-formatter': {
+          let formatted = inputVal
+            .replace(/\s*([\{\}\:\;\,])\s*/g, '$1')
+            .replace(/;/g, ';\n  ')
+            .replace(/\{/g, ' {\n  ')
+            .replace(/\n\s*\}/g, '\n}\n\n')
+            .replace(/\}/g, '\n}\n\n')
+            .trim();
+          return { outputText: formatted, error: null };
+        }
+        case 'sql-formatter': {
+          const keywords = [
+            'SELECT', 'FROM', 'WHERE', 'AND', 'OR', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN',
+            'INNER JOIN', 'OUTER JOIN', 'ON', 'GROUP BY', 'ORDER BY', 'HAVING', 'LIMIT',
+            'OFFSET', 'INSERT INTO', 'VALUES', 'UPDATE', 'SET', 'DELETE FROM', 'CREATE TABLE',
+            'DROP TABLE', 'ALTER TABLE', 'AS', 'DISTINCT', 'UNION', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END'
+          ];
+          let sql = inputVal;
+          for (const kw of keywords) {
+            const regex = new RegExp(`\\b${kw}\\b`, 'gi');
+            sql = sql.replace(regex, kw);
+          }
+          const mainClauses = [
+            'SELECT', 'FROM', 'WHERE', 'GROUP BY', 'HAVING', 'ORDER BY', 'LIMIT',
+            'LEFT JOIN', 'RIGHT JOIN', 'INNER JOIN', 'JOIN', 'SET', 'VALUES'
+          ];
+          for (const clause of mainClauses) {
+            const re = new RegExp(`\\s*\\b(${clause})\\b\\s*`, 'g');
+            sql = sql.replace(re, `\n$1 `);
+          }
+          return { outputText: sql.trim(), error: null };
         }
         default:
           return { outputText: inputVal, error: null };
@@ -395,8 +506,62 @@ export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
         </div>
       )}
 
+      {/* HTTP Status Codes Interactive Reference */}
+      {toolSlug === 'http-status-codes' && (
+        <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <input
+              type="text"
+              placeholder="Search by code (e.g. 404) or description..."
+              value={httpSearch}
+              onChange={(e) => setHttpSearch(e.target.value)}
+              className="w-full sm:w-80 px-4 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white"
+            />
+            <div className="flex flex-wrap gap-1.5">
+              {(['all', '2xx', '3xx', '4xx', '5xx'] as const).map((filter) => (
+                <button
+                  key={filter}
+                  onClick={() => setHttpFilter(filter)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold uppercase transition-all ${
+                    httpFilter === filter
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                  }`}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {filteredHttpStatuses.map((item) => (
+              <div
+                key={item.code}
+                onClick={() => handleCopy(`${item.code} ${item.name}`)}
+                className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 hover:border-emerald-500/50 cursor-pointer transition-all space-y-1 group"
+                title="Click to copy code & name"
+              >
+                <div className="flex items-center justify-between">
+                  <span className={`text-base font-bold font-mono ${
+                    item.code >= 500 ? 'text-rose-500' :
+                    item.code >= 400 ? 'text-amber-500' :
+                    item.code >= 300 ? 'text-sky-500' : 'text-emerald-500'
+                  }`}>
+                    {item.code}
+                  </span>
+                  <span className="text-[10px] font-mono text-slate-400 group-hover:text-emerald-500">Copy</span>
+                </div>
+                <h4 className="text-xs font-bold text-slate-900 dark:text-white">{item.name}</h4>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Standard Dual Pane Layout for Formatter/Decoder/Encoder */}
-      {toolSlug !== 'hash-generator' && toolSlug !== 'timestamp-converter' && (
+      {toolSlug !== 'hash-generator' && toolSlug !== 'timestamp-converter' && toolSlug !== 'http-status-codes' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="space-y-2">
             <div className="flex items-center justify-between">

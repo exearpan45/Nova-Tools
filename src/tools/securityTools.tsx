@@ -33,6 +33,70 @@ export const SecurityTools: React.FC<SecurityProps> = ({ toolSlug }) => {
   const [actualInput, setActualInput] = useState<string>('Verify file authenticity');
   const [computedSha256, setComputedSha256] = useState<string>('');
 
+  // Text Encryption / Decryption states
+  const [cryptoText, setCryptoText] = useState<string>('Confidential NOVA notes and keys');
+  const [cryptoPassword, setCryptoPassword] = useState<string>('SuperSecretPass123!');
+  const [cryptoMode, setCryptoMode] = useState<'encrypt' | 'decrypt'>('encrypt');
+  const [cryptoResult, setCryptoResult] = useState<string>('');
+  const [cryptoError, setCryptoError] = useState<string>('');
+
+  const handleEncryptDecrypt = async () => {
+    setCryptoError('');
+    if (!cryptoPassword) {
+      setCryptoError('Please enter a secret passphrase.');
+      return;
+    }
+    try {
+      const enc = new TextEncoder();
+      const dec = new TextDecoder();
+      const passKey = await crypto.subtle.importKey(
+        'raw',
+        enc.encode(cryptoPassword),
+        { name: 'PBKDF2' },
+        false,
+        ['deriveKey']
+      );
+      const salt = new Uint8Array([110, 111, 118, 97, 95, 115, 101, 99, 117, 114, 101, 95, 115, 97, 108, 116]);
+      const key = await crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
+        passKey,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['encrypt', 'decrypt']
+      );
+
+      if (cryptoMode === 'encrypt') {
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const encrypted = await crypto.subtle.encrypt(
+          { name: 'AES-GCM', iv },
+          key,
+          enc.encode(cryptoText)
+        );
+        const combined = new Uint8Array(iv.length + encrypted.byteLength);
+        combined.set(iv, 0);
+        combined.set(new Uint8Array(encrypted), iv.length);
+        const b64 = btoa(String.fromCharCode(...combined));
+        setCryptoResult(b64);
+      } else {
+        const raw = atob(cryptoText.trim());
+        const combined = new Uint8Array(raw.length);
+        for (let i = 0; i < raw.length; i++) combined[i] = raw.charCodeAt(i);
+        if (combined.length < 13) throw new Error('Ciphertext is too short or malformed.');
+        const iv = combined.slice(0, 12);
+        const data = combined.slice(12);
+        const decrypted = await crypto.subtle.decrypt(
+          { name: 'AES-GCM', iv },
+          key,
+          data
+        );
+        setCryptoResult(dec.decode(decrypted));
+      }
+    } catch (err: any) {
+      setCryptoError(cryptoMode === 'decrypt' ? 'Decryption failed. Incorrect password or corrupted ciphertext.' : err.message || 'Encryption error');
+      setCryptoResult('');
+    }
+  };
+
   // Generate strong password
   const generateNewPassword = () => {
     let charset = '';
@@ -342,6 +406,94 @@ export const SecurityTools: React.FC<SecurityProps> = ({ toolSlug }) => {
               {expectedHash === computedSha256
                 ? '✓ Checksums match perfectly. File integrity verified.'
                 : '✕ Checksums do NOT match. File or data has been modified.'}
+            </div>
+          )}
+        </div>
+      )}
+      {/* Text Encryption & Decryption (AES-GCM Web Crypto) */}
+      {toolSlug === 'text-encrypt-decrypt' && (
+        <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 space-y-5">
+          <div className="flex gap-2">
+            <button
+              onClick={() => { setCryptoMode('encrypt'); setCryptoResult(''); setCryptoError(''); }}
+              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+                cryptoMode === 'encrypt'
+                  ? 'bg-red-600 text-white shadow-md'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+              }`}
+            >
+              Encrypt (AES-GCM 256-bit)
+            </button>
+            <button
+              onClick={() => { setCryptoMode('decrypt'); setCryptoResult(''); setCryptoError(''); }}
+              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+                cryptoMode === 'decrypt'
+                  ? 'bg-red-600 text-white shadow-md'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+              }`}
+            >
+              Decrypt
+            </button>
+          </div>
+
+          <div>
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">
+              {cryptoMode === 'encrypt' ? 'Plaintext to Encrypt' : 'Base64 Ciphertext to Decrypt'}
+            </label>
+            <textarea
+              rows={4}
+              value={cryptoText}
+              onChange={(e) => setCryptoText(e.target.value)}
+              className="w-full p-3 font-mono text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white"
+            />
+          </div>
+
+          <div>
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">
+              Secret Passphrase (Key Derivation)
+            </label>
+            <input
+              type="password"
+              value={cryptoPassword}
+              onChange={(e) => setCryptoPassword(e.target.value)}
+              className="w-full px-4 py-2.5 text-xs font-mono rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white"
+            />
+          </div>
+
+          <button
+            onClick={handleEncryptDecrypt}
+            className="w-full py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-semibold text-xs shadow-md transition-all active:scale-98 cursor-pointer flex items-center justify-center gap-2"
+          >
+            <Lock className="w-4 h-4" />
+            <span>{cryptoMode === 'encrypt' ? 'Encrypt Text Locally' : 'Decrypt Ciphertext'}</span>
+          </button>
+
+          {cryptoError && (
+            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs font-semibold">
+              {cryptoError}
+            </div>
+          )}
+
+          {cryptoResult && (
+            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  {cryptoMode === 'encrypt' ? 'Encrypted Output (Base64)' : 'Decrypted Plaintext'}
+                </span>
+                <button
+                  onClick={() => handleCopy(cryptoResult)}
+                  className="text-xs flex items-center gap-1.5 text-red-500 hover:underline font-medium"
+                >
+                  {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copied ? 'Copied' : 'Copy'}
+                </button>
+              </div>
+              <textarea
+                readOnly
+                rows={3}
+                value={cryptoResult}
+                className="w-full p-2.5 font-mono text-xs rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+              />
             </div>
           )}
         </div>

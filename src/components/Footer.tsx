@@ -27,6 +27,27 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Links */}
           <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-neutral-600 dark:text-neutral-400">
             <button
+              id="footer-link-dashboard"
+              onClick={() => handleNav('/dashboard')}
+              className="hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"
+            >
+              Dashboard
+            </button>
+            <button
+              id="footer-link-workspace"
+              onClick={() => handleNav('/workspace')}
+              className="hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"
+            >
+              Workspace
+            </button>
+            <button
+              id="footer-link-changelog"
+              onClick={() => handleNav('/changelog')}
+              className="hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"
+            >
+              What's New
+            </button>
+            <button
               id="footer-link-tools"
               onClick={() => handleNav('/tools')}
               className="hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer"

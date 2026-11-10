@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Search, ArrowRight, Star, Sparkles, ChevronRight, GitFork
+  Search, ArrowRight, Star, Sparkles, ChevronRight, GitFork, LayoutDashboard
 } from 'lucide-react';
 import { useNova } from '../context/NovaContext';
 import { SUITE_LIST, SUITES_DATA } from '../data/suitesData';
@@ -61,7 +61,17 @@ export const HomePage: React.FC = () => {
           A powerful collection of free tools for files, images, developers, students and everyday work. Fast, simple and designed to keep your workflow moving.
         </p>
 
-        <div className="flex flex-col min-[420px]:flex-row flex-wrap items-stretch min-[420px]:items-center justify-start gap-2.5 sm:gap-3 pt-2"><button type="button" onClick={() => navigate('/tools')} className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-4 sm:px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-violet-600/20 hover:shadow-violet-500/30 hover:-translate-y-0.5"><Sparkles className="h-4 w-4" /> Explore all tools <ArrowRight className="h-4 w-4" /></button><button type="button" onClick={() => setSearchOpen(true)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300/80 bg-white/70 px-4 sm:px-5 py-3 text-xs sm:text-sm font-bold text-slate-700 hover:border-violet-400 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200"><Search className="h-4 w-4" /> Find a tool</button></div>
+        <div className="flex flex-col min-[420px]:flex-row flex-wrap items-stretch min-[420px]:items-center justify-start gap-2.5 sm:gap-3 pt-2">
+          <button type="button" onClick={() => navigate('/tools')} className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-4 sm:px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-violet-600/20 hover:shadow-violet-500/30 hover:-translate-y-0.5">
+            <Sparkles className="h-4 w-4" /> Explore all tools <ArrowRight className="h-4 w-4" />
+          </button>
+          <button type="button" onClick={() => navigate('/dashboard')} className="inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 hover:bg-cyan-500/20 px-4 sm:px-5 py-3 text-xs sm:text-sm font-bold text-cyan-700 dark:text-cyan-300">
+            <LayoutDashboard className="h-4 w-4" /> Dashboard
+          </button>
+          <button type="button" onClick={() => setSearchOpen(true)} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300/80 bg-white/70 px-4 sm:px-5 py-3 text-xs sm:text-sm font-bold text-slate-700 hover:border-violet-400 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200">
+            <Search className="h-4 w-4" /> Find a tool
+          </button>
+        </div>
 
         {/* Desktop Search Trigger (Visible on md+ screens) */}
         <div className="hidden md:block pt-3 max-w-3xl">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Home, Grid, Star, History, GitFork, Settings, ChevronLeft, ChevronRight,
+  Home, LayoutDashboard, Grid, Star, History, GitFork, Settings, ChevronLeft, ChevronRight,
   Image, FileText, Type, Code2, GraduationCap, Calculator, Globe,
   Palette, ShieldCheck, Database, PenTool, Wrench, Sparkles
 } from 'lucide-react';
@@ -29,10 +29,13 @@ export const Sidebar: React.FC = () => {
 
   const navItems = [
     { id: 'home', label: 'Home', icon: Home, path: '/' },
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
+    { id: 'workspace', label: 'Workspace', icon: FileText, path: '/workspace' },
     { id: 'tools', label: 'All Tools', icon: Grid, path: '/tools' },
     { id: 'favorites', label: 'Favorites', icon: Star, path: '/favorites', badge: favorites.length },
     { id: 'recent', label: 'Recently Used', icon: History, path: '/recent', badge: recentTools.length },
     { id: 'workflows', label: 'Workflows', icon: GitFork, path: '/workflows' },
+    { id: 'changelog', label: "What's New", icon: Sparkles, path: '/changelog' },
     { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
   ];
 

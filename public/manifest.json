@@ -2,11 +2,13 @@
   "name": "NOVA TOOLS",
   "short_name": "NOVA TOOLS",
   "description": "Production-ready all-in-one toolbox with 100+ genuinely useful tools for files, images, code, and everyday work.",
+  "id": "/",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#0b0f19",
-  "theme_color": "#06b6d4",
+  "background_color": "#080D1C",
+  "theme_color": "#00D9FF",
   "categories": ["utilities", "productivity", "developer tools"],
   "icons": [
     {

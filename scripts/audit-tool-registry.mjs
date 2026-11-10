@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 
 const registryPath = resolve('src/data/toolsData.ts');
 const source = readFileSync(registryPath, 'utf8');
-const entries = [...source.matchAll(/\{\s*id:\s*'([^']+)'[\s\S]*?slug:\s*'([^']+)'[\s\S]*?name:\s*'([^']+)'[\s\S]*?description:\s*'([^']+)'/g)]
+const entries = [...source.matchAll(/\{\s*id:\s*['"]([^'"]+)['"][\s\S]*?slug:\s*['"]([^'"]+)['"][\s\S]*?name:\s*['"]([^'"]+)['"][\s\S]*?description:\s*['"]([^'"]+)['"]/g)]
   .map((match) => ({ id: match[1], slug: match[2], name: match[3], description: match[4] }));
 
 const errors = [];
@@ -28,7 +28,7 @@ if (!source.includes('export const TOOLS_BY_SLUG')) errors.push('TOOLS_BY_SLUG e
 
 const relatedMatches = [...source.matchAll(/relatedSlugs:\s*\[([^\]]*)\]/g)];
 for (const match of relatedMatches) {
-  const related = [...match[1].matchAll(/'([^']+)'/g)].map((item) => item[1]);
+  const related = [...match[1].matchAll(/['"]([^'"]+)['"]/g)].map((item) => item[1]);
   for (const slug of related) {
     if (!slugs.has(slug)) errors.push(`Related tool slug does not exist in registry: ${slug}`);
   }
@@ -69,12 +69,12 @@ for (const suite of declaredSuites) {
 }
 
 // Verify every registered tool is routed to a suite component that handles its slug.
-const implementationEntries = [...source.matchAll(/\{\s*id:\s*'([^']+)'[\s\S]*?slug:\s*'([^']+)'[\s\S]*?name:\s*'([^']+)'[\s\S]*?description:\s*'([^']+)'[\s\S]*?category:\s*'([^']+)'/g)]
+const implementationEntries = [...source.matchAll(/\{\s*id:\s*['"]([^'"]+)['"][\s\S]*?slug:\s*['"]([^'"]+)['"][\s\S]*?name:\s*['"]([^'"]+)['"][\s\S]*?description:\s*['"]([^'"]+)['"][\s\S]*?category:\s*['"]([^'"]+)['"]/g)]
   .map((match) => ({ id: match[1], slug: match[2], name: match[3], category: match[5] }));
 const explicitSuiteBlock = source.match(/\(\(\{([\s\S]*?)\}\s+as Record<string, ToolSuite>\)\[tool\.id\]/);
 const explicitSuiteMap = new Map(
   explicitSuiteBlock
-    ? [...explicitSuiteBlock[1].matchAll(/'([^']+)':\s*'([^']+)'/g)].map((match) => [match[1], match[2]])
+    ? [...explicitSuiteBlock[1].matchAll(/['"]([^'"]+)['"]:\s*['"]([^'"]+)['"]/g)].map((match) => [match[1], match[2]])
     : []
 );
 const categorySuiteMap = {

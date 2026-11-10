@@ -10,6 +10,9 @@ const BASE_URL = 'https://nova-tools2.pages.dev';
 
 const STATIC_ROUTES = [
   '/',
+  '/dashboard',
+  '/workspace',
+  '/changelog',
   '/tools',
   '/about',
   '/contact',

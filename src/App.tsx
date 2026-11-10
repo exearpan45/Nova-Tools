@@ -11,6 +11,9 @@ import { SmartDropZone } from './components/SmartDropZone';
 
 // Pages
 import { HomePage } from './pages/HomePage';
+import { DashboardPage } from './pages/DashboardPage';
+import { WorkspacePage } from './pages/WorkspacePage';
+import { ChangelogPage } from './pages/ChangelogPage';
 import { ToolsPage } from './pages/ToolsPage';
 import { ToolDetailPage } from './pages/ToolDetailPage';
 import { WorkflowsPage } from './pages/WorkflowsPage';
@@ -20,6 +23,7 @@ import { SettingsPage } from './pages/SettingsPage';
 import {
   AboutPage, ContactPage, PrivacyPage, TermsPage, DisclaimerPage, CookiePolicyPage
 } from './pages/StaticPages';
+import { OfflineIndicator } from './components/OfflineIndicator';
 
 // Data
 import { TOOLS_BY_SLUG } from './data/toolsData';
@@ -48,6 +52,13 @@ const AppContent: React.FC = () => {
     switch (normalizedPath) {
       case '/':
         return <HomePage />;
+      case '/dashboard':
+        return <DashboardPage />;
+      case '/workspace':
+        return <WorkspacePage />;
+      case '/changelog':
+      case '/whats-new':
+        return <ChangelogPage />;
       case '/tools':
         return <ToolsPage />;
       case '/workflows':
@@ -107,6 +118,9 @@ const AppContent: React.FC = () => {
 
       {/* Global Drag & Drop File Detection */}
       <SmartDropZone />
+
+      {/* Offline Status Badge for PWA */}
+      <OfflineIndicator />
     </div>
   );
 };

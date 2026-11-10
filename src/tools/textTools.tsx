@@ -104,6 +104,14 @@ export const TextTools: React.FC<TextProps> = ({ toolSlug }) => {
           .replace(/[—–]/g, '-')
           .trim();
       }
+      case 'text-to-slug': {
+        return inputText
+          .toLowerCase()
+          .trim()
+          .replace(/[^\w\s-]/g, '')
+          .replace(/[\s_-]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+      }
       case 'find-and-replace': {
         if (!findStr) return inputText;
         try {
