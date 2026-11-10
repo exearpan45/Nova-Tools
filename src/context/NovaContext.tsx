@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { UserSettings, ThemeId, ToolSuite, RecentToolItem, WorkflowDefinition } from '../types';
 import { DEFAULT_WORKFLOWS } from '../data/workflowsData';
 import { TOOLS_BY_SLUG } from '../data/toolsData';
+import { playSound } from '../utils/soundEffects';
 
 interface NovaContextType {
   settings: UserSettings;
@@ -25,6 +26,9 @@ interface NovaContextType {
   navigate: (path: string) => void;
   sidebarCollapsed: boolean;
   toggleSidebar: () => void;
+  exportUserData: () => void;
+  importUserData: (jsonString: string) => { success: boolean; message: string };
+  triggerSound: (type: 'click' | 'success' | 'delete' | 'chime' | 'beep') => void;
 }
 
 const DEFAULT_SETTINGS: UserSettings = {
@@ -38,6 +42,7 @@ const DEFAULT_SETTINGS: UserSettings = {
   confirmBeforeClearing: true,
   reducedMotion: false,
   highContrast: false,
+  soundEffects: false,
 };
 
 const NovaContext = createContext<NovaContextType | undefined>(undefined);
@@ -284,6 +289,84 @@ export const NovaProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // Sound effect trigger with setting check
+  const triggerSound = (type: 'click' | 'success' | 'delete' | 'chime' | 'beep') => {
+    if (settings.soundEffects) {
+      playSound(type);
+    }
+  };
+
+  // Cross-Device Export User Data (Favorites, Recents, Settings, Workspaces)
+  const exportUserData = () => {
+    try {
+      const data = {
+        app: 'NOVA TOOLS',
+        version: '2.1.0',
+        exportedAt: new Date().toISOString(),
+        favorites,
+        recentTools,
+        settings,
+        workflows,
+        workspaceNote: localStorage.getItem('nova_workspace_note') || '',
+        workspaceTasks: JSON.parse(localStorage.getItem('nova_workspace_tasks') || '[]'),
+      };
+      const jsonStr = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `nova-tools-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      triggerSound('success');
+    } catch (err) {
+      console.error('Export error:', err);
+    }
+  };
+
+  // Cross-Device Import User Data with verification
+  const importUserData = (jsonString: string): { success: boolean; message: string } => {
+    try {
+      const parsed = JSON.parse(jsonString);
+      if (!parsed || typeof parsed !== 'object') {
+        return { success: false, message: 'Invalid backup format. Expected JSON object.' };
+      }
+
+      let restoredCount = 0;
+      if (Array.isArray(parsed.favorites)) {
+        setFavorites(parsed.favorites);
+        localStorage.setItem('nova_v2_favorites', JSON.stringify(parsed.favorites));
+        restoredCount += parsed.favorites.length;
+      }
+      if (Array.isArray(parsed.recentTools)) {
+        setRecentTools(parsed.recentTools);
+        localStorage.setItem('nova_v2_recent', JSON.stringify(parsed.recentTools));
+      }
+      if (parsed.settings && typeof parsed.settings === 'object') {
+        const mergedSettings = { ...settings, ...parsed.settings };
+        setSettings(mergedSettings);
+        localStorage.setItem('nova_v2_settings', JSON.stringify(mergedSettings));
+      }
+      if (Array.isArray(parsed.workflows)) {
+        setWorkflows(parsed.workflows);
+        localStorage.setItem('nova_v2_workflows', JSON.stringify(parsed.workflows));
+      }
+      if (typeof parsed.workspaceNote === 'string') {
+        localStorage.setItem('nova_workspace_note', parsed.workspaceNote);
+      }
+      if (Array.isArray(parsed.workspaceTasks)) {
+        localStorage.setItem('nova_workspace_tasks', JSON.stringify(parsed.workspaceTasks));
+      }
+
+      triggerSound('success');
+      return { success: true, message: `Successfully restored ${restoredCount} favorites and personal history!` };
+    } catch {
+      return { success: false, message: 'Failed to parse JSON backup file.' };
+    }
+  };
+
   // Global Ctrl+K keyboard shortcut
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -311,7 +394,7 @@ export const NovaProvider: React.FC<{ children: React.ReactNode }> = ({ children
         addRecent,
         clearRecent,
         workflows,
-        addWorkflow,
+        addWorkflow
         deleteWorkflow,
         searchOpen,
         setSearchOpen,
@@ -323,6 +406,9 @@ export const NovaProvider: React.FC<{ children: React.ReactNode }> = ({ children
         navigate,
         sidebarCollapsed,
         toggleSidebar,
+        exportUserData,
+        importUserData,
+        triggerSound,
       }}
     >
       {children}

@@ -98,6 +98,7 @@ export interface UserSettings {
   confirmBeforeClearing: boolean;
   reducedMotion: boolean;
   highContrast: boolean;
+  soundEffects?: boolean;
 }
 
 export interface RecentToolItem {
