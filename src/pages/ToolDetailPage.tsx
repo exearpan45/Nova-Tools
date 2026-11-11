@@ -9,6 +9,7 @@ import { TOOLS_DATA } from '../data/toolsData';
 import { ToolDispatcher } from '../tools/ToolDispatcher';
 import { copyToClipboard } from '../utils/clipboard';
 import { ToolRating } from '../components/ToolRating';
+import { CommunityFeedback } from '../components/CommunityFeedback';
 
 interface ToolDetailPageProps {
   tool: ToolDefinition;
@@ -209,6 +210,8 @@ export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
           </section>
         )}
       </article>
+
+      <CommunityFeedback toolSlug={tool.slug} toolName={tool.name} />
 
       {/* Related Suite Tools */}
       {relatedTools.length > 0 && (
