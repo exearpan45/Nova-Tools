@@ -27,15 +27,18 @@ export const DashboardPage: React.FC = () => {
     .map((r) => ({ ...r, tool: TOOLS_BY_SLUG.get(r.slug) }))
     .filter((r) => r.tool);
 
-  // Quick Action Suites
+  // Quick Action Suites with accurate dynamic counts
   const suiteHighlights = [
-    { title: 'Calculators', count: 15, icon: Calculator, color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)', border: 'rgba(16, 185, 129, 0.25)', suite: 'calculators' },
-    { title: 'Image Studio', count: 18, icon: Image, color: '#f43f5e', bg: 'rgba(244, 63, 94, 0.1)', border: 'rgba(244, 63, 94, 0.25)', suite: 'image' },
-    { title: 'Developer Suite', count: 24, icon: Code2, color: '#06b6d4', bg: 'rgba(6, 182, 212, 0.1)', border: 'rgba(6, 182, 212, 0.25)', suite: 'developer' },
-    { title: 'Web & QR', count: 12, icon: Globe, color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)', border: 'rgba(59, 130, 246, 0.25)', suite: 'web' },
-    { title: 'Design & CSS', count: 10, icon: Palette, color: '#a855f7', bg: 'rgba(168, 85, 247, 0.1)', border: 'rgba(168, 85, 247, 0.25)', suite: 'design' },
-    { title: 'Converters & Utilities', count: 24, icon: Cpu, color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)', border: 'rgba(245, 158, 11, 0.25)', suite: 'utility' },
-  ];
+    { title: 'Calculators', icon: Calculator, color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)', border: 'rgba(16, 185, 129, 0.25)', suite: 'calculators' },
+    { title: 'Image Studio', icon: Image, color: '#f43f5e', bg: 'rgba(244, 63, 94, 0.1)', border: 'rgba(244, 63, 94, 0.25)', suite: 'image' },
+    { title: 'Developer Suite', icon: Code2, color: '#06b6d4', bg: 'rgba(6, 182, 212, 0.1)', border: 'rgba(6, 182, 212, 0.25)', suite: 'developer' },
+    { title: 'Web & QR', icon: Globe, color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)', border: 'rgba(59, 130, 246, 0.25)', suite: 'web' },
+    { title: 'Design & CSS', icon: Palette, color: '#a855f7', bg: 'rgba(168, 85, 247, 0.1)', border: 'rgba(168, 85, 247, 0.25)', suite: 'design' },
+    { title: 'Converters & Utilities', icon: Cpu, color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)', border: 'rgba(245, 158, 11, 0.25)', suite: 'utility' },
+  ].map((s) => ({
+    ...s,
+    count: TOOLS_DATA.filter((t) => t.suite === s.suite).length,
+  }));
 
   return (
     <div className="space-y-6 sm:space-y-8 animate-page-enter">
@@ -86,8 +89,8 @@ export const DashboardPage: React.FC = () => {
               <Wrench className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-3 text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-            {TOOLS_DATA.length}+
+          <div className="mt-3 text-2xl sm:text-3xl font-black font-mono tabular-nums text-slate-900 dark:text-white">
+            {TOOLS_DATA.length}
           </div>
           <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">Genuinely functional tools</p>
         </div>
@@ -99,7 +102,7 @@ export const DashboardPage: React.FC = () => {
               <Star className="w-4 h-4 fill-amber-500" />
             </div>
           </div>
-          <div className="mt-3 text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+          <div className="mt-3 text-2xl sm:text-3xl font-black font-mono tabular-nums text-slate-900 dark:text-white">
             {favorites.length}
           </div>
           <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">Quick-access essentials</p>
@@ -112,7 +115,7 @@ export const DashboardPage: React.FC = () => {
               <History className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-3 text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+          <div className="mt-3 text-2xl sm:text-3xl font-black font-mono tabular-nums text-slate-900 dark:text-white">
             {recentTools.length}
           </div>
           <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">Saved operations</p>
@@ -125,7 +128,7 @@ export const DashboardPage: React.FC = () => {
               <ShieldCheck className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-3 text-2xl sm:text-3xl font-black text-emerald-500">
+          <div className="mt-3 text-2xl sm:text-3xl font-black font-mono tabular-nums text-emerald-500">
             100%
           </div>
           <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">Local client execution</p>
@@ -152,24 +155,32 @@ export const DashboardPage: React.FC = () => {
 
           {favoriteTools.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              {favoriteTools.slice(0, 6).map((tool) => (
-                <button
-                  key={tool!.slug}
-                  onClick={() => navigate(`/tools/${tool!.slug}`)}
-                  className="flex items-center gap-3 p-3 rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-800/40 hover:border-cyan-500/50 hover:bg-white dark:hover:bg-slate-800 transition-all text-left group"
-                >
-                  <span className="text-xl shrink-0 group-hover:scale-110 transition-transform">{tool!.icon}</span>
-                  <div className="min-w-0 flex-1 truncate">
-                    <span className="text-xs font-bold text-slate-900 dark:text-white block truncate">
-                      {tool!.name}
-                    </span>
-                    <span className="text-[10px] text-slate-400 truncate block">
-                      {tool!.description}
-                    </span>
-                  </div>
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-cyan-500 shrink-0" />
-                </button>
-              ))}
+              {favoriteTools.slice(0, 6).map((tool) => {
+                const suite = SUITES_DATA[tool!.suite];
+                return (
+                  <button
+                    key={tool!.slug}
+                    onClick={() => navigate(`/tools/${tool!.slug}`)}
+                    className="flex items-center gap-3 p-3 rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-800/40 hover:border-cyan-500/50 hover:bg-white dark:hover:bg-slate-800 transition-all text-left group"
+                  >
+                    <div
+                      className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                      style={{ backgroundColor: `${suite.accentColor}18`, color: suite.accentColor }}
+                    >
+                      <Star className="w-4 h-4 fill-current" />
+                    </div>
+                    <div className="min-w-0 flex-1 truncate">
+                      <span className="text-xs font-bold text-slate-900 dark:text-white block truncate">
+                        {tool!.name}
+                      </span>
+                      <span className="text-[10px] text-slate-400 truncate block">
+                        {tool!.description}
+                      </span>
+                    </div>
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-cyan-500 shrink-0" />
+                  </button>
+                );
+              })}
             </div>
           ) : (
             <div className="text-center py-8 text-slate-400 space-y-2">
@@ -198,24 +209,32 @@ export const DashboardPage: React.FC = () => {
 
           {recentToolObjs.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              {recentToolObjs.slice(0, 6).map((item) => (
-                <button
-                  key={item.slug}
-                  onClick={() => navigate(`/tools/${item.slug}`)}
-                  className="flex items-center gap-3 p-3 rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-800/40 hover:border-violet-500/50 hover:bg-white dark:hover:bg-slate-800 transition-all text-left group"
-                >
-                  <span className="text-xl shrink-0 group-hover:scale-110 transition-transform">{item.icon}</span>
-                  <div className="min-w-0 flex-1 truncate">
-                    <span className="text-xs font-bold text-slate-900 dark:text-white block truncate">
-                      {item.name}
-                    </span>
-                    <span className="text-[10px] text-slate-400 truncate block">
-                      Used recently
-                    </span>
-                  </div>
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-violet-500 shrink-0" />
-                </button>
-              ))}
+              {recentToolObjs.slice(0, 6).map((item) => {
+                const suite = SUITES_DATA[item.suite];
+                return (
+                  <button
+                    key={item.slug}
+                    onClick={() => navigate(`/tools/${item.slug}`)}
+                    className="flex items-center gap-3 p-3 rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-800/40 hover:border-violet-500/50 hover:bg-white dark:hover:bg-slate-800 transition-all text-left group"
+                  >
+                    <div
+                      className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                      style={{ backgroundColor: `${suite.accentColor}18`, color: suite.accentColor }}
+                    >
+                      <History className="w-4 h-4" />
+                    </div>
+                    <div className="min-w-0 flex-1 truncate">
+                      <span className="text-xs font-bold text-slate-900 dark:text-white block truncate">
+                        {item.name}
+                      </span>
+                      <span className="text-[10px] text-slate-400 truncate block">
+                        {suite.name}
+                      </span>
+                    </div>
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-violet-500 shrink-0" />
+                  </button>
+                );
+              })}
             </div>
           ) : (
             <div className="text-center py-8 text-slate-400 space-y-2">
@@ -247,7 +266,7 @@ export const DashboardPage: React.FC = () => {
             return (
               <button
                 key={suite.title}
-                onClick={() => navigate('/tools')}
+                onClick={() => navigate(`/tools?suite=${suite.suite}`)}
                 className="p-4 rounded-2xl border border-slate-200/90 dark:border-slate-800/90 bg-white dark:bg-slate-900/60 hover:-translate-y-1 transition-all text-left shadow-xs group"
               >
                 <div
@@ -259,8 +278,8 @@ export const DashboardPage: React.FC = () => {
                 <h3 className="text-xs font-bold text-slate-900 dark:text-white truncate">
                   {suite.title}
                 </h3>
-                <span className="text-[10px] text-slate-400 block mt-0.5">
-                  {suite.count}+ tools
+                <span className="text-[10px] text-slate-400 block mt-0.5 font-mono tabular-nums">
+                  {suite.count} tools
                 </span>
               </button>
             );

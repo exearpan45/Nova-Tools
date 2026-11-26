@@ -1,0 +1,1403 @@
+# NOVA TOOLS 2.0
+# MASTER PRODUCT REQUIREMENTS DOCUMENT (PRD)
+
+**Project Codename:** NOVA REBORN  
+**Product:** NOVA Tools  
+**Creator:** Arpan Goswami  
+**Year:** 2026  
+**Product Type:** Digital Utility & Productivity Ecosystem  
+**Redesign Scope:** Complete 100% Transformation  
+**Deployment:** GitHub + Cloudflare Pages  
+**API Budget:** ₹0  
+**Core Philosophy:** Premium Design, Maximum Functionality, Extreme Performance, Privacy First.
+
+**Tagline:** One Space. Infinite Possibilities.
+
+---
+
+# 1. PRODUCT VISION
+
+Transform NOVA Tools from a traditional online tools website into a complete, premium digital workspace.
+
+NOVA should combine:
+
+- 100+ functional digital utilities.
+- Productivity applications.
+- Developer tools.
+- File processing tools.
+- Creative design utilities.
+- Workflow automation.
+- Personal workspaces.
+- Educational resources.
+- Browser utilities.
+- Privacy management.
+
+The objective is to create an ecosystem where users can perform everyday digital tasks without switching between multiple websites.
+
+This is a complete redesign, not a minor update.
+
+Every major interface, component, interaction, navigation structure, and user experience should be reconsidered.
+
+# 2. NON-NEGOTIABLE REQUIREMENTS
+
+1. Completely redesign the existing website.
+2. Build a premium, modern, futuristic interface.
+3. Implement all 16 major feature modules.
+4. Provide 100+ genuinely functional tools.
+5. No paid APIs whatsoever.
+6. No paid AI API dependencies.
+7. No mandatory registration.
+8. No fake buttons or placeholder functionality.
+9. No unnecessary backend infrastructure.
+10. Prioritize browser-side processing.
+11. Preserve existing functional tools.
+12. Preserve existing SEO URLs wherever possible.
+13. Preserve existing analytics configuration.
+14. Optimize for low-powered devices.
+15. Support desktop, tablet and mobile.
+16. Provide excellent light and dark themes.
+17. Use smooth, performance-friendly animations.
+18. Implement comprehensive testing.
+19. No deployment before QA.
+20. Never claim a feature works without testing it.
+
+A literal zero-bug guarantee is impossible, but no critical or high-severity unresolved defects may be accepted for production release.
+
+# 3. ZERO PAID API POLICY
+
+NOVA must not depend on:
+
+- OpenAI paid APIs.
+- Gemini paid APIs.
+- Claude APIs.
+- Paid image-processing APIs.
+- Paid PDF-processing APIs.
+- Paid conversion APIs.
+- Paid authentication services.
+- Paid database services.
+- Paid analytics services.
+- Subscription-based external functionality.
+
+Prefer:
+
+- Native JavaScript.
+- TypeScript.
+- Browser APIs.
+- Canvas API.
+- IndexedDB.
+- LocalStorage.
+- Web Workers.
+- WebAssembly.
+- Open-source libraries.
+- CSS.
+- Client-side processing.
+
+No API keys should be necessary for core functionality.
+
+Do not add a remote service merely to imitate functionality that can be implemented locally.
+
+Optional external services must be free, disclosed, independently evaluated and never required for core functionality.
+
+# 4. DESIGN SYSTEM
+
+## 4.1 Design direction
+
+Create an original premium visual identity inspired by modern software products such as Apple software, Linear, Raycast and Arc.
+
+Design characteristics:
+
+- Elegant typography.
+- Deep visual hierarchy.
+- Sophisticated spacing.
+- Rounded components.
+- Subtle gradients.
+- Premium shadows.
+- Beautiful iconography.
+- Carefully controlled RGB accents.
+- Minimal clutter.
+- Smooth interactions.
+- Professional layouts.
+
+Do not directly copy existing brands.
+
+## 4.2 Dark theme
+
+Use:
+
+- Deep midnight background.
+- Elevated charcoal surfaces.
+- Electric violet accents.
+- Blue and cyan secondary accents.
+- Soft white typography.
+- Muted grey secondary text.
+- Subtle borders.
+- Restrained glow effects.
+
+## 4.3 Light theme
+
+Use:
+
+- Premium off-white background.
+- White elevated surfaces.
+- Neutral grey borders.
+- Deep violet accents.
+- Dark readable typography.
+- Soft shadows.
+
+Both themes must be individually optimized.
+
+## 4.4 Typography
+
+Recommended fonts:
+
+- Geist.
+- Inter.
+- Plus Jakarta Sans.
+
+Use appropriate system fallbacks.
+
+## 4.5 Responsive layout
+
+Desktop:
+- Maximum content width around 1440px.
+- Adaptive sidebar.
+- Multi-column tool grids.
+- Flexible content sections.
+
+Tablet:
+- Adaptive navigation.
+- Two-column layouts where appropriate.
+
+Mobile:
+- Single-column layouts.
+- Compact navigation.
+- Touch-friendly controls.
+- Responsive dialogs.
+- No horizontal overflow.
+
+## 4.6 Component library
+
+Build reusable components:
+
+- Button.
+- IconButton.
+- Input.
+- Textarea.
+- Select.
+- Dropdown.
+- Modal.
+- Drawer.
+- Tooltip.
+- Toast.
+- Tabs.
+- Card.
+- ToolCard.
+- FileUploader.
+- ProgressBar.
+- SearchDialog.
+- CommandPalette.
+- Breadcrumb.
+- EmptyState.
+- ErrorState.
+- LoadingState.
+- Skeleton.
+- Pagination.
+- ThemeSelector.
+- ConfirmDialog.
+
+Every component must support appropriate interaction and accessibility states.
+
+# 5. WEBSITE STRUCTURE
+
+## 5.1 Navigation
+
+Include:
+
+1. Home.
+2. Explore.
+3. Categories.
+4. Workspace.
+5. NOVA Flow.
+6. File Studio.
+7. Developer Lab.
+8. Design Studio.
+9. Focus.
+10. Learning Hub.
+11. Settings.
+
+Use a responsive sidebar on desktop and an appropriate mobile navigation system.
+
+## 5.2 Homepage
+
+Create a premium dashboard-style homepage.
+
+### Hero section
+
+Headline:
+
+"Everything You Need. One Powerful Space."
+
+Description:
+
+"Discover, create, organize and transform with a powerful collection of digital tools designed to make everyday work simpler."
+
+Include:
+
+- Animated headline.
+- Global search.
+- Popular tool shortcuts.
+- Featured tools.
+- Premium gradient background.
+- Smooth animations.
+- Primary Explore Tools action.
+
+### Homepage sections
+
+1. Hero.
+2. Universal search.
+3. Featured tools.
+4. Popular tools.
+5. Category explorer.
+6. Recently used tools.
+7. Favorite tools.
+8. Workspace preview.
+9. NOVA Flow preview.
+10. Developer Lab preview.
+11. Why NOVA.
+12. Footer.
+
+## 5.3 Category pages
+
+Every category needs:
+
+- Dedicated landing page.
+- Unique title and description.
+- Tool grid.
+- Search and filters.
+- Related tools.
+- Breadcrumbs.
+- SEO metadata.
+
+## 5.4 Individual tool pages
+
+Each tool page must contain:
+
+- Breadcrumb navigation.
+- Tool icon.
+- Tool title.
+- Description.
+- Main interface.
+- Input controls.
+- Output section.
+- Copy and download actions.
+- Reset functionality.
+- Instructions.
+- Related tools.
+- FAQ.
+- SEO metadata.
+
+Interfaces must be purpose-built for their respective tools.
+
+# 6. THE 16 MAJOR FEATURE MODULES
+
+## FEATURE 01: NOVA WORKSPACE
+
+Objective: Create a customizable personal dashboard.
+
+Features:
+
+- Customizable dashboard.
+- Drag-and-drop widgets.
+- Favorites.
+- Recently used tools.
+- Quick actions.
+- Personal notes.
+- Custom collections.
+- Custom shortcuts.
+- Multiple dashboard layouts.
+- Widget visibility controls.
+- Reset dashboard.
+- Import/export workspace settings.
+
+Default widgets:
+
+- Welcome panel.
+- Favorite tools.
+- Recently used.
+- Quick launch.
+- Productivity overview.
+- Saved collections.
+- Recent workflows.
+
+Requirements:
+
+- Persist changes.
+- Support widget restoration.
+- Prevent duplicate widgets.
+- Support mobile layouts.
+- Provide accessible drag-and-drop alternatives.
+
+Storage: IndexedDB and LocalStorage.
+
+## FEATURE 02: NOVA FLOW
+
+Objective: Build a visual multi-tool workflow automation system.
+
+Example:
+
+Upload Image → Resize → Compress → Convert to WebP → Download.
+
+Features:
+
+- Visual workflow editor.
+- Connectable nodes.
+- Drag-and-drop.
+- Workflow creation.
+- Workflow duplication.
+- Save and load.
+- Import/export workflow JSON.
+- Execute entire workflow.
+- Execute individual steps.
+- Execution progress.
+- Error handling.
+- Retry failed steps.
+- Output preview.
+- Workflow validation.
+
+Node types:
+
+- Input.
+- Processing.
+- Conversion.
+- Text operation.
+- Image operation.
+- Output.
+
+Requirements:
+
+- Use a validated workflow schema.
+- Validate node connections.
+- Detect missing inputs.
+- Prevent unsupported circular dependencies.
+- Support cancellation where possible.
+- Never execute arbitrary imported JavaScript.
+
+## FEATURE 03: NOVA FILE STUDIO
+
+Objective: Create a unified file-processing workspace.
+
+Features:
+
+- Drag-and-drop upload.
+- File preview.
+- File information.
+- File type detection.
+- Batch selection.
+- Conversion.
+- Processing queue.
+- Download manager.
+- ZIP export.
+- Progress tracking.
+- File removal.
+- Clear temporary files.
+
+Initial formats:
+
+Images:
+- PNG.
+- JPEG.
+- WebP.
+- SVG with safe preview restrictions.
+- GIF with limitations.
+
+Documents:
+- PDF.
+- TXT.
+- CSV.
+- JSON.
+- Markdown.
+
+Requirements:
+
+- Validate file size and MIME type.
+- Check file signatures where practical.
+- Handle unsupported formats.
+- Manage memory efficiently.
+- Never silently upload files remotely.
+
+## FEATURE 04: NOVA SMART UTILITIES
+
+Build deterministic smart utilities without requiring AI APIs.
+
+Features:
+
+- Smart text cleaner.
+- JSON structure analyzer.
+- Automatic file type detector.
+- Duplicate text detector.
+- Color palette extractor.
+- Readability analyzer.
+- Unit converter.
+- Regex helper.
+- File size estimator.
+- Code syntax analyzer.
+
+Do not falsely label conventional algorithms as AI.
+
+## FEATURE 05: NOVA DEVELOPER LAB
+
+Create a browser-based development playground.
+
+### HTML Playground
+- HTML editor.
+- Live preview.
+- Download HTML.
+- Reset.
+
+### CSS Playground
+- CSS editor.
+- Live preview.
+- Generated CSS.
+- Reset.
+
+### JavaScript Playground
+- JavaScript editor.
+- Sandboxed execution.
+- Console output.
+- Error display.
+- Reset.
+
+### Additional tools
+- JSON editor.
+- Markdown editor.
+- Regex tester.
+- Code formatter.
+- Syntax highlighting.
+- Color playground.
+
+Security:
+
+- Use a sandboxed iframe.
+- Restrict execution permissions.
+- Never execute user code in the main application context.
+- Prevent access to privileged application storage.
+
+## FEATURE 06: NOVA QR & BARCODE STUDIO
+
+Features:
+
+- URL QR.
+- Text QR.
+- Wi-Fi QR.
+- Email QR.
+- Phone QR.
+- Contact QR.
+- Location QR.
+- Custom colors.
+- Logo placement.
+- QR size controls.
+- PNG export.
+- SVG export.
+- Batch generation.
+- Barcode generator.
+- Camera-based QR scanner.
+- Printable QR sheets.
+
+Requirements:
+
+- Validate inputs.
+- Preserve QR readability.
+- Warn about excessive logo coverage.
+- Request camera permission only after explicit user action.
+- Release camera resources after use.
+
+## FEATURE 07: NOVA CLIPBOARD VAULT
+
+Features:
+
+- Save text manually.
+- Create snippets.
+- Search snippets.
+- Categories.
+- Favorites.
+- Copy.
+- Edit.
+- Delete.
+- Import/export.
+- Duplicate detection.
+- Clear all.
+
+Privacy:
+
+- No background clipboard surveillance.
+- Clipboard operations require explicit user interaction.
+- Protect saved data through clear privacy controls.
+
+## FEATURE 08: NOVA FOCUS
+
+Features:
+
+- Pomodoro timer.
+- Stopwatch.
+- Countdown timer.
+- Custom timer presets.
+- Task list.
+- Daily goals.
+- Session history.
+- Focus statistics.
+- Distraction-free mode.
+- Optional sounds.
+
+Requirements:
+
+- Accurate timestamp-based timing.
+- Handle suspended browser tabs.
+- Restore eligible sessions after refresh.
+- Avoid relying solely on setInterval for elapsed-time accuracy.
+- Do not play audio without user interaction.
+
+## FEATURE 09: NOVA DESIGN STUDIO
+
+Features:
+
+- Color picker.
+- Gradient generator.
+- Palette generator.
+- Typography preview.
+- Shadow generator.
+- Border-radius generator.
+- CSS generator.
+- SVG preview.
+- SVG optimizer.
+- Favicon generator.
+- Contrast checker.
+- Social media dimension presets.
+
+Export:
+
+- CSS.
+- SVG.
+- PNG.
+- JSON palette.
+- Text.
+
+Requirements:
+
+- Live preview.
+- Copy.
+- Download.
+- Reset.
+- Input validation.
+
+## FEATURE 10: NOVA PRIVACY CENTER
+
+Features:
+
+- Local data overview.
+- Favorites count.
+- Recent history count.
+- Collections count.
+- Snippet count.
+- Workspace settings.
+- Temporary data information.
+
+Controls:
+
+- Clear recent history.
+- Clear favorites.
+- Delete collections.
+- Delete snippets.
+- Clear temporary data.
+- Export personal settings.
+- Reset workspace.
+
+Every tool must disclose whether processing is local or external.
+
+## FEATURE 11: NOVA LEARNING HUB
+
+Features:
+
+- HTML reference.
+- CSS reference.
+- JavaScript reference.
+- Python reference.
+- Mathematical formulas.
+- Unit conversion guides.
+- Keyboard shortcuts.
+- Markdown reference.
+- Programming examples.
+- Interactive educational calculators.
+
+Requirements:
+
+- Searchable content.
+- Category navigation.
+- Copy examples.
+- Responsive design.
+- Accurate educational information.
+
+## FEATURE 12: NOVA UNIVERSAL SEARCH
+
+Search across:
+
+- All tools.
+- Categories.
+- Workflows.
+- Favorites.
+- Collections.
+- Recently used tools.
+- Learning resources.
+
+Features:
+
+- Instant search.
+- Typo-tolerant matching.
+- Search aliases.
+- Filters.
+- Recent searches.
+- Popular searches.
+- Keyboard navigation.
+- Highlighted results.
+- Empty-result suggestions.
+
+Keyboard shortcuts:
+
+- Ctrl/Cmd + K: Open search.
+- Arrow keys: Navigate.
+- Enter: Open selected result.
+- Escape: Close.
+
+Use a local search index.
+
+## FEATURE 13: NOVA MINI APPS
+
+Features:
+
+- Floating calculator.
+- Floating notes.
+- Floating timer.
+- Floating color picker.
+- Floating unit converter.
+
+Controls:
+
+- Drag.
+- Resize.
+- Minimize.
+- Maximize.
+- Close.
+- Restore.
+- Focus active window.
+
+Requirements:
+
+- Keep windows within the application viewport.
+- Handle overlapping windows.
+- Prevent accidental background interaction.
+- Provide mobile-friendly alternatives.
+- Persist supported window preferences.
+
+## FEATURE 14: NOVA BATCH PROCESSING ENGINE
+
+Features:
+
+- Multiple file uploads.
+- Processing queue.
+- Individual progress.
+- Overall progress.
+- Cancel.
+- Retry.
+- Pause where supported.
+- Individual downloads.
+- ZIP export.
+- Failed-file reporting.
+
+Processing targets:
+
+- Image compression.
+- Image resizing.
+- Image conversion.
+- JSON formatting.
+- Text processing.
+- QR generation.
+
+Requirements:
+
+- Configurable concurrency.
+- Memory limits.
+- File validation.
+- Cancellation handling.
+- Web Workers for suitable intensive tasks.
+- No browser freezing.
+
+## FEATURE 15: NOVA BROWSER UTILITIES
+
+Tools:
+
+- Browser information.
+- Screen resolution detector.
+- Viewport inspector.
+- Time-zone detector.
+- User-agent viewer.
+- Keyboard event tester.
+- Mouse event tester.
+- Cookie viewer.
+- LocalStorage viewer.
+- SessionStorage viewer.
+- Network information where supported.
+
+Requirements:
+
+- Explain browser compatibility.
+- Request no unnecessary permissions.
+- Never transmit sensitive storage information.
+- Confirm destructive actions.
+- Distinguish unsupported features from empty results.
+
+## FEATURE 16: NOVA PREMIUM EXPERIENCE SYSTEM
+
+### A. Adaptive Dashboard
+- Customizable widgets.
+- Multiple layouts.
+- Compact and comfortable modes.
+- Persistent theme settings.
+
+### B. Quick Command
+- Universal command palette.
+- Tool launch.
+- Navigation.
+- Search.
+- Keyboard shortcuts.
+
+### C. Appearance Studio
+- Light theme.
+- Dark theme.
+- Accent selection.
+- Custom density.
+- Animation preferences.
+
+### D. Interactive Onboarding
+- First-visit welcome.
+- Feature introduction.
+- Search tutorial.
+- Workspace setup.
+- Skip option.
+- Restart tutorial.
+
+### E. Notification Center
+- Processing complete.
+- Processing failed.
+- Workflow status.
+- Application announcements.
+
+Notifications must be meaningful, dismissible and non-intrusive.
+
+### F. Shortcut Center
+- Complete keyboard shortcut list.
+- Shortcut descriptions.
+- Customization where safe and supported.
+
+# 7. ORIGINAL TOOL ECOSYSTEM
+
+Build at least 100 unique functional tools.
+
+Suggested category targets:
+
+| Category | Target |
+|---|---:|
+| Image Tools | 15 |
+| PDF Tools | 12 |
+| Text Tools | 12 |
+| Developer Tools | 20 |
+| Calculators | 12 |
+| Generators | 12 |
+| Color & Design | 12 |
+| Productivity | 12 |
+| Data & Conversion | 12 |
+| Browser & Web | 12 |
+| Education | 10 |
+| File Utilities | 12 |
+
+Avoid counting the same utility multiple times under different names.
+
+Every tool must have a genuine implementation, validation, error handling and appropriate output.
+
+# 8. GLOBAL UX REQUIREMENTS
+
+## Tool cards
+
+Each card must contain:
+
+- Icon.
+- Name.
+- Description.
+- Category.
+- Favorite control.
+- Optional new/popular indicator.
+
+## Loading states
+
+Implement:
+
+- Skeletons.
+- Processing progress.
+- Empty states.
+- Success states.
+- Error states.
+- Retry actions.
+
+Never use artificial loading delays.
+
+## Animation system
+
+Use CSS transitions and lightweight motion tools.
+
+Suggested timings:
+
+- Button feedback: 100–160 ms.
+- Card hover: 150–220 ms.
+- Dropdown: 150–200 ms.
+- Dialog: 180–250 ms.
+- Page transition: 180–300 ms.
+
+Prefer transform and opacity animations.
+
+Support reduced-motion preferences.
+
+# 9. TECHNICAL ARCHITECTURE
+
+Recommended stack:
+
+- React.
+- TypeScript.
+- Vite.
+- Tailwind CSS.
+- CSS variables.
+- Lucide icons.
+- CSS animations.
+- IndexedDB.
+- LocalStorage.
+- Web Workers.
+- Cloudflare Pages.
+- GitHub.
+
+Use compatible, maintained dependency versions and commit the lockfile.
+
+## Suggested directory structure
+
+src/
+- app/
+  - routing/
+  - providers/
+  - configuration/
+- components/
+  - ui/
+  - navigation/
+  - cards/
+  - dialogs/
+  - forms/
+  - feedback/
+- features/
+  - workspace/
+  - flow/
+  - file-studio/
+  - smart-utilities/
+  - developer-lab/
+  - qr-studio/
+  - clipboard-vault/
+  - focus/
+  - design-studio/
+  - privacy-center/
+  - learning-hub/
+  - universal-search/
+  - mini-apps/
+  - batch-engine/
+  - browser-utilities/
+  - experience-system/
+- tools/
+  - image/
+  - pdf/
+  - text/
+  - developer/
+  - calculators/
+  - generators/
+  - productivity/
+  - converters/
+- workers/
+- registry/
+- hooks/
+- services/
+- storage/
+- utils/
+- styles/
+- tests/
+
+## Central tool registry
+
+Each tool must contain:
+
+- Unique ID.
+- Name.
+- Description.
+- Category.
+- Icon.
+- Route.
+- Keywords.
+- Implementation reference.
+- Supported capabilities.
+- Privacy classification.
+- Availability status.
+
+Do not maintain duplicate manually updated tool lists.
+
+# 10. PERFORMANCE REQUIREMENTS
+
+Optimize for low-powered laptops and mobile devices.
+
+Mandatory:
+
+- Lazy loading.
+- Code splitting.
+- Tree shaking.
+- Lightweight dependencies.
+- Efficient state management.
+- Web Workers.
+- Memory-conscious processing.
+- Optimized images.
+- No unnecessary network requests.
+- No excessive background processing.
+- Efficient component rendering.
+- Proper resource cleanup.
+
+Performance targets:
+
+- Lighthouse Performance: 95+.
+- Accessibility: 95+.
+- Best Practices: 95+.
+- SEO: 95+.
+- LCP: Under 2.5 seconds.
+- CLS: Below 0.1.
+- INP: Below 200 ms.
+
+These must be verified through testing, not assumed.
+
+# 11. PWA AND OFFLINE SUPPORT
+
+Features:
+
+- Installable web app.
+- App icons.
+- Manifest.
+- Service worker.
+- Offline homepage shell.
+- Offline static resources.
+- Offline-capable tools.
+- Update notifications.
+
+Requirements:
+
+- Never automatically cache sensitive uploaded files.
+- Never claim unsupported tools work offline.
+- Explain internet requirements.
+- Handle application updates reliably.
+- Prevent stale versions from breaking functionality.
+
+# 12. SECURITY AND PRIVACY
+
+File security:
+
+- Validate file size.
+- Check MIME type.
+- Verify signatures where practical.
+- Sanitize SVG.
+- Sandbox previews.
+- Release temporary resources.
+
+Code security:
+
+- Sandbox JavaScript execution.
+- Avoid unsafe HTML injection.
+- Never expose privileged application context.
+- Validate imported workflow data.
+
+Data security:
+
+- No unnecessary remote uploads.
+- No hidden tracking.
+- No exposed secrets.
+- Explicit destructive-action confirmations.
+- User-controlled local data deletion.
+
+# 13. SEO AND ANALYTICS
+
+SEO:
+
+- Unique page titles.
+- Unique descriptions.
+- Canonical URLs.
+- Sitemap.
+- Robots.txt.
+- Open Graph metadata.
+- Structured data where appropriate.
+- Breadcrumbs.
+- Internal links.
+- Semantic HTML.
+
+Preserve existing indexed URLs or create appropriate permanent redirects.
+
+Analytics:
+
+Preserve the existing GA4 property:
+
+G-JVN75PL5JS
+
+Verify the configuration before modifying it.
+
+Track:
+
+- Tool opened.
+- Tool completed.
+- Search performed.
+- Category viewed.
+- Favorite added.
+- Workflow executed.
+
+Never collect uploaded file contents, passwords or private user input.
+
+# 14. ZERO-PAID-API LIBRARY POLICY
+
+Possible open-source solutions:
+
+| Purpose | Technology |
+|---|---|
+| Image processing | Canvas API |
+| PDF operations | pdf-lib |
+| QR generation | qrcode |
+| ZIP processing | fflate |
+| Color calculations | Native JavaScript |
+| Code editor | CodeMirror |
+| Workflow interface | React Flow |
+| Drag-and-drop | dnd-kit |
+| Indexed storage | idb |
+| Markdown | Marked |
+| Syntax highlighting | Prism or Shiki |
+
+These are candidates, not mandatory dependencies.
+
+Before adding any package:
+
+- Check its license.
+- Check maintenance status.
+- Check security.
+- Check compatibility.
+- Check bundle size.
+- Check whether native browser functionality can replace it.
+
+# 15. TESTING AND BUG PREVENTION
+
+Testing is mandatory.
+
+## Unit tests
+
+Test:
+
+- Calculations.
+- Conversions.
+- Formatting.
+- Validation.
+- Search.
+- Storage.
+- Workflow execution logic.
+- File handling.
+
+## Integration tests
+
+Test:
+
+- Tool registry.
+- Routing.
+- File processing.
+- Batch processing.
+- Favorites.
+- History.
+- Workspace persistence.
+- Workflow execution.
+- Import/export.
+
+## End-to-end tests
+
+Use Playwright.
+
+Test:
+
+1. Homepage loading.
+2. Tool searching.
+3. Tool navigation.
+4. Input handling.
+5. Processing.
+6. Copy and download.
+7. Favorites.
+8. Refresh persistence.
+9. Theme switching.
+10. Mobile navigation.
+
+## Visual testing
+
+Test:
+
+- Dark theme.
+- Light theme.
+- Desktop.
+- Tablet.
+- Mobile.
+- Dialogs.
+- Tool pages.
+- File Studio.
+- Workflow editor.
+- Developer Lab.
+
+## Release gates
+
+The following must pass:
+
+- TypeScript checks.
+- Linting.
+- Unit tests.
+- Integration tests.
+- E2E tests.
+- Production build.
+- Route validation.
+- Sitemap validation.
+- Security review.
+- Accessibility review.
+- Browser compatibility checks.
+- Console error checks.
+
+No critical or high-severity unresolved bugs may be accepted for release.
+
+# 16. DEVELOPMENT ROADMAP
+
+## PHASE 1: Repository audit
+
+- Inspect the complete existing repository.
+- Identify current tools.
+- Review dependencies.
+- Review routes.
+- Review analytics.
+- Review SEO.
+- Create a backup.
+- Document migration requirements.
+
+## PHASE 2: Architecture
+
+- Establish design tokens.
+- Build component library.
+- Configure routing.
+- Create tool registry.
+- Set up storage.
+- Set up testing.
+
+## PHASE 3: Complete redesign
+
+- Homepage.
+- Navigation.
+- Search.
+- Categories.
+- Tool pages.
+- Responsive layouts.
+- Themes.
+- Animations.
+
+## PHASE 4: Core tools
+
+- Migrate existing tools.
+- Improve functionality.
+- Add missing utilities.
+- Reach 100+ unique tools.
+- Validate processing.
+
+## PHASE 5: Workspace
+
+- Workspace.
+- Search.
+- Favorites.
+- History.
+- Collections.
+- Personalization.
+
+## PHASE 6: Advanced studios
+
+- File Studio.
+- Developer Lab.
+- Design Studio.
+- QR Studio.
+- Batch Engine.
+
+## PHASE 7: Advanced ecosystem
+
+- NOVA Flow.
+- Clipboard Vault.
+- Focus.
+- Privacy Center.
+- Learning Hub.
+- Mini Apps.
+- Browser Utilities.
+- Premium Experience System.
+
+## PHASE 8: Optimization
+
+- Performance.
+- Security.
+- Accessibility.
+- PWA.
+- Offline support.
+- SEO.
+- Analytics.
+
+## PHASE 9: Production QA
+
+- Complete regression tests.
+- Fix identified defects.
+- Test production build.
+- Validate redirects.
+- Verify sitemap.
+- Verify analytics.
+- Test live deployment.
+
+# 17. EXISTING PROJECT PRESERVATION
+
+Existing repository:
+
+https://github.com/exearpan45/Nova-Tools
+
+Existing deployment:
+
+https://nova-tools2.pages.dev
+
+Mandatory instructions:
+
+- Inspect the existing project first.
+- Preserve working tools.
+- Preserve useful existing URLs.
+- Preserve analytics configuration.
+- Preserve valid SEO metadata.
+- Back up before major migration.
+- Avoid unnecessary dependency replacement.
+- Avoid deleting existing data.
+- Test all migrated functionality.
+- Document breaking changes.
+- Deploy only after QA.
+
+# 18. FINAL ACCEPTANCE CHECKLIST
+
+## Product
+
+- Complete redesign.
+- 100+ unique functional tools.
+- All 16 feature modules.
+- Universal search.
+- Workspace.
+- Favorites.
+- History.
+- Collections.
+- Workflow automation.
+- File Studio.
+- Developer Lab.
+- QR Studio.
+- Clipboard Vault.
+- Focus.
+- Design Studio.
+- Privacy Center.
+- Learning Hub.
+- Mini Apps.
+- Batch Processing.
+- Browser Utilities.
+- Premium Experience System.
+
+## Design
+
+- Premium visual identity.
+- Desktop responsiveness.
+- Mobile responsiveness.
+- Light theme.
+- Dark theme.
+- Smooth animations.
+- Accessible navigation.
+- Reduced-motion support.
+
+## Engineering
+
+- Zero paid API dependency.
+- No mandatory registration.
+- No exposed secrets.
+- No fake functionality.
+- No critical security issues.
+- No broken routes.
+- No critical unresolved defects.
+- Production build passes.
+- Automated tests pass.
+
+## SEO and deployment
+
+- Existing URLs preserved or redirected.
+- Sitemap validated.
+- Metadata validated.
+- GA4 verified.
+- Cloudflare deployment verified.
+- Production smoke tests passed.
+
+# 19. FINAL DEVELOPMENT AGENT INSTRUCTIONS
+
+This document is the single source of truth for the NOVA TOOLS 2.0 rebuild.
+
+Follow these rules strictly:
+
+1. Read the complete repository before editing.
+2. Never assume the existing architecture.
+3. Never delete working functionality without migration.
+4. Never replace real functionality with mockups.
+5. Never leave placeholder buttons.
+6. Never use paid APIs.
+7. Never introduce unnecessary dependencies.
+8. Never add unnecessary backend infrastructure.
+9. Never duplicate existing tools.
+10. Never sacrifice performance for animations.
+11. Never expose user files or data.
+12. Never break existing SEO URLs without redirects.
+13. Never remove analytics without justification.
+14. Test each module independently.
+15. Test cross-module interactions.
+16. Maintain consistent error handling.
+17. Run production builds frequently.
+18. Fix errors before dependent phases.
+19. Maintain technical documentation.
+20. Never declare completion without actual verification.
+
+If a feature cannot be implemented reliably using free browser-side technology, document the limitation and implement a transparent alternative.
+
+Do not pretend a feature is functional when it is not.
+
+---
+
+# 20. FINAL PRODUCT IDENTITY
+
+**NOVA TOOLS 2.0**
+
+**ONE SPACE. INFINITE POSSIBILITIES.**
+
+Five major ecosystem pillars:
+
+1. TOOLS: Everyday digital utilities.
+2. WORKSPACE: Personal productivity and organization.
+3. FLOW: Connected tools and automation.
+4. STUDIO: Development, files and creative utilities.
+5. PRIVACY: Control, transparency and local-first processing.
+
+**Creator:** Arpan Goswami  
+**Project:** NOVA Tools  
+**Release:** NOVA REBORN  
+**Year:** 2026
+
+The ultimate objective is to create a genuinely useful, beautifully engineered digital ecosystem that feels premium, performs efficiently, respects privacy and operates without paid API dependencies.
+
+**No shortcuts. No fake features. No unnecessary bloat. Every feature must earn its place.**

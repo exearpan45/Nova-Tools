@@ -1,15 +1,32 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   GraduationCap, Calculator, Percent, Clock, Timer, Hourglass,
-  Scale, Calendar, Award, Play, Pause, RotateCcw, Shuffle, Check, Plus, Trash2
+  Scale, Calendar, Award, Play, Pause, RotateCcw, Shuffle, Check, Plus, Trash2,
+  Atom, Search, Copy, Flag
 } from 'lucide-react';
 import { evaluateSafeMath } from '../utils/safeMath';
+import {
+  PERIODIC_ELEMENTS,
+  CATEGORY_META,
+  ElementCategory,
+  ChemicalElement,
+} from '../data/periodicTableData';
+import { useNova } from '../context/NovaContext';
+import { copyToClipboard } from '../utils/clipboard';
 
 interface StudentProps {
   toolSlug: string;
 }
 
 export const StudentTools: React.FC<StudentProps> = ({ toolSlug }) => {
+  const { triggerSound } = useNova();
+
+  // Periodic Table States
+  const [elementSearch, setElementSearch] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [activeElementNum, setActiveElementNum] = useState<number>(6); // Carbon default
+  const [copiedElem, setCopiedElem] = useState<boolean>(false);
+
   // Percentage calculator states
   const [percMode, setPercMode] = useState<'whatIs' | 'isWhat' | 'increase'>('whatIs');
   const [pVal1, setPVal1] = useState<number>(20);
@@ -51,22 +68,37 @@ export const StudentTools: React.FC<StudentProps> = ({ toolSlug }) => {
   );
   const [pickedQuestion, setPickedQuestion] = useState<string | null>(null);
 
+  // Sync initial timer value when switching timer tools
+  useEffect(() => {
+    setIsTimerRunning(false);
+    setLaps([]);
+    if (toolSlug === 'stopwatch') {
+      setTimerSeconds(0);
+    } else if (toolSlug === 'pomodoro-timer' || toolSlug === 'study-timer') {
+      setPomoMode('work');
+      setTimerSeconds(25 * 60);
+    }
+  }, [toolSlug]);
+
   // Pomodoro interval handler
   useEffect(() => {
-    let interval: any = null;
+    let interval: ReturnType<typeof setInterval> | null = null;
     if (isTimerRunning) {
       interval = setInterval(() => {
         setTimerSeconds((prev) => {
           if (toolSlug === 'stopwatch') return prev + 1;
           if (prev <= 1) {
             setIsTimerRunning(false);
+            triggerSound('chime');
             return 0;
           }
           return prev - 1;
         });
       }, 1000);
     }
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [isTimerRunning, toolSlug]);
 
   const switchPomo = (mode: 'work' | 'short' | 'long') => {
@@ -144,7 +176,31 @@ export const StudentTools: React.FC<StudentProps> = ({ toolSlug }) => {
     if (list.length === 0) return;
     const random = list[Math.floor(Math.random() * list.length)];
     setPickedQuestion(random);
+    triggerSound('click');
   };
+
+  // Periodic table derived state
+  const activeElement: ChemicalElement = useMemo(() => {
+    return PERIODIC_ELEMENTS.find((e) => e.number === activeElementNum) || PERIODIC_ELEMENTS[0];
+  }, [activeElementNum]);
+
+  const matchingNumbers = useMemo(() => {
+    const q = elementSearch.trim().toLowerCase();
+    return new Set(
+      PERIODIC_ELEMENTS.filter((el) => {
+        const catMatch = selectedCategory === 'all' || el.category === selectedCategory;
+        if (!catMatch) return false;
+        if (!q) return true;
+        return (
+          el.name.toLowerCase().includes(q) ||
+          el.symbol.toLowerCase().includes(q) ||
+          String(el.number) === q
+        );
+      }).map((el) => el.number)
+    );
+  }, [elementSearch, selectedCategory]);
+
+  const hasActiveFilter = elementSearch.trim().length > 0 || selectedCategory !== 'all';
 
   return (
     <div className="space-y-6">
@@ -469,6 +525,247 @@ export const StudentTools: React.FC<StudentProps> = ({ toolSlug }) => {
               <p className="text-lg font-bold text-slate-900 dark:text-white">{pickedQuestion}</p>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Interactive Chemistry Periodic Table (118 Elements) */}
+      {toolSlug === 'periodic-table' && (
+        <div className="space-y-5">
+          {/* Search & Category Controls */}
+          <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="relative flex-1 max-w-md">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={elementSearch}
+                  onChange={(e) => setElementSearch(e.target.value)}
+                  placeholder="Search by element name, symbol (Fe), or atomic # (26)..."
+                  aria-label="Search chemical elements"
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white"
+                />
+              </div>
+              <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 font-mono tabular-nums">
+                <Atom className="w-4 h-4 text-violet-500" />
+                <span>{matchingNumbers.size} / 118 elements highlighted</span>
+                {hasActiveFilter && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setElementSearch('');
+                      setSelectedCategory('all');
+                    }}
+                    className="ml-2 text-violet-600 dark:text-violet-400 font-sans font-semibold hover:underline"
+                  >
+                    Reset
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Category Filter Chips */}
+            <div className="flex flex-wrap gap-1.5">
+              <button
+                type="button"
+                onClick={() => setSelectedCategory('all')}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition-all whitespace-nowrap ${
+                  selectedCategory === 'all'
+                    ? 'bg-violet-600 text-white border-violet-600'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-transparent hover:border-slate-300 dark:hover:border-slate-700'
+                }`}
+              >
+                All Elements
+              </button>
+              {(Object.entries(CATEGORY_META) as [ElementCategory, typeof CATEGORY_META[ElementCategory]][]).map(
+                ([catKey, meta]) => (
+                  <button
+                    key={catKey}
+                    type="button"
+                    onClick={() => setSelectedCategory(selectedCategory === catKey ? 'all' : catKey)}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition-all whitespace-nowrap ${
+                      selectedCategory === catKey
+                        ? `${meta.badgeClass} ring-1 ring-current`
+                        : 'bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-slate-300'
+                    }`}
+                  >
+                    {meta.label}
+                  </button>
+                )
+              )}
+            </div>
+          </div>
+
+          {/* Element Detail Inspector Card */}
+          <div className="p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm">
+            <div className="flex flex-col md:flex-row md:items-start justify-between gap-5">
+              <div className="flex items-start gap-4">
+                <div
+                  className={`w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border-2 flex flex-col items-center justify-center shrink-0 ${
+                    CATEGORY_META[activeElement.category].cellClass
+                  }`}
+                >
+                  <span className="text-[11px] font-mono font-bold tabular-nums opacity-80">
+                    {activeElement.number}
+                  </span>
+                  <span className="text-2xl sm:text-3xl font-black tracking-tight leading-none my-0.5">
+                    {activeElement.symbol}
+                  </span>
+                  <span className="text-[10px] font-mono tabular-nums opacity-80">
+                    {activeElement.mass}
+                  </span>
+                </div>
+
+                <div className="space-y-1.5 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                      {activeElement.name}
+                    </h3>
+                    <span
+                      className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border ${
+                        CATEGORY_META[activeElement.category].badgeClass
+                      }`}
+                    >
+                      {CATEGORY_META[activeElement.category].label}
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
+                    {activeElement.summary}
+                  </p>
+                  <div className="pt-1 flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        copyToClipboard(
+                          `${activeElement.name} (${activeElement.symbol}) — Z=${activeElement.number}, Mass=${activeElement.mass} u, Config=${activeElement.electronConfig}`
+                        );
+                        setCopiedElem(true);
+                        triggerSound('click');
+                        setTimeout(() => setCopiedElem(false), 1800);
+                      }}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:border-violet-500 transition-colors"
+                    >
+                      {copiedElem ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                      <span>{copiedElem ? 'Copied Element Info' : 'Copy Element Summary'}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 gap-2.5 shrink-0 text-xs min-w-[240px]">
+                <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Electron Config
+                  </span>
+                  <span className="font-mono font-bold text-slate-900 dark:text-white mt-0.5 block">
+                    {activeElement.electronConfig}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Group / Period
+                  </span>
+                  <span className="font-mono font-bold text-slate-900 dark:text-white tabular-nums mt-0.5 block">
+                    G{activeElement.group} · P{activeElement.period}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Standard Phase
+                  </span>
+                  <span className="font-semibold text-slate-900 dark:text-white mt-0.5 block">
+                    {activeElement.phase}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Electronegativity
+                  </span>
+                  <span className="font-mono font-bold text-slate-900 dark:text-white tabular-nums mt-0.5 block">
+                    {activeElement.electronegativity}
+                  </span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800 col-span-2 sm:col-span-1 md:col-span-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Discovered
+                  </span>
+                  <span className="font-mono font-bold text-slate-900 dark:text-white tabular-nums mt-0.5 block">
+                    {activeElement.discovered}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 18-Column Periodic Table Matrix (Horizontally scrollable on narrow screens) */}
+          <div className="p-3 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 overflow-x-auto">
+            <div
+              className="grid gap-1 min-w-[760px]"
+              style={{
+                gridTemplateColumns: 'repeat(18, minmax(38px, 1fr))',
+                gridTemplateRows: 'repeat(10, auto)',
+              }}
+              role="grid"
+              aria-label="Periodic Table of Elements"
+            >
+              {/* Series placeholders in rows 6 & 7 col 3 */}
+              <div
+                style={{ gridColumn: 3, gridRow: 6 }}
+                className="p-1 rounded-lg border border-dashed border-indigo-400/40 bg-indigo-500/5 flex flex-col items-center justify-center text-[9px] font-mono text-indigo-500"
+                title="Lanthanides (57–71) shown below"
+              >
+                <span>57–71</span>
+                <span className="font-bold">La–Lu</span>
+              </div>
+              <div
+                style={{ gridColumn: 3, gridRow: 7 }}
+                className="p-1 rounded-lg border border-dashed border-pink-400/40 bg-pink-500/5 flex flex-col items-center justify-center text-[9px] font-mono text-pink-500"
+                title="Actinides (89–103) shown below"
+              >
+                <span>89–103</span>
+                <span className="font-bold">Ac–Lr</span>
+              </div>
+
+              {/* Row 8 spacer */}
+              <div style={{ gridColumn: '1 / 19', gridRow: 8 }} className="h-3" />
+
+              {PERIODIC_ELEMENTS.map((el) => {
+                const isSelected = activeElementNum === el.number;
+                const isMatch = matchingNumbers.has(el.number);
+                const meta = CATEGORY_META[el.category];
+
+                return (
+                  <button
+                    key={el.number}
+                    type="button"
+                    onClick={() => {
+                      setActiveElementNum(el.number);
+                      triggerSound('click');
+                    }}
+                    style={{ gridColumn: el.col, gridRow: el.row }}
+                    title={`${el.number} ${el.name} (${el.symbol}) — ${el.mass}`}
+                    aria-pressed={isSelected}
+                    className={`p-1 rounded-lg border text-left transition-all flex flex-col justify-between min-h-[46px] ${
+                      meta.cellClass
+                    } ${
+                      isSelected
+                        ? 'ring-2 ring-slate-900 dark:ring-white scale-105 z-10 shadow-md'
+                        : ''
+                    } ${hasActiveFilter && !isMatch ? 'opacity-20' : 'opacity-100'}`}
+                  >
+                    <span className="text-[8px] font-mono leading-none tabular-nums opacity-80">
+                      {el.number}
+                    </span>
+                    <span className="text-xs font-black leading-tight tracking-tight text-center">
+                      {el.symbol}
+                    </span>
+                    <span className="text-[7px] leading-none truncate opacity-75 text-center">
+                      {el.name}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
       )}
     </div>

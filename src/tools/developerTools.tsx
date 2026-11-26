@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import {
   Code2, Copy, Check, Braces, RefreshCw, Key, Shield,
-  Link, Unlink, Lock, Clock, Terminal, Sparkles, FileJson, Play
+  Link, Unlink, Lock, Clock, Terminal, Sparkles, FileJson, Play,
+  Download, Upload, FileCode, Layers, AlertCircle, Eye, Binary
 } from 'lucide-react';
 import { copyToClipboard } from '../utils/clipboard';
 
@@ -9,25 +10,75 @@ interface DevProps {
   toolSlug: string;
 }
 
-export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
-  const [inputVal, setInputVal] = useState<string>(
-    toolSlug.includes('json')
-      ? '{"name":"NOVA TOOLS","type":"Productivity Suite","features":["100+ Tools","Client-Side","Zero-Upload"]}'
-      : toolSlug.includes('jwt')
-      ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFycGFuIEdvc3dhbWkiLCJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTgwMDAwMDAwMH0.signature'
-      : toolSlug.includes('regex')
-      ? 'hello from nova@example.com and support@example.com'
-      : toolSlug === 'html-formatter'
-      ? '<div class="container"><header><h1>NOVA TOOLS</h1><nav><a href="/tools">All Tools</a></nav></header><main><p>Fast client-side utilities.</p></main></div>'
-      : toolSlug === 'css-formatter'
-      ? '.card{display:flex;align-items:center;background:#080D1C;color:#F5F7FF;padding:16px;border-radius:12px;border:1px solid rgba(170,190,255,0.15);}'
-      : toolSlug === 'sql-formatter'
-      ? 'select u.id, u.name, count(o.id) as total_orders from users u left join orders o on u.id = o.user_id where u.active = 1 and o.status = "completed" group by u.id order by total_orders desc limit 20;'
-      : 'Hello NOVA TOOLS!'
-  );
+const getDefaultDevInput = (slug: string): string => {
+  if (slug.includes('json')) {
+    return '{"name":"NOVA TOOLS","type":"Productivity Suite","features":["100+ Tools","Client-Side","Zero-Upload"]}';
+  }
+  if (slug.includes('jwt')) {
+    return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFycGFuIEdvc3dhbWkiLCJyb2xlIjoiY3JlYXRvciIsImlhdCI6MTUxNjIzOTAyMiwiZXhwIjoxOTAwMDAwMDAwfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+  }
+  if (slug.includes('regex')) {
+    return 'Contact us at nova@example.com or support@nova-tools.dev for updates on v2.1!';
+  }
+  if (slug === 'html-formatter') {
+    return '<div class="container"><header><h1>NOVA TOOLS</h1><nav><a href="/tools">All Tools</a></nav></header><main><p>Fast client-side utilities.</p></main></div>';
+  }
+  if (slug === 'css-formatter') {
+    return '.card{display:flex;align-items:center;background:#080D1C;color:#F5F7FF;padding:16px;border-radius:12px;border:1px solid rgba(170,190,255,0.15);}';
+  }
+  if (slug === 'sql-formatter') {
+    return 'select u.id, u.name, count(o.id) as total_orders from users u left join orders o on u.id = o.user_id where u.active = 1 and o.status = "completed" group by u.id order by total_orders desc limit 20;';
+  }
+  return 'Hello NOVA TOOLS!';
+};
 
-  const [regexPattern, setRegexPattern] = useState<string>('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}');
+const decodeBase64Url = (segment: string): string => {
+  const base64 = segment.replace(/-/g, '+').replace(/_/g, '/');
+  const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
+  const binary = atob(padded);
+  const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+};
+
+export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
+  const [inputVal, setInputVal] = useState<string>(() => getDefaultDevInput(toolSlug));
+
+  useEffect(() => {
+    setInputVal(getDefaultDevInput(toolSlug));
+  }, [toolSlug]);
+
+  // ================= 1. CODE PLAYGROUND STATES =================
+  const [htmlCode, setHtmlCode] = useState<string>(
+    `<div class="card">\n  <h2>🚀 NOVA Interactive Card</h2>\n  <p>Click the button below to test reactive JS!</p>\n  <button id="counterBtn">Clicks: 0</button>\n</div>`
+  );
+  const [cssCode, setCssCode] = useState<string>(
+    `body {\n  font-family: system-ui, sans-serif;\n  background: #080D1C;\n  color: #F5F7FF;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  min-height: 90vh;\n  margin: 0;\n}\n.card {\n  background: #10182B;\n  border: 1px solid rgba(118, 87, 255, 0.3);\n  padding: 24px;\n  border-radius: 16px;\n  text-align: center;\n  box-shadow: 0 10px 30px rgba(0,0,0,0.5);\n}\nbutton {\n  background: linear-gradient(135deg, #7657FF, #00D9FF);\n  border: none;\n  color: white;\n  padding: 10px 20px;\n  border-radius: 10px;\n  font-weight: bold;\n  cursor: pointer;\n  transition: transform 0.15s;\n}\nbutton:active { transform: scale(0.95); }`
+  );
+  const [jsCode, setJsCode] = useState<string>(
+    `let count = 0;\nconst btn = document.getElementById('counterBtn');\nbtn.addEventListener('click', () => {\n  count++;\n  btn.textContent = 'Clicks: ' + count;\n  console.log('Button clicked! New count:', count);\n});`
+  );
+  const [activeEditorTab, setActiveEditorTab] = useState<'html' | 'css' | 'js' | 'console'>('html');
+  const [consoleLogs, setConsoleLogs] = useState<Array<{ type: 'log' | 'error' | 'warn'; text: string; time: string }>>([]);
+
+  // ================= 2. FILE INSPECTOR STATES =================
+  const [inspectedFile, setInspectedFile] = useState<{
+    name: string;
+    size: number;
+    type: string;
+    lastModified: number;
+  } | null>(null);
+  const [fileHashes, setFileHashes] = useState<{ sha256: string; sha1: string; sha384: string }>({
+    sha256: '',
+    sha1: '',
+    sha384: ''
+  });
+  const [hexRows, setHexRows] = useState<string[]>([]);
+  const [hexPage, setHexPage] = useState<number>(0);
+  const [isInspecting, setIsInspecting] = useState<boolean>(false);
+
+  const [regexPattern, setRegexPattern] = useState<string>('([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})');
   const [regexFlags, setRegexFlags] = useState<string>('g');
+  const [regexReplace, setRegexReplace] = useState<string>('');
   const [base64Mode, setBase64Mode] = useState<'encode' | 'decode'>('encode');
   const [copied, setCopied] = useState<boolean>(false);
 
@@ -98,6 +149,122 @@ export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
       return matchFilter && matchSearch;
     });
   }, [httpStatusCatalog, httpFilter, httpSearch]);
+
+  // Code playground message listener for logs
+  useEffect(() => {
+    const handleMsg = (e: MessageEvent) => {
+      if (e.data && e.data.type === 'NOVA_CONSOLE') {
+        const time = new Date().toLocaleTimeString();
+        setConsoleLogs((prev) => [{ type: e.data.level, text: e.data.text, time }, ...prev.slice(0, 49)]);
+      }
+    };
+    window.addEventListener('message', handleMsg);
+    return () => window.removeEventListener('message', handleMsg);
+  }, []);
+
+  const playgroundSrcDoc = useMemo(() => {
+    return `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>${cssCode}</style>
+    <script>
+      const _log = console.log;
+      const _err = console.error;
+      window.addEventListener('error', (e) => {
+        window.parent.postMessage({ type: 'NOVA_CONSOLE', level: 'error', text: e.message }, '*');
+      });
+      console.log = (...args) => {
+        _log(...args);
+        window.parent.postMessage({ type: 'NOVA_CONSOLE', level: 'log', text: args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ') }, '*');
+      };
+      console.error = (...args) => {
+        _err(...args);
+        window.parent.postMessage({ type: 'NOVA_CONSOLE', level: 'error', text: args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ') }, '*');
+      };
+    <\/script>
+  </head>
+  <body>
+    ${htmlCode}
+    <script>${jsCode}<\/script>
+  </body>
+</html>`;
+  }, [htmlCode, cssCode, jsCode]);
+
+  const handleDownloadPlayground = () => {
+    const blob = new Blob([playgroundSrcDoc], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `nova-playground-${Date.now()}.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const loadPlaygroundTemplate = (name: 'counter' | 'neon' | 'particles') => {
+    if (name === 'counter') {
+      setHtmlCode(`<div class="card">\n  <h2>🚀 Counter App</h2>\n  <p>Interactive client-side JavaScript</p>\n  <div class="actions">\n    <button id="dec">-</button>\n    <span id="num">0</span>\n    <button id="inc">+</button>\n  </div>\n</div>`);
+      setCssCode(`body { font-family: system-ui, sans-serif; background: #080D1C; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 90vh; margin: 0; }\n.card { background: #10182B; padding: 32px; border-radius: 16px; text-align: center; border: 1px solid rgba(118,87,255,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }\n.actions { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 16px; }\nbutton { width: 44px; height: 44px; font-size: 20px; font-weight: bold; border-radius: 12px; border: none; background: #7657FF; color: white; cursor: pointer; }\n#num { font-size: 28px; font-weight: bold; min-width: 40px; font-family: monospace; }`);
+      setJsCode(`let val = 0;\nconst num = document.getElementById('num');\ndocument.getElementById('inc').onclick = () => { val++; num.textContent = val; console.log('Incremented:', val); };\ndocument.getElementById('dec').onclick = () => { val--; num.textContent = val; console.log('Decremented:', val); };`);
+    } else if (name === 'neon') {
+      setHtmlCode(`<div class="container">\n  <button class="neon-btn">NOVA CYBERPUNK</button>\n</div>`);
+      setCssCode(`body { background: #050811; display: grid; place-items: center; min-height: 90vh; margin: 0; font-family: sans-serif; }\n.neon-btn {\n  padding: 16px 36px;\n  color: #00D9FF;\n  background: transparent;\n  border: 2px solid #00D9FF;\n  border-radius: 12px;\n  font-size: 18px;\n  font-weight: 900;\n  letter-spacing: 2px;\n  cursor: pointer;\n  box-shadow: 0 0 15px rgba(0,217,255,0.4), inset 0 0 15px rgba(0,217,255,0.2);\n  transition: 0.2s;\n}\n.neon-btn:hover {\n  background: #00D9FF;\n  color: #050811;\n  box-shadow: 0 0 30px rgba(0,217,255,0.8);\n}`);
+      setJsCode(`document.querySelector('.neon-btn').addEventListener('click', () => {\n  console.log('Neon button activated!');\n});`);
+    } else if (name === 'particles') {
+      setHtmlCode(`<canvas id="canvas"></canvas>`);
+      setCssCode(`body { margin: 0; overflow: hidden; background: #080D1C; }\ncanvas { display: block; }`);
+      setJsCode(`const canvas = document.getElementById('canvas');\nconst ctx = canvas.getContext('2d');\ncanvas.width = 400;\ncanvas.height = 300;\nconst particles = Array.from({ length: 40 }, () => ({\n  x: Math.random() * canvas.width,\n  y: Math.random() * canvas.height,\n  vx: (Math.random() - 0.5) * 2,\n  vy: (Math.random() - 0.5) * 2,\n  r: Math.random() * 3 + 1\n}));\nfunction animate() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = '#00D9FF';\n  particles.forEach(p => {\n    p.x += p.vx; p.y += p.vy;\n    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;\n    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;\n    ctx.beginPath();\n    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);\n    ctx.fill();\n  });\n  requestAnimationFrame(animate);\n}\nanimate();\nconsole.log('Particle simulation initialized!');`);
+    }
+  };
+
+  // File inspector upload handler
+  const handleInspectFile = async (file: File) => {
+    setIsInspecting(true);
+    setInspectedFile({
+      name: file.name,
+      size: file.size,
+      type: file.type || 'application/octet-stream',
+      lastModified: file.lastModified,
+    });
+
+    try {
+      const buffer = await file.arrayBuffer();
+
+      const toHex = (buf: ArrayBuffer) =>
+        Array.from(new Uint8Array(buf))
+          .map((b) => b.toString(16).padStart(2, '0'))
+          .join('');
+
+      const sha256Buf = await crypto.subtle.digest('SHA-256', buffer);
+      const sha1Buf = await crypto.subtle.digest('SHA-1', buffer);
+      const sha384Buf = await crypto.subtle.digest('SHA-384', buffer);
+
+      setFileHashes({
+        sha256: toHex(sha256Buf),
+        sha1: toHex(sha1Buf),
+        sha384: toHex(sha384Buf),
+      });
+
+      // Generate Hex Dump (first 4KB max for smooth performance)
+      const sliceLen = Math.min(buffer.byteLength, 4096);
+      const uint8 = new Uint8Array(buffer.slice(0, sliceLen));
+      const rows: string[] = [];
+      for (let i = 0; i < uint8.length; i += 16) {
+        const offset = i.toString(16).padStart(8, '0');
+        const chunk = Array.from(uint8.slice(i, i + 16));
+        const hex = chunk.map((b) => b.toString(16).padStart(2, '0')).join(' ').padEnd(48, ' ');
+        const ascii = chunk.map((b) => (b >= 32 && b <= 126 ? String.fromCharCode(b) : '.')).join('');
+        rows.push(`${offset}  ${hex}  |${ascii}|`);
+      }
+      setHexRows(rows);
+      setHexPage(0);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsInspecting(false);
+    }
+  };
 
   // Trigger hash calculation when input changes for hash-generator
   React.useEffect(() => {
@@ -183,10 +350,10 @@ export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
           return { outputText: list.join('\n'), error: null };
         }
         case 'jwt-decoder': {
-          const parts = inputVal.split('.');
-          if (parts.length < 2) throw new Error('Invalid JWT format (must have 3 parts separated by dots).');
-          const header = JSON.parse(atob(parts[0]));
-          const payload = JSON.parse(atob(parts[1]));
+          const parts = inputVal.trim().split('.');
+          if (parts.length < 2) throw new Error('Invalid JWT format (must have at least header.payload parts).');
+          const header = JSON.parse(decodeBase64Url(parts[0]));
+          const payload = JSON.parse(decodeBase64Url(parts[1]));
           const res = {
             header,
             payload,
@@ -306,6 +473,107 @@ export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
     }
   }, [inputVal, toolSlug, uuidCount, strLength, charSet, base64Mode]);
 
+  // Regex parsed analysis
+  const regexAnalysis = useMemo(() => {
+    if (toolSlug !== 'regex-tester') {
+      return { valid: true, error: null as string | null, matches: [] as Array<{ text: string; index: number; groups: string[] }>, segments: [] as Array<{ text: string; isMatch: boolean }>, replaced: '' };
+    }
+    if (!regexPattern) {
+      return { valid: true, error: null, matches: [], segments: [{ text: inputVal, isMatch: false }], replaced: inputVal };
+    }
+    try {
+      const cleanFlags = Array.from(new Set(regexFlags.split('').filter((f) => 'gimsu'.includes(f)))).join('');
+      const re = new RegExp(regexPattern, cleanFlags);
+      const matches: Array<{ text: string; index: number; groups: string[] }> = [];
+      const segments: Array<{ text: string; isMatch: boolean }> = [];
+
+      if (cleanFlags.includes('g')) {
+        let lastIndex = 0;
+        let m: RegExpExecArray | null;
+        let safety = 0;
+        while ((m = re.exec(inputVal)) !== null && safety < 500) {
+          safety++;
+          if (m.index > lastIndex) {
+            segments.push({ text: inputVal.slice(lastIndex, m.index), isMatch: false });
+          }
+          if (m[0].length > 0) {
+            segments.push({ text: m[0], isMatch: true });
+          }
+          matches.push({ text: m[0], index: m.index, groups: m.slice(1).map((g) => g ?? '') });
+          lastIndex = m.index + m[0].length;
+          if (m[0].length === 0) {
+            re.lastIndex += 1;
+          }
+        }
+        if (lastIndex < inputVal.length) {
+          segments.push({ text: inputVal.slice(lastIndex), isMatch: false });
+        }
+      } else {
+        const m = re.exec(inputVal);
+        if (m) {
+          if (m.index > 0) segments.push({ text: inputVal.slice(0, m.index), isMatch: false });
+          segments.push({ text: m[0], isMatch: true });
+          if (m.index + m[0].length < inputVal.length) {
+            segments.push({ text: inputVal.slice(m.index + m[0].length), isMatch: false });
+          }
+          matches.push({ text: m[0], index: m.index, groups: m.slice(1).map((g) => g ?? '') });
+        } else {
+          segments.push({ text: inputVal, isMatch: false });
+        }
+      }
+
+      const replaced = regexReplace !== '' ? inputVal.replace(new RegExp(regexPattern, cleanFlags), regexReplace) : '';
+      return { valid: true, error: null, matches, segments, replaced };
+    } catch (e: any) {
+      return { valid: false, error: e?.message || 'Invalid regular expression', matches: [], segments: [{ text: inputVal, isMatch: false }], replaced: '' };
+    }
+  }, [toolSlug, regexPattern, regexFlags, regexReplace, inputVal]);
+
+  // JWT detailed analysis
+  const jwtDetails = useMemo(() => {
+    if (toolSlug !== 'jwt-decoder') return null;
+    try {
+      const parts = inputVal.trim().split('.');
+      if (parts.length < 2) {
+        return { error: 'Invalid JWT format. A valid token must contain at least Header and Payload segments separated by dots.' };
+      }
+      const header = JSON.parse(decodeBase64Url(parts[0]));
+      const payload = JSON.parse(decodeBase64Url(parts[1]));
+      const signature = parts[2] || '';
+      const nowSec = Math.floor(Date.now() / 1000);
+      const exp = typeof payload.exp === 'number' ? payload.exp : null;
+      const iat = typeof payload.iat === 'number' ? payload.iat : null;
+      const isExpired = exp !== null ? exp < nowSec : false;
+
+      let expirySummary = 'No expiration claim (exp)';
+      if (exp !== null) {
+        const diff = Math.abs(exp - nowSec);
+        const days = Math.floor(diff / 86400);
+        const hours = Math.floor((diff % 86400) / 3600);
+        const mins = Math.floor((diff % 3600) / 60);
+        const span = days > 0 ? `${days}d ${hours}h` : hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+        expirySummary = isExpired ? `Expired ${span} ago` : `Valid for ${span}`;
+      }
+
+      return {
+        error: null,
+        header,
+        payload,
+        signature,
+        iatFormatted: iat ? new Date(iat * 1000).toLocaleString() : null,
+        expFormatted: exp ? new Date(exp * 1000).toLocaleString() : null,
+        isExpired,
+        expirySummary,
+      };
+    } catch (e: any) {
+      return { error: e?.message || 'Failed to decode JWT segments. Ensure Base64URL encoding is valid.' };
+    }
+  }, [toolSlug, inputVal]);
+
+  const toggleRegexFlag = (flag: string) => {
+    setRegexFlags((prev) => (prev.includes(flag) ? prev.replace(flag, '') : prev + flag));
+  };
+
   const handleCopy = (text: string) => {
     copyToClipboard(text);
     setCopied(true);
@@ -398,36 +666,292 @@ export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
         </div>
       )}
 
-      {/* Regex Live Tester Special View */}
+      {/* Regex Live Tester Special Interactive View */}
       {toolSlug === 'regex-tester' && (
-        <div className="p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="sm:col-span-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">
-                Regular Expression Pattern
-              </label>
-              <div className="flex items-center font-mono text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 overflow-hidden">
-                <span className="px-3 text-slate-400">/</span>
-                <input
-                  type="text"
-                  value={regexPattern}
-                  onChange={(e) => setRegexPattern(e.target.value)}
-                  className="w-full py-2 bg-transparent text-emerald-600 dark:text-emerald-400 focus:outline-none"
-                />
-                <span className="px-3 text-slate-400">/</span>
+        <div className="space-y-5">
+          <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="lg:col-span-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
+                  Regular Expression Pattern
+                </label>
+                <div className="flex items-center font-mono text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 overflow-hidden">
+                  <span className="px-3 text-slate-400 select-none">/</span>
+                  <input
+                    type="text"
+                    value={regexPattern}
+                    onChange={(e) => setRegexPattern(e.target.value)}
+                    placeholder="Enter regex pattern..."
+                    className="w-full py-2.5 bg-transparent text-emerald-600 dark:text-emerald-400 focus:outline-none"
+                  />
+                  <span className="px-3 text-slate-400 select-none">/{regexFlags}</span>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
+                  Regex Flags
+                </label>
+                <div className="flex items-center gap-1.5">
+                  {[
+                    { flag: 'g', title: 'Global match' },
+                    { flag: 'i', title: 'Case-insensitive' },
+                    { flag: 'm', title: 'Multiline' },
+                    { flag: 's', title: 'Dot matches newline' },
+                    { flag: 'u', title: 'Unicode' },
+                  ].map((item) => {
+                    const active = regexFlags.includes(item.flag);
+                    return (
+                      <button
+                        key={item.flag}
+                        type="button"
+                        onClick={() => toggleRegexFlag(item.flag)}
+                        title={item.title}
+                        className={`flex-1 py-2 rounded-lg font-mono text-xs font-bold border transition-all ${
+                          active
+                            ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700'
+                        }`}
+                      >
+                        {item.flag}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
+
             <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Flags</label>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
+                Live Replace With (Optional)
+              </label>
               <input
                 type="text"
-                value={regexFlags}
-                onChange={(e) => setRegexFlags(e.target.value)}
-                placeholder="g, i, m"
-                className="w-full px-3 py-2 font-mono text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white"
+                value={regexReplace}
+                onChange={(e) => setRegexReplace(e.target.value)}
+                placeholder="e.g. [REDACTED] or $1@domain.com"
+                className="w-full px-3.5 py-2 font-mono text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white"
               />
             </div>
+
+            {!regexAnalysis.valid && (
+              <div className="p-3 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-500 text-xs font-mono flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>{regexAnalysis.error}</span>
+              </div>
+            )}
           </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Test String</span>
+                <button
+                  type="button"
+                  onClick={() => setInputVal('')}
+                  className="text-xs text-rose-500 hover:underline"
+                >
+                  Clear
+                </button>
+              </div>
+              <textarea
+                value={inputVal}
+                onChange={(e) => setInputVal(e.target.value)}
+                className="w-full h-56 p-4 font-mono text-xs rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white leading-relaxed"
+                placeholder="Paste text to test against regex..."
+              />
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  Live Match Highlighting
+                </span>
+                <span className="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-mono tabular-nums text-[11px] font-bold">
+                  {regexAnalysis.matches.length} {regexAnalysis.matches.length === 1 ? 'match' : 'matches'}
+                </span>
+              </div>
+              <div className="w-full h-56 p-4 font-mono text-xs rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 text-slate-800 dark:text-slate-200 overflow-y-auto whitespace-pre-wrap break-words leading-relaxed">
+                {regexAnalysis.segments.map((seg, i) =>
+                  seg.isMatch ? (
+                    <mark
+                      key={i}
+                      className="px-0.5 rounded bg-emerald-500/25 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 font-semibold"
+                    >
+                      {seg.text}
+                    </mark>
+                  ) : (
+                    <span key={i}>{seg.text}</span>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+
+          {regexReplace !== '' && regexAnalysis.valid && (
+            <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  Replacement Output Preview
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleCopy(regexAnalysis.replaced)}
+                  className="text-xs text-emerald-500 hover:underline font-semibold flex items-center gap-1"
+                >
+                  {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copied ? 'Copied' : 'Copy'}
+                </button>
+              </div>
+              <pre className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 font-mono text-xs text-slate-800 dark:text-slate-200 whitespace-pre-wrap break-words">
+                {regexAnalysis.replaced}
+              </pre>
+            </div>
+          )}
+
+          {regexAnalysis.matches.length > 0 && (
+            <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 space-y-3">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
+                Matched Tokens & Capture Groups
+              </span>
+              <div className="space-y-2 max-h-60 overflow-y-auto">
+                {regexAnalysis.matches.map((m, idx) => (
+                  <div
+                    key={idx}
+                    className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800 font-mono text-xs flex flex-wrap items-center justify-between gap-2"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-500 tabular-nums">
+                        #{idx + 1} @ {m.index}
+                      </span>
+                      <span className="font-semibold text-slate-900 dark:text-white break-all">{m.text}</span>
+                    </div>
+                    {m.groups.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5">
+                        {m.groups.map((grp, gIdx) => (
+                          <span
+                            key={gIdx}
+                            className="px-2 py-0.5 rounded bg-violet-500/10 text-violet-600 dark:text-violet-300 text-[11px]"
+                          >
+                            ${gIdx + 1}: {grp || '""'}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* JWT Decoder Interactive Inspector */}
+      {toolSlug === 'jwt-decoder' && (
+        <div className="space-y-5">
+          <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                Encoded JWT Token
+              </label>
+              <button
+                type="button"
+                onClick={() => setInputVal('')}
+                className="text-xs text-rose-500 hover:underline"
+              >
+                Clear
+              </button>
+            </div>
+            <textarea
+              value={inputVal}
+              onChange={(e) => setInputVal(e.target.value)}
+              placeholder="Paste header.payload.signature JWT token here..."
+              className="w-full h-28 p-3.5 font-mono text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white break-all"
+            />
+          </div>
+
+          {jwtDetails && jwtDetails.error ? (
+            <div className="p-4 rounded-2xl border border-rose-500/30 bg-rose-500/10 text-rose-500 text-xs font-mono flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span>{jwtDetails.error}</span>
+            </div>
+          ) : jwtDetails ? (
+            <div className="space-y-4">
+              {/* Token Claims Summary Bar */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Algorithm</span>
+                  <span className="font-mono font-bold text-slate-900 dark:text-white mt-1 block">
+                    {jwtDetails.header?.alg || 'Unknown'} ({jwtDetails.header?.typ || 'JWT'})
+                  </span>
+                </div>
+                <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Issued At (iat)</span>
+                  <span className="font-mono font-semibold text-slate-900 dark:text-white mt-1 block">
+                    {jwtDetails.iatFormatted || 'Not specified'}
+                  </span>
+                </div>
+                <div
+                  className={`p-3.5 rounded-xl border ${
+                    jwtDetails.isExpired
+                      ? 'border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400'
+                      : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                  }`}
+                >
+                  <span className="text-[10px] font-bold uppercase tracking-wider opacity-80 block">
+                    Expiration Status
+                  </span>
+                  <span className="font-mono font-bold mt-1 block">{jwtDetails.expirySummary}</span>
+                  {jwtDetails.expFormatted && (
+                    <span className="text-[10px] font-mono opacity-80 block mt-0.5">{jwtDetails.expFormatted}</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider text-rose-500">Header (Algorithm & Type)</span>
+                    <button
+                      type="button"
+                      onClick={() => handleCopy(JSON.stringify(jwtDetails.header, null, 2))}
+                      className="text-xs text-emerald-500 hover:underline font-medium"
+                    >
+                      Copy JSON
+                    </button>
+                  </div>
+                  <pre className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 font-mono text-xs text-slate-800 dark:text-slate-200 overflow-x-auto">
+                    {JSON.stringify(jwtDetails.header, null, 2)}
+                  </pre>
+                </div>
+
+                <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider text-violet-500">Payload (Claims & Data)</span>
+                    <button
+                      type="button"
+                      onClick={() => handleCopy(JSON.stringify(jwtDetails.payload, null, 2))}
+                      className="text-xs text-emerald-500 hover:underline font-medium"
+                    >
+                      Copy JSON
+                    </button>
+                  </div>
+                  <pre className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 font-mono text-xs text-emerald-600 dark:text-emerald-400 overflow-x-auto">
+                    {JSON.stringify(jwtDetails.payload, null, 2)}
+                  </pre>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/30 space-y-1">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-sky-500 block">
+                  Signature Segment (Decoded locally; verify HMAC/RSA keys server-side before trusting claims)
+                </span>
+                <p className="font-mono text-xs text-slate-600 dark:text-slate-300 break-all">
+                  {jwtDetails.signature || '(unsigned / empty signature)'}
+                </p>
+              </div>
+            </div>
+          ) : null}
         </div>
       )}
 
@@ -560,8 +1084,313 @@ export const DeveloperTools: React.FC<DevProps> = ({ toolSlug }) => {
         </div>
       )}
 
+      {/* Code Playground */}
+      {toolSlug === 'code-playground' && (
+        <div className="space-y-4">
+          {/* Controls Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-xs">
+            {/* Tabs */}
+            <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <button
+                onClick={() => setActiveEditorTab('html')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  activeEditorTab === 'html'
+                    ? 'bg-rose-600 text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                }`}
+              >
+                HTML
+              </button>
+              <button
+                onClick={() => setActiveEditorTab('css')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  activeEditorTab === 'css'
+                    ? 'bg-sky-600 text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                }`}
+              >
+                CSS
+              </button>
+              <button
+                onClick={() => setActiveEditorTab('js')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  activeEditorTab === 'js'
+                    ? 'bg-amber-500 text-slate-950 shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                }`}
+              >
+                JS
+              </button>
+              <button
+                onClick={() => setActiveEditorTab('console')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  activeEditorTab === 'console'
+                    ? 'bg-violet-600 text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                }`}
+              >
+                <Terminal className="w-3.5 h-3.5" />
+                <span>Console ({consoleLogs.length})</span>
+              </button>
+            </div>
+
+            {/* Template Selector & Export */}
+            <div className="flex items-center gap-2">
+              <select
+                onChange={(e) => loadPlaygroundTemplate(e.target.value as any)}
+                className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:outline-none"
+              >
+                <option value="">Load Template...</option>
+                <option value="counter">Counter App</option>
+                <option value="neon">Neon Cyberpunk Card</option>
+                <option value="particles">2D Particle Canvas</option>
+              </select>
+
+              <button
+                onClick={handleDownloadPlayground}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold shadow-sm"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Export .HTML</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Dual Split Pane: Editor Left, Live Preview Right */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Editor Area */}
+            <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 shadow-xs flex flex-col h-[460px]">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800/80 mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  {activeEditorTab.toUpperCase()} Editor
+                </span>
+                <span className="text-[11px] text-slate-400">Updates live</span>
+              </div>
+
+              {activeEditorTab === 'html' && (
+                <textarea
+                  value={htmlCode}
+                  onChange={(e) => setHtmlCode(e.target.value)}
+                  className="w-full flex-1 p-3 font-mono text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 resize-none leading-relaxed"
+                />
+              )}
+
+              {activeEditorTab === 'css' && (
+                <textarea
+                  value={cssCode}
+                  onChange={(e) => setCssCode(e.target.value)}
+                  className="w-full flex-1 p-3 font-mono text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-sky-500 resize-none leading-relaxed"
+                />
+              )}
+
+              {activeEditorTab === 'js' && (
+                <textarea
+                  value={jsCode}
+                  onChange={(e) => setJsCode(e.target.value)}
+                  className="w-full flex-1 p-3 font-mono text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none leading-relaxed"
+                />
+              )}
+
+              {activeEditorTab === 'console' && (
+                <div className="flex-1 overflow-y-auto space-y-1.5 p-3 rounded-xl bg-slate-950 text-xs font-mono">
+                  {consoleLogs.length > 0 ? (
+                    consoleLogs.map((log, i) => (
+                      <div key={i} className="flex items-start gap-2">
+                        <span className="text-slate-500 shrink-0">[{log.time}]</span>
+                        <span className={log.type === 'error' ? 'text-rose-400' : 'text-emerald-400'}>
+                          {log.text}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <span className="text-slate-500">Console is empty. Run JS code to see logs.</span>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Live Sandboxed Preview */}
+            <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 shadow-xs flex flex-col h-[460px]">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800/80 mb-2">
+                <div className="flex items-center gap-2">
+                  <Eye className="w-3.5 h-3.5 text-emerald-500" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Isolated Sandboxed Preview
+                  </span>
+                </div>
+                {consoleLogs.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setConsoleLogs([])}
+                    className="text-[11px] font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                  >
+                    Clear Console
+                  </button>
+                )}
+              </div>
+
+              <iframe
+                title="NOVA Code Playground Preview"
+                srcDoc={playgroundSrcDoc}
+                sandbox="allow-scripts allow-modals"
+                className="w-full flex-1 rounded-xl border border-slate-200 dark:border-slate-800 bg-white shadow-inner"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* File Inspector & Hex Dump Viewer */}
+      {toolSlug === 'file-inspector' && (
+        <div className="space-y-6">
+          {/* Dropzone */}
+          <div
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={(e) => {
+              e.preventDefault();
+              const f = e.dataTransfer.files?.[0];
+              if (f) handleInspectFile(f);
+            }}
+            className="p-8 rounded-3xl border-2 border-dashed border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900/30 text-center space-y-3 hover:border-violet-500 transition-colors cursor-pointer"
+            onClick={() => {
+              const el = document.getElementById('file-inspector-input');
+              if (el) el.click();
+            }}
+          >
+            <input
+              id="file-inspector-input"
+              type="file"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) handleInspectFile(f);
+              }}
+            />
+            <div className="w-12 h-12 rounded-2xl bg-violet-500/10 text-violet-500 flex items-center justify-center mx-auto">
+              <Binary className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-slate-800 dark:text-slate-200">
+                Drop any file to inspect metadata, hashes & hex dump
+              </p>
+              <p className="text-xs text-slate-400 mt-1">
+                Images, PDFs, audio, videos, archives, binaries (processed 100% in-browser)
+              </p>
+            </div>
+          </div>
+
+          {/* Inspected Results */}
+          {inspectedFile && (
+            <div className="space-y-4 animate-page-enter">
+              {/* Metadata Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">File Name</span>
+                  <span className="text-xs font-bold text-slate-900 dark:text-white truncate block mt-1" title={inspectedFile.name}>
+                    {inspectedFile.name}
+                  </span>
+                </div>
+                <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">File Size</span>
+                  <span className="text-xs font-bold text-slate-900 dark:text-white block mt-1">
+                    {(inspectedFile.size / 1024).toFixed(2)} KB ({inspectedFile.size.toLocaleString()} bytes)
+                  </span>
+                </div>
+                <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">MIME Type</span>
+                  <span className="text-xs font-bold text-slate-900 dark:text-white truncate block mt-1">
+                    {inspectedFile.type}
+                  </span>
+                </div>
+                <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Last Modified</span>
+                  <span className="text-xs font-bold text-slate-900 dark:text-white truncate block mt-1">
+                    {new Date(inspectedFile.lastModified).toLocaleDateString()}
+                  </span>
+                </div>
+              </div>
+
+              {isInspecting && (
+                <div className="text-xs text-violet-500 font-semibold">
+                  Computing cryptographic hashes and reading binary header...
+                </div>
+              )}
+
+              {/* Cryptographic Hashes */}
+              <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 space-y-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
+                  Cryptographic Checksums
+                </span>
+                <div className="space-y-2 font-mono text-xs">
+                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800/80">
+                    <span className="text-slate-400 shrink-0 font-bold uppercase">SHA-256</span>
+                    <span className="text-emerald-500 font-semibold truncate mx-2">{fileHashes.sha256}</span>
+                    <button onClick={() => handleCopy(fileHashes.sha256)} className="text-[11px] text-slate-400 hover:text-emerald-400">Copy</button>
+                  </div>
+                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800/80">
+                    <span className="text-slate-400 shrink-0 font-bold uppercase">SHA-384</span>
+                    <span className="text-violet-500 font-semibold truncate mx-2">{fileHashes.sha384}</span>
+                    <button onClick={() => handleCopy(fileHashes.sha384)} className="text-[11px] text-slate-400 hover:text-violet-400">Copy</button>
+                  </div>
+                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800/80">
+                    <span className="text-slate-400 shrink-0 font-bold uppercase">SHA-1</span>
+                    <span className="text-sky-500 font-semibold truncate mx-2">{fileHashes.sha1}</span>
+                    <button onClick={() => handleCopy(fileHashes.sha1)} className="text-[11px] text-slate-400 hover:text-sky-400">Copy</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Hex Dump Viewer */}
+              {hexRows.length > 0 && (
+                <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                      Hex Dump Viewer ({hexRows.length} lines of 16-bytes)
+                    </span>
+                    <span className="text-xs text-slate-400 font-mono tabular-nums">
+                      Page {hexPage + 1} of {Math.ceil(hexRows.length / 16)}
+                    </span>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-slate-950 text-slate-300 font-mono text-[11px] overflow-x-auto leading-relaxed border border-slate-800">
+                    {hexRows.slice(hexPage * 16, (hexPage + 1) * 16).map((line, idx) => (
+                      <div key={idx} className="whitespace-pre">{line}</div>
+                    ))}
+                  </div>
+
+                  {hexRows.length > 16 && (
+                    <div className="flex justify-between items-center pt-2">
+                      <button
+                        disabled={hexPage === 0}
+                        onClick={() => setHexPage((p) => Math.max(0, p - 1))}
+                        className="px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-800 text-xs disabled:opacity-30"
+                      >
+                        Previous Page
+                      </button>
+                      <button
+                        disabled={(hexPage + 1) * 16 >= hexRows.length}
+                        onClick={() => setHexPage((p) => p + 1)}
+                        className="px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-800 text-xs disabled:opacity-30"
+                      >
+                        Next Page
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Standard Dual Pane Layout for Formatter/Decoder/Encoder */}
-      {toolSlug !== 'hash-generator' && toolSlug !== 'timestamp-converter' && toolSlug !== 'http-status-codes' && (
+      {toolSlug !== 'hash-generator' &&
+        toolSlug !== 'timestamp-converter' &&
+        toolSlug !== 'http-status-codes' &&
+        toolSlug !== 'code-playground' &&
+        toolSlug !== 'file-inspector' &&
+        toolSlug !== 'regex-tester' &&
+        toolSlug !== 'jwt-decoder' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="space-y-2">
             <div className="flex items-center justify-between">

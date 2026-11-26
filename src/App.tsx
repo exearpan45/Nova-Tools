@@ -8,11 +8,21 @@ import { MobileNav } from './components/MobileNav';
 import { Footer } from './components/Footer';
 import { GlobalSearchModal } from './components/GlobalSearchModal';
 import { SmartDropZone } from './components/SmartDropZone';
+import { MiniAppsManager } from './components/MiniAppsManager';
+import { ExperienceModals } from './components/ExperienceModals';
 
 // Pages
 import { HomePage } from './pages/HomePage';
 import { DashboardPage } from './pages/DashboardPage';
 import { WorkspacePage } from './pages/WorkspacePage';
+import { CategoriesPage } from './pages/CategoriesPage';
+import { FileStudioPage } from './pages/FileStudioPage';
+import { DeveloperLabPage } from './pages/DeveloperLabPage';
+import { DesignStudioPage } from './pages/DesignStudioPage';
+import { QrStudioPage } from './pages/QrStudioPage';
+import { FocusPage } from './pages/FocusPage';
+import { LearningHubPage } from './pages/LearningHubPage';
+import { BrowserUtilitiesPage } from './pages/BrowserUtilitiesPage';
 import { ChangelogPage } from './pages/ChangelogPage';
 import { ToolsPage } from './pages/ToolsPage';
 import { ToolDetailPage } from './pages/ToolDetailPage';
@@ -32,7 +42,7 @@ import { normalizeRoutePath } from './utils/routing';
 const AppContent: React.FC = () => {
   const { currentPath, navigate, sidebarCollapsed } = useNova();
 
-  // Normalize the pathname before routing. Cloudflare Pages may serve directory routes with a trailing slash.
+  // Normalize pathname cleanly for static directory routes
   const normalizedPath = normalizeRoutePath(currentPath);
 
   // Router resolver
@@ -44,11 +54,10 @@ const AppContent: React.FC = () => {
       if (tool) {
         return <ToolDetailPage tool={tool} />;
       }
-      // Fallback if not found
       return <ToolsPage />;
     }
 
-    // 2. Main routes
+    // 2. Main & Studio routes
     switch (normalizedPath) {
       case '/':
         return <HomePage />;
@@ -56,6 +65,24 @@ const AppContent: React.FC = () => {
         return <DashboardPage />;
       case '/workspace':
         return <WorkspacePage />;
+      case '/clipboard-vault':
+        return <WorkspacePage initialTab="vault" />;
+      case '/categories':
+        return <CategoriesPage />;
+      case '/file-studio':
+        return <FileStudioPage />;
+      case '/developer-lab':
+        return <DeveloperLabPage />;
+      case '/design-studio':
+        return <DesignStudioPage />;
+      case '/qr-studio':
+        return <QrStudioPage />;
+      case '/focus':
+        return <FocusPage />;
+      case '/learning-hub':
+        return <LearningHubPage />;
+      case '/browser-utilities':
+        return <BrowserUtilitiesPage />;
       case '/changelog':
       case '/whats-new':
         return <ChangelogPage />;
@@ -115,6 +142,12 @@ const AppContent: React.FC = () => {
 
       {/* Global Command Center Search */}
       <GlobalSearchModal />
+
+      {/* Floating Draggable Mini Apps */}
+      <MiniAppsManager />
+
+      {/* Notifications, Shortcuts & Guided Tour Modals */}
+      <ExperienceModals />
 
       {/* Global Drag & Drop File Detection */}
       <SmartDropZone />

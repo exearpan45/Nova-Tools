@@ -1,18 +1,22 @@
-import React from 'react';
-import { History, Trash2, ArrowRight, Clock, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { History, Trash2, ArrowRight, Clock, Sparkles, Download, Upload } from 'lucide-react';
 import { useNova } from '../context/NovaContext';
+import { useToast } from '../context/ToastContext';
 import { SUITES_DATA } from '../data/suitesData';
 
 export const RecentPage: React.FC = () => {
-  const { recentTools, clearRecent, navigate, settings } = useNova();
+  const { recentTools, clearRecent, navigate, settings, exportUserData, importUserData } = useNova();
+  const { showToast } = useToast();
+  const [confirmClear, setConfirmClear] = useState<boolean>(false);
 
   const handleClear = () => {
-    if (settings.confirmBeforeClearing) {
-      if (!window.confirm('Clear all recently used tools history?')) {
-        return;
-      }
+    if (settings.confirmBeforeClearing && !confirmClear) {
+      setConfirmClear(true);
+      return;
     }
     clearRecent();
+    setConfirmClear(false);
+    showToast('Recent history cleared', 'info');
   };
 
   const formatTimeAgo = (timestamp: number) => {
@@ -24,25 +28,81 @@ export const RecentPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 animate-page-enter">
+    <div className="space-y-6 sm:space-y-8 animate-page-enter">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
             Recently Used
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Locally stored session history of your recently opened tools
+            Locally stored session history of your recently opened tools ({recentTools.length} saved)
           </p>
         </div>
 
-        {recentTools.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
           <button
-            onClick={handleClear}
-            className="text-xs font-semibold text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1.5"
+            type="button"
+            onClick={exportUserData}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-violet-500/30 bg-violet-500/10 hover:bg-violet-500/20 text-violet-700 dark:text-violet-300 text-xs font-semibold shadow-xs"
+            title="Export history & settings to JSON"
           >
-            <Trash2 className="w-3.5 h-3.5" /> Clear History
+            <Download className="w-3.5 h-3.5" />
+            <span>Export JSON</span>
           </button>
-        )}
+
+          <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold cursor-pointer shadow-xs hover:border-cyan-500">
+            <Upload className="w-3.5 h-3.5 text-cyan-500" />
+            <span>Import JSON</span>
+            <input
+              type="file"
+              accept=".json"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                  const text = event.target?.result as string;
+                  if (text) {
+                    const res = importUserData(text);
+                    showToast(res.message, res.success ? 'success' : 'error');
+                  }
+                };
+                reader.readAsText(file);
+                e.target.value = '';
+              }}
+            />
+          </label>
+
+          {recentTools.length > 0 && (
+            confirmClear ? (
+              <div className="inline-flex items-center gap-1.5 ml-1">
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="px-2.5 py-1 rounded-lg bg-rose-600 text-white text-xs font-semibold"
+                >
+                  Confirm Clear
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmClear(false)}
+                  className="px-2 py-1 rounded-lg border border-slate-300 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={handleClear}
+                className="text-xs font-semibold text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1.5 ml-1"
+              >
+                <Trash2 className="w-3.5 h-3.5" /> Clear History
+              </button>
+            )
+          )}
+        </div>
       </div>
 
       {recentTools.length > 0 ? (

@@ -108,3 +108,46 @@ export interface RecentToolItem {
   icon: string;
   lastUsed: number;
 }
+
+export interface ClipboardSnippet {
+  id: string;
+  title: string;
+  content: string;
+  category: 'Code' | 'Text' | 'Links' | 'Prompts' | 'Other';
+  favorite: boolean;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface ToolCollection {
+  id: string;
+  name: string;
+  description: string;
+  toolSlugs: string[];
+  createdAt: number;
+}
+
+export interface WorkspaceWidgetConfig {
+  id: 'welcome' | 'favorites' | 'recent' | 'quick-launch' | 'stats' | 'collections' | 'workflows';
+  label: string;
+  visible: boolean;
+}
+
+export interface FocusSessionRecord {
+  id: string;
+  mode: 'pomodoro' | 'countdown' | 'stopwatch';
+  label: string;
+  durationSeconds: number;
+  completedAt: number;
+}
+
+export type MiniAppId = 'calculator' | 'notes' | 'timer' | 'color' | 'converter';
+
+export interface NotificationItem {
+  id: string;
+  title: string;
+  message: string;
+  type: 'info' | 'success' | 'error';
+  timestamp: number;
+  read: boolean;
+}

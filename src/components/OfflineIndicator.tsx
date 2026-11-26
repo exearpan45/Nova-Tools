@@ -25,7 +25,7 @@ export const OfflineIndicator: React.FC = () => {
     <div
       role="status"
       aria-live="polite"
-      className="fixed bottom-16 sm:bottom-6 left-4 z-50 flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 text-white text-xs font-semibold shadow-2xl shadow-amber-950/40 border border-amber-400/30 backdrop-blur-md animate-bounce"
+      className="fixed bottom-16 sm:bottom-6 left-4 z-50 flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 text-white text-xs font-semibold shadow-2xl shadow-amber-950/40 border border-amber-400/30 backdrop-blur-md animate-page-enter"
     >
       <WifiOff className="w-4 h-4 text-amber-200 shrink-0" />
       <span>Offline Mode — All loaded tools work locally without internet</span>

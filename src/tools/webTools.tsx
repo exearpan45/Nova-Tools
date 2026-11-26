@@ -14,7 +14,11 @@ export const WebTools: React.FC<WebProps> = ({ toolSlug }) => {
   // QR Code states
   const [qrContent, setQrContent] = useState<string>('https://nova-tools2.pages.dev');
   const [qrSize, setQrSize] = useState<number>(300);
+  const [qrDarkColor, setQrDarkColor] = useState<string>('#0f172a');
+  const [qrLightColor, setQrLightColor] = useState<string>('#ffffff');
+  const [qrEcc, setQrEcc] = useState<'L' | 'M' | 'Q' | 'H'>('M');
   const [qrDataUrl, setQrDataUrl] = useState<string>('');
+  const [qrSvg, setQrSvg] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);
 
   // URL Parser & Cleaner
@@ -37,18 +41,26 @@ export const WebTools: React.FC<WebProps> = ({ toolSlug }) => {
   const [fgColor, setFgColor] = useState<string>('#ffffff');
   const [bgColor, setBgColor] = useState<string>('#0f172a');
 
-  // Generate QR Code
+  // Generate QR Code (PNG + SVG)
   useEffect(() => {
     if (toolSlug === 'qr-generator' && qrContent) {
-      QRCode.toDataURL(qrContent, {
+      const opts = {
         width: qrSize,
         margin: 2,
-        color: { dark: '#000000', light: '#ffffff' },
-      })
+        errorCorrectionLevel: qrEcc,
+        color: { dark: qrDarkColor, light: qrLightColor },
+      };
+      QRCode.toDataURL(qrContent, opts)
         .then((url) => setQrDataUrl(url))
         .catch(() => {});
+      QRCode.toString(qrContent, { ...opts, type: 'svg' })
+        .then((svgStr) => setQrSvg(svgStr))
+        .catch(() => {});
+    } else if (toolSlug === 'qr-generator' && !qrContent) {
+      setQrDataUrl('');
+      setQrSvg('');
     }
-  }, [qrContent, qrSize, toolSlug]);
+  }, [qrContent, qrSize, qrDarkColor, qrLightColor, qrEcc, toolSlug]);
 
   // URL Parser logic
   const parsedUrl = React.useMemo(() => {
@@ -143,51 +155,136 @@ Sitemap: ${robotSitemap}`;
 
   return (
     <div className="space-y-6">
-      {/* QR Code Generator */}
+      {/* QR Code Generator Studio */}
       {toolSlug === 'qr-generator' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 space-y-4">
-            <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">
-                QR Content (URL, Text, or Wi-Fi)
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                QR Content (URL, Text, Wi-Fi)
               </label>
-              <textarea
-                value={qrContent}
-                onChange={(e) => setQrContent(e.target.value)}
-                placeholder="https://..."
-                className="w-full h-32 p-3 text-xs font-mono rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white"
-              />
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { label: 'URL', val: 'https://nova-tools2.pages.dev' },
+                  { label: 'Wi-Fi', val: 'WIFI:T:WPA;S:MyNetwork;P:MyPassword;;' },
+                  { label: 'Email', val: 'mailto:hello@example.com?subject=Hello' },
+                ].map((preset) => (
+                  <button
+                    key={preset.label}
+                    type="button"
+                    onClick={() => setQrContent(preset.val)}
+                    className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-teal-500/15 hover:text-teal-600 dark:hover:text-teal-400 text-[10px] font-bold text-slate-600 dark:text-slate-300 transition-colors"
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div>
-              <label className="text-xs text-slate-400 block mb-1">Pixel Size: {qrSize}px</label>
-              <input
-                type="range"
-                min="150"
-                max="600"
-                step="50"
-                value={qrSize}
-                onChange={(e) => setQrSize(Number(e.target.value))}
-                className="w-full accent-teal-500"
-              />
+            <textarea
+              value={qrContent}
+              onChange={(e) => setQrContent(e.target.value)}
+              placeholder="https://..."
+              className="w-full h-28 p-3 text-xs font-mono rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white"
+            />
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-[11px] text-slate-400 block mb-1">Foreground</label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="color"
+                    value={qrDarkColor}
+                    onChange={(e) => setQrDarkColor(e.target.value)}
+                    className="w-9 h-9 rounded-lg cursor-pointer"
+                  />
+                  <span className="text-xs font-mono uppercase text-slate-600 dark:text-slate-300">{qrDarkColor}</span>
+                </div>
+              </div>
+              <div>
+                <label className="text-[11px] text-slate-400 block mb-1">Background</label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="color"
+                    value={qrLightColor}
+                    onChange={(e) => setQrLightColor(e.target.value)}
+                    className="w-9 h-9 rounded-lg cursor-pointer"
+                  />
+                  <span className="text-xs font-mono uppercase text-slate-600 dark:text-slate-300">{qrLightColor}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              <div>
+                <label className="text-xs text-slate-400 block mb-1 font-mono tabular-nums">Pixel Size: {qrSize}px</label>
+                <input
+                  type="range"
+                  min="150"
+                  max="600"
+                  step="50"
+                  value={qrSize}
+                  onChange={(e) => setQrSize(Number(e.target.value))}
+                  className="w-full accent-teal-500"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Error Correction</label>
+                <div className="grid grid-cols-4 gap-1">
+                  {(['L', 'M', 'Q', 'H'] as const).map((lvl) => (
+                    <button
+                      key={lvl}
+                      type="button"
+                      onClick={() => setQrEcc(lvl)}
+                      className={`py-1.5 rounded-lg text-xs font-mono font-bold transition-colors ${
+                        qrEcc === lvl
+                          ? 'bg-teal-600 text-white'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+                      }`}
+                    >
+                      {lvl}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="p-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 flex flex-col items-center justify-center space-y-4 shadow-sm">
+          <div className="p-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 flex flex-col items-center justify-center space-y-4 shadow-sm min-h-[320px]">
             {qrDataUrl ? (
               <>
                 <img
                   src={qrDataUrl}
                   alt="Generated QR Code"
-                  className="w-56 h-56 rounded-xl border border-slate-200 dark:border-slate-800 shadow-md p-2 bg-white"
+                  className="w-56 h-56 rounded-xl border border-slate-200 dark:border-slate-800 shadow-md p-2"
+                  style={{ backgroundColor: qrLightColor }}
                 />
-                <a
-                  href={qrDataUrl}
-                  download="nova-qrcode.png"
-                  className="px-6 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-semibold text-xs flex items-center gap-2 shadow-sm transition-colors"
-                >
-                  <Download className="w-4 h-4" /> Download High-Res PNG
-                </a>
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  <a
+                    href={qrDataUrl}
+                    download="nova-qrcode.png"
+                    className="px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-semibold text-xs flex items-center gap-2 shadow-sm transition-colors whitespace-nowrap"
+                  >
+                    <Download className="w-4 h-4" /> PNG
+                  </a>
+                  {qrSvg && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const blob = new Blob([qrSvg], { type: 'image/svg+xml;charset=utf-8' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'nova-qrcode.svg';
+                        a.click();
+                        URL.revokeObjectURL(url);
+                      }}
+                      className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-teal-500 text-slate-700 dark:text-slate-200 font-semibold text-xs flex items-center gap-2 shadow-sm transition-colors whitespace-nowrap"
+                    >
+                      <Download className="w-4 h-4" /> SVG Vector
+                    </button>
+                  )}
+                </div>
               </>
             ) : (
               <span className="text-xs text-slate-400">Enter text to generate QR code...</span>

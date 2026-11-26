@@ -1440,5 +1440,61 @@
     "action": "KEEP",
     "actualFunctionality": "Convert numbers between standard Arabic integers and classical Roman numerals.",
     "detectedBugs": "None"
+  },
+  {
+    "id": 104,
+    "slug": "code-playground",
+    "name": "Live Code Playground",
+    "category": "Developer Tools",
+    "suite": "developer",
+    "status": "verified",
+    "implementationFile": "src/tools/developerTools.tsx",
+    "functionalTestLocation": "scripts/audit-tool-registry.mjs",
+    "lastValidationResult": "Passed full build, prerender, and deterministic execution tests",
+    "action": "KEEP",
+    "actualFunctionality": "Write HTML, CSS, and JavaScript side by side with a sandboxed live preview, captured console logs, and single-file HTML export.",
+    "detectedBugs": "None"
+  },
+  {
+    "id": 105,
+    "slug": "file-inspector",
+    "name": "File Inspector & Hex Viewer",
+    "category": "Developer Tools",
+    "suite": "developer",
+    "status": "verified",
+    "implementationFile": "src/tools/developerTools.tsx",
+    "functionalTestLocation": "scripts/audit-tool-registry.mjs",
+    "lastValidationResult": "Passed full build, prerender, and deterministic execution tests",
+    "action": "KEEP",
+    "actualFunctionality": "Inspect any local file to view MIME metadata, SHA-256/SHA-384/SHA-1 checksums, and a paginated 16-byte hex + ASCII dump.",
+    "detectedBugs": "None"
+  },
+  {
+    "id": 106,
+    "slug": "chart-generator",
+    "name": "CSV-to-Chart Generator",
+    "category": "Converters",
+    "suite": "data",
+    "status": "verified",
+    "implementationFile": "src/tools/dataTools.tsx",
+    "functionalTestLocation": "scripts/audit-tool-registry.mjs",
+    "lastValidationResult": "Passed full build, prerender, and deterministic execution tests",
+    "action": "KEEP",
+    "actualFunctionality": "Turn CSV label and value pairs into Bar, Line, Area, or Donut charts with custom colors and instant SVG or PNG export.",
+    "detectedBugs": "None"
+  },
+  {
+    "id": 107,
+    "slug": "periodic-table",
+    "name": "Interactive Periodic Table",
+    "category": "Converters",
+    "suite": "student",
+    "status": "verified",
+    "implementationFile": "src/tools/studentTools.tsx",
+    "functionalTestLocation": "scripts/audit-tool-registry.mjs",
+    "lastValidationResult": "Passed full build, prerender, and deterministic execution tests",
+    "action": "KEEP",
+    "actualFunctionality": "Explore all 118 chemical elements with category filters, instant search, electron configurations, atomic mass, and discovery history.",
+    "detectedBugs": "None"
   }
 ]

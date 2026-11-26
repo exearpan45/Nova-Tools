@@ -1,16 +1,49 @@
 import React from 'react';
 import {
-  Sparkles, Zap, Shield, Smartphone, Palette, CheckCircle2,
-  Cpu, Wrench, Layers, RefreshCw
+  Sparkles, Palette, CheckCircle2, Cpu, Wrench, Layers
 } from 'lucide-react';
 
 export const ChangelogPage: React.FC = () => {
   const releases = [
     {
+      version: 'v2.2.0',
+      date: 'NOVA REBORN Release',
+      title: '16-Module Ecosystem Architecture & Studio Workbenches',
+      badge: 'Latest Release',
+      badgeColor: 'bg-cyan-500/10 text-cyan-500 border-cyan-500/30',
+      items: [
+        {
+          category: 'Studios & Workbenches',
+          icon: Layers,
+          color: 'text-cyan-400',
+          points: [
+            'File Studio & Batch Engine: Binary magic-byte inspection, sandboxed SVG preview, concurrency queue, and pure client-side .ZIP export.',
+            'Developer Lab: Unified multi-tab workbench for Code Playground, JSON, Markdown, Regex, Minifier, JWT Decoder & File Inspector.',
+            'Design Studio: Palette generator with CSS/JSON export, WCAG Contrast Checker, Gradient, Shadow, Glassmorphism & Sanitized SVG Optimizer.',
+            'QR & Barcode Studio: URL/Wi-Fi/vCard/Geo QR builder with logo overlay coverage warnings, Code 128B barcodes, print sheets & camera scanner.',
+            'Focus Studio: Timestamp-accurate Pomodoro, Countdown presets, Stopwatch, Zen Mode & session logging.',
+            'Learning Hub & Browser Utilities: Copy-ready developer/math references, Viewport monitor, Key/Mouse testers & Storage Inspector.',
+          ],
+        },
+        {
+          category: 'Workspace, Discovery & Control',
+          icon: Sparkles,
+          color: 'text-violet-400',
+          points: [
+            'Customizable Dashboard Widgets with drag reordering, accessible Up/Down controls & show/hide persistence.',
+            'Clipboard & Snippets Vault with duplicate detection, category tagging & portable JSON export/import.',
+            '5 Floating Mini Apps (Calculator, Quick Notes, Mini Timer, Color Inspector, Unit Converter) draggable across screens.',
+            'Universal Command Search (⌘K) across all 107 tools, 12 suites, 11 studios, and saved NOVA Flow workflows.',
+            'Privacy Center in Settings with granular local data clearing, notifications drawer, shortcuts modal & guided walkthrough.',
+          ],
+        },
+      ],
+    },
+    {
       version: 'v2.1.0',
-      date: 'Current Release',
-      title: 'The Ultimate Platform Transformation & Feature Expansion',
-      badge: 'Major Overhaul',
+      date: 'Platform Transformation',
+      title: 'UI/UX Overhaul & Signature Tools',
+      badge: 'Previous Major',
       badgeColor: 'bg-violet-500/10 text-violet-500 border-violet-500/30',
       items: [
         {
@@ -18,26 +51,9 @@ export const ChangelogPage: React.FC = () => {
           icon: Palette,
           color: 'text-violet-400',
           points: [
-            'Apple-inspired futuristic SaaS aesthetic with midnight navy, electric violet, and cyan ambient gradients.',
-            'Smooth theme switching between Light Mode, Dark Mode, and system preferences.',
-            'Reading progress indicator anchored to long-form reading pages and tool guides.',
+            'Midnight navy dark mode & clean daylight theme switching.',
+            'Scroll-linked reading progress indicator anchored cleanly inside header.',
             'Full PWA compliance with offline service worker asset caching and in-app install flow.',
-          ],
-        },
-        {
-          category: 'Signature NOVA Features',
-          icon: Sparkles,
-          color: 'text-cyan-400',
-          points: [
-            'NOVA Dashboard with real-time productivity statistics, pinned tools, and quick launchpad.',
-            'Universal File Converter with multi-format drag-and-drop processing for images and text.',
-            'Mini Image Studio with crop, resize, rotate, flip, filters, and format conversion.',
-            'NOVA Code Playground with live sandboxed HTML/CSS/JS preview and built-in console logger.',
-            'File Inspector & Hex Dump Viewer with cryptographic checksums (SHA-256/SHA-1/MD5).',
-            'CSV-to-Chart Generator for interactive Bar, Line, Area, and Donut SVG/PNG charts.',
-            'Advanced QR Studio with custom frames, colors, and built-in QR Code Validator.',
-            'Accessibility Checker for WCAG 2.1 AA/AAA contrast ratios and color blindness simulation.',
-            'NOVA Workspace for persistent browser-local notes, checklists, and calculations.',
           ],
         },
         {
@@ -45,9 +61,8 @@ export const ChangelogPage: React.FC = () => {
           icon: Cpu,
           color: 'text-emerald-400',
           points: [
-            '100% in-browser client execution: zero telemetry, zero mandatory user accounts, zero server file uploads.',
-            'Lazy-loaded suite code-splitting to ensure instantaneous first-paint on low-end mobile devices.',
-            'Zero build errors, verified route normalization, and automated sitemap generation for Cloudflare Pages.',
+            '100% in-browser client execution: zero telemetry clutter, zero mandatory user accounts, zero server file uploads.',
+            'Cross-device JSON Export & Import backup for Favorites, Recent history, Workspace, and Settings.',
           ],
         },
       ],
@@ -57,17 +72,16 @@ export const ChangelogPage: React.FC = () => {
       date: 'Foundational Upgrade',
       title: 'Arsenal Expansion to 100+ Functional Tools',
       badge: 'Milestone',
-      badgeColor: 'bg-cyan-500/10 text-cyan-500 border-cyan-500/30',
+      badgeColor: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30',
       items: [
         {
           category: 'Tooling',
           icon: Wrench,
           color: 'text-amber-400',
           points: [
-            'Expanded tool registry from 61 to 100+ fully-implemented client-side tools across 12 distinct suites.',
+            'Expanded tool registry to 107 client-side tools across 12 distinct suites.',
             'Added Financial calculators (GST with CGST/SGST, Reducing-balance EMI, Date Differences).',
             'Added Web Crypto AES-GCM 256-bit Text Encryption and Decryption.',
-            'Added Student suite: GPA/CGPA calculators, Pomodoro timer, and Fraction simplifiers.',
           ],
         },
       ],
@@ -86,7 +100,7 @@ export const ChangelogPage: React.FC = () => {
           Changelog & Platform Evolution
         </h1>
         <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-          Explore the latest improvements, newly launched utility suites, and performance optimizations.
+          Explore the latest NOVA 2.0 ("NOVA REBORN") ecosystem studios, utilities, and architectural improvements.
         </p>
       </div>
 

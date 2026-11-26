@@ -9,6 +9,7 @@ import { TOOLS_DATA } from '../data/toolsData';
 import { ToolDispatcher } from '../tools/ToolDispatcher';
 import { copyToClipboard } from '../utils/clipboard';
 import { ToolRating } from '../components/ToolRating';
+import { trackToolOpen } from '../utils/analytics';
 
 interface ToolDetailPageProps {
   tool: ToolDefinition;
@@ -19,10 +20,10 @@ export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
   const [copiedShare, setCopiedShare] = React.useState<boolean>(false);
   const [shareFailed, setShareFailed] = React.useState<boolean>(false);
 
-  // Record this tool in recently used
+  // Record this tool in recently used & fire non-blocking analytics event
   useEffect(() => {
     addRecent(tool.slug);
-    // Scroll to top
+    trackToolOpen(tool.slug, tool.suite);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [tool.slug]);
 

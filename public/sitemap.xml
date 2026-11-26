@@ -3,6 +3,16 @@
   <url><loc>https://nova-tools2.pages.dev/</loc></url>
   <url><loc>https://nova-tools2.pages.dev/dashboard</loc></url>
   <url><loc>https://nova-tools2.pages.dev/workspace</loc></url>
+  <url><loc>https://nova-tools2.pages.dev/clipboard-vault</loc></url>
+  <url><loc>https://nova-tools2.pages.dev/categories</loc></url>
+  <url><loc>https://nova-tools2.pages.dev/file-studio</loc></url>
+  <url><loc>https://nova-tools2.pages.dev/developer-lab</loc></url>
+  <url><loc>https://nova-tools2.pages.dev/design-studio</loc></url>
+  <url><loc>https://nova-tools2.pages.dev/qr-studio</loc></url>
+  <url><loc>https://nova-tools2.pages.dev/focus</loc></url>
+  <url><loc>https://nova-tools2.pages.dev/learning-hub</loc></url>
+  <url><loc>https://nova-tools2.pages.dev/browser-utilities</loc></url>
+  <url><loc>https://nova-tools2.pages.dev/workflows</loc></url>
   <url><loc>https://nova-tools2.pages.dev/changelog</loc></url>
   <url><loc>https://nova-tools2.pages.dev/tools</loc></url>
   <url><loc>https://nova-tools2.pages.dev/about</loc></url>
@@ -114,4 +124,8 @@
   <url><loc>https://nova-tools2.pages.dev/tools/emi-calculator</loc></url>
   <url><loc>https://nova-tools2.pages.dev/tools/date-difference-calculator</loc></url>
   <url><loc>https://nova-tools2.pages.dev/tools/roman-numeral-converter</loc></url>
+  <url><loc>https://nova-tools2.pages.dev/tools/code-playground</loc></url>
+  <url><loc>https://nova-tools2.pages.dev/tools/file-inspector</loc></url>
+  <url><loc>https://nova-tools2.pages.dev/tools/chart-generator</loc></url>
+  <url><loc>https://nova-tools2.pages.dev/tools/periodic-table</loc></url>
 </urlset>

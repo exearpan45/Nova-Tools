@@ -1,11 +1,13 @@
 import React, { useState, useMemo } from 'react';
-import { Star, Search, Trash2, ArrowRight, Sparkles } from 'lucide-react';
+import { Star, Search, Trash2, ArrowRight, Sparkles, Download, Upload } from 'lucide-react';
 import { useNova } from '../context/NovaContext';
+import { useToast } from '../context/ToastContext';
 import { TOOLS_DATA } from '../data/toolsData';
 import { SUITES_DATA } from '../data/suitesData';
 
 export const FavoritesPage: React.FC = () => {
-  const { favorites, toggleFavorite, navigate } = useNova();
+  const { favorites, toggleFavorite, navigate, exportUserData, importUserData } = useNova();
+  const { showToast } = useToast();
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const favoritedTools = useMemo(() => {
@@ -24,29 +26,65 @@ export const FavoritesPage: React.FC = () => {
   }, [favorites, searchQuery]);
 
   return (
-    <div className="space-y-8 animate-page-enter">
+    <div className="space-y-6 sm:space-y-8 animate-page-enter">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
             Favorite Tools
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Your pinned quick-access workspace ({favorites.length} saved)
+            Your pinned quick-access workspace ({favorites.length} saved) · 100% private in-browser storage
           </p>
         </div>
 
-        {favorites.length > 0 && (
-          <div className="relative w-full sm:w-64">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={exportUserData}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-violet-500/30 bg-violet-500/10 hover:bg-violet-500/20 text-violet-700 dark:text-violet-300 text-xs font-semibold shadow-xs"
+            title="Export favorites & settings to a portable JSON file"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Export JSON</span>
+          </button>
+
+          <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold cursor-pointer shadow-xs hover:border-cyan-500">
+            <Upload className="w-3.5 h-3.5 text-cyan-500" />
+            <span>Import JSON</span>
             <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search saved favorites..."
-              className="w-full pl-9 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"
+              type="file"
+              accept=".json"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                  const text = event.target?.result as string;
+                  if (text) {
+                    const res = importUserData(text);
+                    showToast(res.message, res.success ? 'success' : 'error');
+                  }
+                };
+                reader.readAsText(file);
+                e.target.value = '';
+              }}
             />
-          </div>
-        )}
+          </label>
+
+          {favorites.length > 0 && (
+            <div className="relative w-full sm:w-56 mt-2 sm:mt-0">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search favorites..."
+                className="w-full pl-9 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       {favoritedTools.length > 0 ? (

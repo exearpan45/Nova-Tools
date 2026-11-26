@@ -18,7 +18,57 @@ const STATIC_PAGES = [
   {
     path: '/workspace',
     title: 'Workspace & Notes — NOVA TOOLS',
-    description: 'Private browser-local workspace for notes, task checklists, and quick scratchpad calculations with zero server tracking.'
+    description: 'Private browser-local workspace with customizable widgets, clipboard snippets vault, collections, notes, tasks, and quick math calculations.'
+  },
+  {
+    path: '/clipboard-vault',
+    title: 'Clipboard & Snippets Vault — NOVA TOOLS',
+    description: 'Save, categorize, edit, search, and export reusable code snippets, links, and templates directly in browser storage.'
+  },
+  {
+    path: '/categories',
+    title: 'Categories Explorer — NOVA TOOLS',
+    description: 'Browse all 12 curated utility suites covering images, PDFs, developer tools, calculators, security, data, design, and writing.'
+  },
+  {
+    path: '/file-studio',
+    title: 'File Studio & Batch Converter — NOVA TOOLS',
+    description: 'Inspect file binary signatures, process batches of images and JSON locally, and download bundled ZIP archives with zero server uploads.'
+  },
+  {
+    path: '/developer-lab',
+    title: 'Developer Lab Workbench — NOVA TOOLS',
+    description: 'Unified multi-tab developer workbench featuring a sandboxed Code Playground, JSON formatter, Regex tester, JWT decoder, and File Inspector.'
+  },
+  {
+    path: '/design-studio',
+    title: 'Design Studio Workbench — NOVA TOOLS',
+    description: 'Create CSS gradients, box shadows, glassmorphism cards, WCAG-accessible palettes, SVG optimizations, and crisp favicons in your browser.'
+  },
+  {
+    path: '/qr-studio',
+    title: 'QR & Barcode Studio — NOVA TOOLS',
+    description: 'Build branded QR codes for URLs, Wi-Fi, and vCards with logos, generate Code 128 barcodes, print sheets, or scan codes locally.'
+  },
+  {
+    path: '/focus',
+    title: 'Focus & Productivity Studio — NOVA TOOLS',
+    description: 'Timestamp-accurate Pomodoro focus timer, countdown presets, stopwatch, Zen mode, and local session tracking.'
+  },
+  {
+    path: '/learning-hub',
+    title: 'Learning & Reference Hub — NOVA TOOLS',
+    description: 'Searchable interactive references for HTML, CSS, JavaScript, Python, math formulas, unit constants, and keyboard shortcuts.'
+  },
+  {
+    path: '/browser-utilities',
+    title: 'Browser & Device Utilities — NOVA TOOLS',
+    description: 'Inspect live viewport dimensions, test keyboard and mouse events, and audit browser localStorage and sessionStorage safely.'
+  },
+  {
+    path: '/workflows',
+    title: 'NOVA Flow Workflows — NOVA TOOLS',
+    description: 'Automate multi-step file, PDF, image, JSON, and CSV pipelines directly in your browser with portable JSON workflow sharing.'
   },
   {
     path: '/changelog',

@@ -231,8 +231,8 @@ transition: all 0.2s ease;`;
 
           {/* Frosted Glass Demo Container with Colorful Background Shapes */}
           <div className="relative w-full h-80 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-950 overflow-hidden flex items-center justify-center p-8">
-            <div className="absolute top-4 left-6 w-32 h-32 rounded-full bg-cyan-500 blur-xl opacity-70 animate-pulse" />
-            <div className="absolute bottom-4 right-6 w-36 h-36 rounded-full bg-fuchsia-500 blur-xl opacity-70 animate-pulse" />
+            <div className="absolute top-4 left-6 w-32 h-32 rounded-full bg-cyan-500 blur-xl opacity-70" />
+            <div className="absolute bottom-4 right-6 w-36 h-36 rounded-full bg-fuchsia-500 blur-xl opacity-70" />
             <div
               className="relative p-6 rounded-2xl shadow-xl max-w-sm text-center text-white"
               style={{

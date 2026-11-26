@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Grid, Search, Star, Menu } from 'lucide-react';
+import { Home, Grid, Search, LayoutDashboard, Settings } from 'lucide-react';
 import { useNova } from '../context/NovaContext';
 
 export const MobileNav: React.FC = () => {
@@ -10,14 +10,14 @@ export const MobileNav: React.FC = () => {
     { id: 'tools', label: 'Tools', icon: Grid, path: '/tools', action: () => navigate('/tools') },
     { id: 'search', label: 'Search', icon: Search, action: () => setSearchOpen(true) },
     {
-      id: 'favorites',
-      label: 'Favorites',
-      icon: Star,
-      path: '/favorites',
+      id: 'workspace',
+      label: 'Workspace',
+      icon: LayoutDashboard,
+      path: '/workspace',
       badge: favorites.length,
-      action: () => navigate('/favorites'),
+      action: () => navigate('/workspace'),
     },
-    { id: 'menu', label: 'Menu', icon: Menu, path: '/settings', action: () => navigate('/settings') },
+    { id: 'settings', label: 'Settings', icon: Settings, path: '/settings', action: () => navigate('/settings') },
   ];
 
   return (
@@ -36,6 +36,7 @@ export const MobileNav: React.FC = () => {
         return (
           <button
             key={item.id}
+            type="button"
             onClick={item.action}
             className={`flex flex-col items-center justify-center min-w-[54px] h-[52px] rounded-xl text-[10px] font-medium transition-all active:scale-90 relative ${
               isActive

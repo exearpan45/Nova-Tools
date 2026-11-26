@@ -3473,9 +3473,162 @@ const RAW_TOOLS_DATA: Omit<ToolDefinition, 'suite'>[] = [
     }
   ],
   relatedSlugs: [
-    "calculator",
-    "number-base-converter",
-    "unit-converter"
+    'calculator',
+    'number-base-converter',
+    'unit-converter'
+  ]
+},
+{
+  id: 'code-playground',
+  slug: 'code-playground',
+  name: 'Live Code Playground',
+  description: 'Write HTML, CSS, and JavaScript side by side with a sandboxed live preview, captured console logs, and single-file HTML export.',
+  category: 'Developer Tools',
+  keywords: ['html', 'css', 'javascript', 'playground', 'sandbox', 'live preview', 'codepen', 'console'],
+  icon: 'Terminal',
+  popular: true,
+  seoTitle: 'Live HTML, CSS & JS Code Playground - Sandboxed Browser IDE',
+  seoDescription: 'Build and test HTML, CSS, and JavaScript live in an isolated sandboxed preview with console output and one-click HTML download.',
+  whatItDoes: [
+    'Provides tabbed HTML, CSS, and JavaScript editors beside a sandboxed iframe preview that updates automatically as you type.',
+    'Captures console.log and runtime errors from the preview into a dedicated Console tab and exports your project as a standalone HTML file.'
+  ],
+  howToUse: [
+    'Switch between HTML, CSS, and JS tabs or load one of the starter templates.',
+    'Watch the sandboxed preview update live and open the Console tab to inspect logs.',
+    'Click Export .HTML to download a self-contained webpage.'
+  ],
+  example: {
+    input: 'HTML + CSS + JS snippets (Counter, Neon Card, Particles)',
+    output: 'Live rendered interactive component inside an isolated sandbox',
+    note: 'JavaScript executes strictly inside an isolated iframe sandbox.'
+  },
+  howItWorks: 'Assembles an HTML document with embedded styles and scripts inside a sandboxed iframe attribute and bridges console output safely via window.postMessage.',
+  privacyInfo: 'All code editing and execution happens locally in your browser with zero external requests.',
+  faqs: [
+    {
+      question: 'Is user JavaScript isolated from NOVA TOOLS?',
+      answer: 'Yes. The preview iframe runs under sandbox="allow-scripts allow-modals" without allow-same-origin, preventing access to main app storage.'
+    }
+  ],
+  relatedSlugs: [
+    'html-formatter',
+    'css-formatter',
+    'regex-tester'
+  ]
+},
+{
+  id: 'file-inspector',
+  slug: 'file-inspector',
+  name: 'File Inspector & Hex Viewer',
+  description: 'Inspect any local file to view MIME metadata, SHA-256/SHA-384/SHA-1 checksums, and a paginated 16-byte hex + ASCII dump.',
+  category: 'Developer Tools',
+  keywords: ['hex', 'dump', 'binary', 'inspector', 'sha256', 'sha1', 'metadata', 'mime', 'magic bytes'],
+  icon: 'Binary',
+  popular: true,
+  seoTitle: 'File Inspector & Hex Dump Viewer - Checksums & Metadata',
+  seoDescription: 'Examine any file locally in your browser to inspect byte size, MIME type, SHA-256/SHA-384/SHA-1 hashes, and hex/ASCII dump.',
+  whatItDoes: [
+    'Reads any dropped or selected file locally into an ArrayBuffer to report exact byte size, MIME type, and last modified date.',
+    'Computes SHA-256, SHA-384, and SHA-1 digests via Web Crypto and renders a paginated 16-byte/line hex and ASCII header dump.'
+  ],
+  howToUse: [
+    'Drag and drop any file into the upload zone or click to pick a file.',
+    'Copy cryptographic checksums or browse the hex and ASCII rows using Previous/Next Page.'
+  ],
+  example: {
+    input: 'Any local binary, image, archive, or document file',
+    output: 'SHA-256 / SHA-384 / SHA-1 hashes + 00000000 hex & ASCII dump',
+    note: 'Hex dump inspects the first 4 KB header smoothly without freezing mobile browsers.'
+  },
+  howItWorks: 'Uses File.arrayBuffer(), crypto.subtle.digest(), and Uint8Array byte formatting to render hexadecimal offsets alongside printable ASCII characters.',
+  privacyInfo: 'Files are read strictly in local RAM and are never uploaded anywhere.',
+  faqs: [
+    {
+      question: 'Does the File Inspector upload large files to a server?',
+      answer: 'No. File metadata, cryptographic hashes, and the hex dump are computed completely offline in your browser memory.'
+    }
+  ],
+  relatedSlugs: [
+    'hash-generator',
+    'file-type-detector',
+    'file-hash-checker'
+  ]
+},
+{
+  id: 'chart-generator',
+  slug: 'chart-generator',
+  name: 'CSV-to-Chart Generator',
+  description: 'Turn CSV label and value pairs into Bar, Line, Area, or Donut charts with custom colors and instant SVG or PNG export.',
+  category: 'Converters',
+  keywords: ['chart', 'graph', 'csv', 'bar chart', 'line chart', 'area chart', 'donut chart', 'svg export', 'data visualization'],
+  icon: 'BarChart3',
+  popular: true,
+  seoTitle: 'CSV-to-Chart Studio - Bar, Line, Area & Donut SVG/PNG Charts',
+  seoDescription: 'Paste CSV data to build crisp Bar, Line, Area, or Donut charts locally and download publication-ready SVG or PNG graphics.',
+  whatItDoes: [
+    'Parses comma-separated label and numeric value rows into responsive SVG Bar, Line, Area, and Donut charts.',
+    'Lets you customize the chart title, accent palette, and export crisp SVG vectors or high-resolution PNG images.'
+  ],
+  howToUse: [
+    'Paste two-column CSV data (Label, Value) on the left editor.',
+    'Choose Bar, Line, Area, or Donut mode, adjust the title and accent color, and export as SVG or PNG.'
+  ],
+  example: {
+    input: 'Month,Revenue\nJan,42000\nFeb,58000\nMar,74000',
+    output: 'Interactive vector Bar/Line/Area/Donut chart ready for SVG or PNG download',
+    note: 'Supports real-time editing and automatic axis scaling.'
+  },
+  howItWorks: 'Parses CSV rows in memory, computes normalized plot coordinates or SVG arc paths, and serializes the SVG DOM for vector or canvas-backed PNG download.',
+  privacyInfo: 'Spreadsheet and chart data remain strictly inside your browser.',
+  faqs: [
+    {
+      question: 'Can I export charts with transparent vector scalability?',
+      answer: 'Yes. Clicking SVG exports pure scalable vector markup, while PNG renders a crisp 920x520 raster image.'
+    }
+  ],
+  relatedSlugs: [
+    'csv-viewer',
+    'csv-to-json',
+    'json-to-csv'
+  ]
+},
+{
+  id: 'periodic-table',
+  slug: 'periodic-table',
+  name: 'Interactive Periodic Table',
+  description: 'Explore all 118 chemical elements with category filters, instant search, electron configurations, atomic mass, and discovery history.',
+  category: 'Converters',
+  keywords: ['periodic table', 'chemistry', 'elements', 'atomic number', 'electron configuration', 'atomic mass', 'science'],
+  icon: 'Atom',
+  popular: true,
+  seoTitle: 'Interactive Periodic Table of All 118 Elements - Chemistry Reference',
+  seoDescription: 'Search and inspect all 118 chemical elements by symbol, atomic number, category, electron configuration, standard phase, and electronegativity.',
+  whatItDoes: [
+    'Displays the complete 18-column Periodic Table including Lanthanides and Actinides for all 118 known chemical elements.',
+    'Provides instant search by name, symbol, or atomic number alongside chemical family filters and a detailed element inspector card.'
+  ],
+  howToUse: [
+    'Click any element tile in the periodic grid or search by name, symbol (e.g., Fe), or atomic number.',
+    'Use chemical category chips to highlight alkali metals, noble gases, transition metals, lanthanides, and more.'
+  ],
+  example: {
+    input: 'Select Element #6 (C) or search "Carbon"',
+    output: 'Atomic Mass 12.011 · Nonmetal · [He] 2s² 2p² · Group 14, Period 2',
+    note: 'Works completely offline for chemistry study and lab reference.'
+  },
+  howItWorks: 'Combines an offline dataset of all 118 IUPAC elements mapped to exact 18-column periodic coordinates with real-time filtering.',
+  privacyInfo: 'All element data is bundled locally and works offline with zero network calls.',
+  faqs: [
+    {
+      question: 'Are all 118 elements up to Oganesson included?',
+      answer: 'Yes, every element from Hydrogen (1) through Oganesson (118) is included with electron configuration, phase, and group/period data.'
+    }
+  ],
+  relatedSlugs: [
+    'scientific-calculator',
+    'unit-converter',
+    'fraction-calculator'
   ]
 },
 ];
@@ -3548,7 +3701,11 @@ export const TOOLS_DATA: ToolDefinition[] = RAW_TOOLS_DATA.map((tool) => ({
     'gst-calculator': 'calculators',
     'emi-calculator': 'calculators',
     'date-difference-calculator': 'calculators',
-    'roman-numeral-converter': 'calculators'
+    'roman-numeral-converter': 'calculators',
+    'code-playground': 'developer',
+    'file-inspector': 'developer',
+    'chart-generator': 'data',
+    'periodic-table': 'student'
   } as Record<string, ToolSuite>)[tool.id] || (tool.id === 'qr-generator'
     ? 'web'
     : tool.id === 'data-converter'
