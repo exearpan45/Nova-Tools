@@ -15,6 +15,7 @@ import { DEFAULT_WORKFLOWS } from '../data/workflowsData';
 import { TOOLS_BY_SLUG } from '../data/toolsData';
 import { playSound } from '../utils/soundEffects';
 import { trackFavoriteToggled } from '../utils/analytics';
+import { resolveTheme } from '../utils/theme';
 
 export const DEFAULT_WIDGET_LAYOUT: WorkspaceWidgetConfig[] = [
   { id: 'welcome', label: 'Welcome Overview', visible: true },
@@ -316,9 +317,7 @@ export const NovaProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const doc = document.documentElement;
     const media = window.matchMedia('(prefers-color-scheme: dark)');
     const applyTheme = () => {
-      const themeMode = settings.theme === 'system'
-        ? (media.matches ? 'dark' : 'light')
-        : settings.theme;
+      const themeMode = resolveTheme(settings.theme, media.matches);
       doc.classList.toggle('dark', themeMode === 'dark');
       doc.classList.toggle('light', themeMode === 'light');
       doc.style.setProperty('background-color', themeMode === 'light' ? '#f8fafc' : '#080D1C', 'important');
