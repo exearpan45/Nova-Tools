@@ -16,7 +16,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <div>
             <div className="flex items-center gap-2">
               <span className="font-semibold text-sm tracking-tight text-neutral-900 dark:text-neutral-100">
-                NOVA <span className="text-blue-600 dark:text-blue-400 font-medium">TOOLS</span>
+                NOVA <span className="text-blue-600 dark:text-blue-400 font-medium">Tools</span>
               </span>
             </div>
             <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
