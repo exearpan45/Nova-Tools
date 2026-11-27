@@ -36,9 +36,9 @@ export const ChangelogPage: React.FC = () => {
     },
     {
       version: 'v2.2.0',
-      date: 'NOVA REBORN Release',
+      date: 'Ecosystem Expansion',
       title: '16-Module Ecosystem Architecture & Studio Workbenches',
-      badge: 'Latest Release',
+      badge: 'Previous Release',
       badgeColor: 'bg-cyan-500/10 text-cyan-500 border-cyan-500/30',
       items: [
         {
