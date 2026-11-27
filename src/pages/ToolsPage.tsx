@@ -6,6 +6,7 @@ import { useNova } from '../context/NovaContext';
 import { TOOLS_DATA } from '../data/toolsData';
 import { SUITE_LIST, SUITES_DATA } from '../data/suitesData';
 import { ToolSuite } from '../types';
+import { ToolIcon } from '../components/ToolIcon';
 
 export const ToolsPage: React.FC = () => {
   const { currentPath, navigate, isFavorite, toggleFavorite, settings } = useNova();
@@ -104,6 +105,44 @@ export const ToolsPage: React.FC = () => {
           </div>
         </div>
       </div></div>
+
+      {/* Visual suite explorer: all 12 suites are first-class destinations. */}
+      <section className="nova-suite-explorer space-y-3" aria-labelledby="suite-explorer-title">
+        <div className="flex items-end justify-between gap-3">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[.18em] text-violet-600 dark:text-violet-300">Explore the ecosystem</p>
+            <h2 id="suite-explorer-title" className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">Choose your studio</h2>
+          </div>
+          <span className="text-[11px] text-slate-500 dark:text-slate-400">12 focused suites</span>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-3">
+          {SUITE_LIST.map((suite) => {
+            const count = TOOLS_DATA.filter((tool) => tool.suite === suite.id).length;
+            const active = selectedSuite === suite.id;
+            return (
+              <button
+                key={suite.id}
+                type="button"
+                onClick={() => handleSelectSuite(suite.id)}
+                aria-pressed={active}
+                className={`nova-suite-card group relative min-w-0 overflow-hidden rounded-2xl border p-3.5 sm:p-4 text-left transition-all ${active ? 'is-active' : ''}`}
+                style={{ '--suite-accent': suite.accentColor } as React.CSSProperties}
+              >
+                <span className="pointer-events-none absolute -right-7 -top-8 h-20 w-20 rounded-full opacity-10 blur-2xl" style={{ backgroundColor: suite.accentColor }} />
+                <span className="relative flex items-center justify-between gap-2">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl" style={{ backgroundColor: `${suite.accentColor}18`, color: suite.accentColor }}>
+                    <ToolIcon name={suite.icon} className="h-4.5 w-4.5" />
+                  </span>
+                  <span className="rounded-full px-2 py-1 text-[10px] font-bold tabular-nums" style={{ backgroundColor: `${suite.accentColor}16`, color: suite.accentColor }}>{count} tools</span>
+                </span>
+                <span className="relative mt-3 block text-xs sm:text-sm font-bold text-slate-900 dark:text-white">{suite.name}</span>
+                <span className="relative mt-1 block text-[10px] sm:text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-2">{suite.description}</span>
+                <span className="relative mt-3 flex items-center gap-1 text-[10px] font-bold" style={{ color: suite.accentColor }}>{active ? 'Currently viewing' : 'Explore suite'} <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" /></span>
+              </button>
+            );
+          })}
+        </div>
+      </section>
 
       {/* Mobile suite picker: avoids a tiny 12-tab strip on phones. */}
       <div className="sm:hidden">
