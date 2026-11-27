@@ -6,21 +6,18 @@
       (function() {
         function applyInitialTheme() {
           try {
-            var t = localStorage.getItem('novatools_theme');
-            var isDark = t ? (t === 'dark') : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            var stored = localStorage.getItem('nova_v2_settings');
+            var settings = stored ? JSON.parse(stored) : null;
+            var preference = settings && settings.theme ? settings.theme : localStorage.getItem('novatools_theme');
+            var isDark = preference === 'system' || !preference
+              ? !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+              : preference === 'dark';
             var doc = document.documentElement;
             doc.classList.add('no-transitions');
-            if (isDark) {
-              doc.classList.add('dark');
-              doc.classList.remove('light');
-              doc.style.setProperty('background-color', '#121214', 'important');
-              doc.style.setProperty('color-scheme', 'dark', 'important');
-            } else {
-              doc.classList.remove('dark');
-              doc.classList.add('light');
-              doc.style.setProperty('background-color', '#ffffff', 'important');
-              doc.style.setProperty('color-scheme', 'light', 'important');
-            }
+            doc.classList.toggle('dark', isDark);
+            doc.classList.toggle('light', !isDark);
+            doc.style.setProperty('background-color', isDark ? '#080D1C' : '#f8fafc', 'important');
+            doc.style.setProperty('color-scheme', isDark ? 'dark' : 'light', 'important');
           } catch(e) {}
         }
         applyInitialTheme();
