@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import '../styles/nova-tool-redesign.css';
 import {
   Search, Grid, List, Star, Filter, ArrowRight, Sparkles, Check
 } from 'lucide-react';
