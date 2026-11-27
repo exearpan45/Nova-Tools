@@ -1,0 +1,62 @@
+/* NOVA 2.0 design system: shared, lightweight polish for every route and suite. */
+:root {
+  --nova-radius-sm: .75rem;
+  --nova-radius-md: 1rem;
+  --nova-radius-lg: 1.35rem;
+  --nova-ease: cubic-bezier(.2,.75,.25,1);
+  --nova-shadow-soft: 0 18px 48px -34px rgba(40,48,90,.32);
+  --nova-ring: color-mix(in srgb, var(--nova-accent, #7657ff) 24%, transparent);
+}
+html { scrollbar-gutter: stable; }
+body { accent-color: var(--nova-accent, #7657ff); }
+::selection { background: color-mix(in srgb, var(--nova-accent, #7657ff) 26%, transparent); }
+:where(button,a,input,select,textarea,[role="button"]):focus-visible {
+  outline: 2px solid var(--nova-accent, #7657ff);
+  outline-offset: 3px;
+}
+:where(button,a) { -webkit-tap-highlight-color: transparent; }
+:where(input,select,textarea) { min-width: 0; }
+:where(button):disabled { cursor: not-allowed; }
+html.dark {
+  --nova-panel-glass: rgba(15,22,40,.78);
+  --nova-panel-line: rgba(164,178,220,.14);
+}
+html.light {
+  --nova-panel-glass: rgba(255,255,255,.82);
+  --nova-panel-line: rgba(40,55,90,.10);
+}
+@supports (backdrop-filter: blur(12px)) {
+  header, .nova-glass {
+    backdrop-filter: blur(14px) saturate(135%);
+    -webkit-backdrop-filter: blur(14px) saturate(135%);
+  }
+}
+main :where(h1) {
+  letter-spacing: -.04em;
+  text-wrap: balance;
+}
+main :where(h2,h3) { letter-spacing: -.025em; text-wrap: balance; }
+main :where(p) { text-wrap: pretty; }
+main :where(img,canvas,svg,video) { max-width: 100%; }
+main :where(pre) { max-width: 100%; overflow-x: auto; }
+main :where(table) { max-width: 100%; }
+main :where(button:not(:disabled),a) { touch-action: manipulation; }
+.nova-suite-workspace, .nova-tool-page, .nova-tools-directory { min-width: 0; }
+.nova-suite-workspace :where(input,select,textarea) { max-width: 100%; }
+.nova-suite-workspace :where(button) { min-height: 2.35rem; }
+.nova-tool-page :where(button) { min-height: 2.4rem; }
+.compact-mode main { --nova-compact-gap: .75rem; }
+.compact-mode main .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem; }
+.high-contrast :focus-visible { outline-width: 3px; }
+@media (max-width: 640px) {
+  main { overflow-wrap: anywhere; }
+  main :where(input,select,textarea) { font-size: 16px; }
+  main :where(pre) { font-size: .78rem; }
+}
+@media (hover:hover) and (pointer:fine) {
+  main :where(button:not(:disabled),a) { transition: transform 160ms var(--nova-ease), border-color 160ms ease, box-shadow 160ms ease; }
+  main :where(button:not(:disabled),a):hover { border-color: color-mix(in srgb, var(--nova-accent, #7657ff) 34%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
