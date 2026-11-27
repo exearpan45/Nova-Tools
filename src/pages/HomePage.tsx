@@ -9,7 +9,7 @@ import { useNova } from '../context/NovaContext';
 import { SUITE_LIST, SUITES_DATA } from '../data/suitesData';
 import { FEATURED_TOOLS, TOOLS_BY_SLUG, TOOLS_DATA } from '../data/toolsData';
 
-const quickLaunch = [
+const quickActions = [
   { name: 'Calculator', slug: 'calculator', icon: Calculator, tint: '#9B8CFF' },
   { name: 'Image tools', slug: 'image-compressor', icon: Image, tint: '#48C6D8' },
   { name: 'JSON formatter', slug: 'json-formatter', icon: Braces, tint: '#F0B45B' },
@@ -104,7 +104,7 @@ export const HomePage: React.FC = () => {
           <button type="button" onClick={() => navigate('/tools')} className="inline-flex items-center gap-1 text-xs font-bold text-violet-600 hover:text-violet-500 dark:text-violet-300">All tools <ArrowRight className="h-3.5 w-3.5" /></button>
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
-          {quickLaunch.map((item) => {
+          {quickActions.map((item) => {
             const Icon = item.icon;
             return <button key={item.slug} type="button" onClick={() => navigate('/tools/' + item.slug)} className="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200/80 bg-white/80 p-3 text-left shadow-sm transition hover:-translate-y-1 hover:border-violet-300 hover:shadow-lg dark:border-white/10 dark:bg-slate-900/60 dark:hover:border-violet-400/40 sm:p-4">
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: item.tint + '20', color: item.tint }}><Icon className="h-5 w-5" /></span>
