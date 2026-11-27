@@ -50,11 +50,11 @@ export function updatePageSeo(options: RouteSeoOptions): void {
   setMeta('meta[property="og:description"]', 'content', description);
   setMeta('meta[property="og:url"]', 'content', fullCanonicalUrl);
   setMeta('meta[property="og:type"]', 'content', tool ? 'article' : 'website');
-  setMeta('meta[property="og:site_name"]', 'content', 'NOVA TOOLS');
+  setMeta('meta[property="og:site_name"]', 'content', 'NOVA Tools');
   setMeta('meta[property="og:image"]', 'content', `${BASE_URL}/og-image.png`);
   setMeta('meta[property="og:image:type"]', 'content', 'image/png');
   setMeta('meta[property="og:image:secure_url"]', 'content', `${BASE_URL}/og-image.png`);
-  setMeta('meta[property="og:image:alt"]', 'content', 'NOVA TOOLS — Simple tools. Done well.');
+  setMeta('meta[property="og:image:alt"]', 'content', 'NOVA Tools — Simple tools. Done well.');
 
   // 6. Twitter Card Tags
   setMeta('meta[name="twitter:card"]', 'content', 'summary_large_image');
@@ -79,7 +79,7 @@ export function updatePageSeo(options: RouteSeoOptions): void {
     schemas.push({
       '@context': 'https://schema.org',
       '@type': 'WebApplication',
-      name: `${tool.name} - NOVA TOOLS`,
+      name: `${tool.name} - NOVA Tools`,
       url: fullCanonicalUrl,
       description: tool.seoDescription || tool.description,
       applicationCategory: 'UtilitiesApplication',
@@ -142,7 +142,7 @@ export function updatePageSeo(options: RouteSeoOptions): void {
     schemas.push({
       '@context': 'https://schema.org',
       '@type': 'WebSite',
-      name: 'NOVA TOOLS',
+      name: 'NOVA Tools',
       url: `${BASE_URL}/`,
       description: 'Free, fast, simple tools for everyday tasks. Calculations, conversions, text tools, developer utilities and more.',
       author: {
