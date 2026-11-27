@@ -15,7 +15,7 @@ interface StaticPageProps {
 
 const UPDATED = 'October 12, 2026';
 const EMAIL = 'exe.arpan45@gmail.com';
-const SITE = 'https://nova-tools-arpan-9160.vercel.app/';
+const SITE = 'https://nova-tools-dun.vercel.app/';
 
 const pageClass = 'max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-8 sm:space-y-10 animate-page-enter';
 const headingClass = 'text-3xl sm:text-4xl font-black tracking-tight text-slate-950 dark:text-white';
