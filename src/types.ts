@@ -85,7 +85,7 @@ export interface WorkflowDefinition {
   estimatedTime: string;
 }
 
-export type ThemeId = 'dark' | 'light';
+export type ThemeId = 'dark' | 'light' | 'system';
 
 export interface UserSettings {
   theme: ThemeId;
