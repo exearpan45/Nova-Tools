@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
 const DIST_DIR = path.resolve(ROOT_DIR, 'dist');
-const BASE_URL = 'https://nova-tools2.pages.dev';
+const BASE_URL = 'https://nova-tools-arpan-9160.vercel.app';
 
 const STATIC_PAGES = [
   {
