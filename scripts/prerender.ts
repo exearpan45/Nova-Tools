@@ -7,113 +7,113 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '..');
 const DIST_DIR = path.resolve(ROOT_DIR, 'dist');
-const BASE_URL = 'https://nova-tools-arpan-9160.vercel.app';
+const BASE_URL = 'https://nova-tools-dun.vercel.app';
 
 const STATIC_PAGES = [
   {
     path: '/dashboard',
-    title: 'Command Dashboard — NOVA TOOLS',
+    title: 'Command Dashboard — NOVA Tools',
     description: 'Personalized utility dashboard with pinned favorites, recent operations, and quick launchpad for 100+ browser-based tools.'
   },
   {
     path: '/workspace',
-    title: 'Workspace & Notes — NOVA TOOLS',
+    title: 'Workspace & Notes — NOVA Tools',
     description: 'Private browser-local workspace with customizable widgets, clipboard snippets vault, collections, notes, tasks, and quick math calculations.'
   },
   {
     path: '/clipboard-vault',
-    title: 'Clipboard & Snippets Vault — NOVA TOOLS',
+    title: 'Clipboard & Snippets Vault — NOVA Tools',
     description: 'Save, categorize, edit, search, and export reusable code snippets, links, and templates directly in browser storage.'
   },
   {
     path: '/categories',
-    title: 'Categories Explorer — NOVA TOOLS',
+    title: 'Categories Explorer — NOVA Tools',
     description: 'Browse all 12 curated utility suites covering images, PDFs, developer tools, calculators, security, data, design, and writing.'
   },
   {
     path: '/file-studio',
-    title: 'File Studio & Batch Converter — NOVA TOOLS',
+    title: 'File Studio & Batch Converter — NOVA Tools',
     description: 'Inspect file binary signatures, process batches of images and JSON locally, and download bundled ZIP archives with zero server uploads.'
   },
   {
     path: '/developer-lab',
-    title: 'Developer Lab Workbench — NOVA TOOLS',
+    title: 'Developer Lab Workbench — NOVA Tools',
     description: 'Unified multi-tab developer workbench featuring a sandboxed Code Playground, JSON formatter, Regex tester, JWT decoder, and File Inspector.'
   },
   {
     path: '/design-studio',
-    title: 'Design Studio Workbench — NOVA TOOLS',
+    title: 'Design Studio Workbench — NOVA Tools',
     description: 'Create CSS gradients, box shadows, glassmorphism cards, WCAG-accessible palettes, SVG optimizations, and crisp favicons in your browser.'
   },
   {
     path: '/qr-studio',
-    title: 'QR & Barcode Studio — NOVA TOOLS',
+    title: 'QR & Barcode Studio — NOVA Tools',
     description: 'Build branded QR codes for URLs, Wi-Fi, and vCards with logos, generate Code 128 barcodes, print sheets, or scan codes locally.'
   },
   {
     path: '/focus',
-    title: 'Focus & Productivity Studio — NOVA TOOLS',
+    title: 'Focus & Productivity Studio — NOVA Tools',
     description: 'Timestamp-accurate Pomodoro focus timer, countdown presets, stopwatch, Zen mode, and local session tracking.'
   },
   {
     path: '/learning-hub',
-    title: 'Learning & Reference Hub — NOVA TOOLS',
+    title: 'Learning & Reference Hub — NOVA Tools',
     description: 'Searchable interactive references for HTML, CSS, JavaScript, Python, math formulas, unit constants, and keyboard shortcuts.'
   },
   {
     path: '/browser-utilities',
-    title: 'Browser & Device Utilities — NOVA TOOLS',
+    title: 'Browser & Device Utilities — NOVA Tools',
     description: 'Inspect live viewport dimensions, test keyboard and mouse events, and audit browser localStorage and sessionStorage safely.'
   },
   {
     path: '/workflows',
-    title: 'NOVA Flow Workflows — NOVA TOOLS',
+    title: 'NOVA Flow Workflows — NOVA Tools',
     description: 'Automate multi-step file, PDF, image, JSON, and CSV pipelines directly in your browser with portable JSON workflow sharing.'
   },
   {
     path: '/changelog',
-    title: "What's New & Changelog — NOVA TOOLS",
-    description: 'Read the latest updates, release notes, and newly launched features in NOVA TOOLS 2.0.'
+    title: "What's New & Changelog — NOVA Tools",
+    description: 'Read the latest updates, release notes, and newly launched features in NOVA Tools 2.0.'
   },
   {
     path: '/tools',
-    title: 'All Tools — NOVA TOOLS',
+    title: 'All Tools — NOVA Tools',
     description: 'Explore free browser-based calculators, converters, PDF and image utilities, text tools, developer helpers, and everyday productivity tools.'
   },
   {
     path: '/about',
-    title: 'About NOVA TOOLS — Mission & Philosophy',
-    description: 'Learn about NOVA TOOLS, an independent collection of browser-based calculators, file utilities, text tools, and developer helpers created by Arpan Goswami.'
+    title: 'About NOVA Tools — Mission & Philosophy',
+    description: 'Learn about NOVA Tools, an independent collection of browser-based calculators, file utilities, text tools, and developer helpers created by Arpan Goswami.'
   },
   {
     path: '/contact',
-    title: 'Contact — NOVA TOOLS',
-    description: 'Contact NOVA TOOLS to report a bug, suggest a new online utility, share accessibility feedback, or ask a question about the website.'
+    title: 'Contact — NOVA Tools',
+    description: 'Contact NOVA Tools to report a bug, suggest a new online utility, share accessibility feedback, or ask a question about the website.'
   },
   {
     path: '/privacy-policy',
-    title: 'Privacy Policy — NOVA TOOLS',
-    description: 'Read how NOVA TOOLS handles browser-based tool inputs, locally saved preferences, hosting requests, analytics, advertising, and third-party services.'
+    title: 'Privacy Policy — NOVA Tools',
+    description: 'Read how NOVA Tools handles browser-based tool inputs, locally saved preferences, hosting requests, analytics, advertising, and third-party services.'
   },
   {
     path: '/privacy',
-    title: 'Privacy Policy — NOVA TOOLS',
-    description: 'Read how NOVA TOOLS handles browser-based tool inputs, locally saved preferences, hosting requests, analytics, advertising, and third-party services.'
+    title: 'Privacy Policy — NOVA Tools',
+    description: 'Read how NOVA Tools handles browser-based tool inputs, locally saved preferences, hosting requests, analytics, advertising, and third-party services.'
   },
   {
     path: '/cookie-policy',
-    title: 'Cookie Policy — NOVA TOOLS',
-    description: 'Understand cookies, browser local storage, analytics, and advertising technologies that may be used while visiting NOVA TOOLS.'
+    title: 'Cookie Policy — NOVA Tools',
+    description: 'Understand cookies, browser local storage, analytics, and advertising technologies that may be used while visiting NOVA Tools.'
   },
   {
     path: '/terms',
-    title: 'Terms of Service — NOVA TOOLS',
-    description: 'Review the terms for using NOVA TOOLS online utilities, including availability, accuracy, permitted use, and intellectual property.'
+    title: 'Terms of Service — NOVA Tools',
+    description: 'Review the terms for using NOVA Tools online utilities, including availability, accuracy, permitted use, and intellectual property.'
   },
   {
     path: '/disclaimer',
-    title: 'Disclaimer — NOVA TOOLS',
-    description: 'Read important limitations for NOVA TOOLS calculators, converters, file utilities, technical outputs, and general-purpose information.'
+    title: 'Disclaimer — NOVA Tools',
+    description: 'Read important limitations for NOVA Tools calculators, converters, file utilities, technical outputs, and general-purpose information.'
   }
 ];
 
@@ -214,7 +214,7 @@ export function prerenderRoutes(): void {
     const toolDir = path.resolve(toolsBaseDir, tool.slug);
     fs.mkdirSync(toolDir, { recursive: true });
 
-    const title = tool.seoTitle || `${tool.name} — NOVA TOOLS`;
+    const title = tool.seoTitle || `${tool.name} — NOVA Tools`;
     const description = tool.seoDescription || tool.description;
     const canonicalUrl = `${BASE_URL}/tools/${tool.slug}`;
 
