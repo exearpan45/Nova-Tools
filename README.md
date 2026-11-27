@@ -3,7 +3,7 @@
 > **Simple tools. Done well.**  
 > Free, fast tools for everyday tasks.
 
-* **Domain:** [https://nova-tools-arpan-9160.vercel.app/](https://nova-tools-arpan-9160.vercel.app/)
+* **Domain:** [https://nova-tools-dun.vercel.app/](https://nova-tools-dun.vercel.app/)
 * **Creator:** Arpan Goswami
 * **Copyright:** © 2026 Copyright Arpan Goswami. All rights reserved.
 
@@ -64,7 +64,7 @@ npm run preview
 
 NOVA Tools is currently deployed through **Vercel with Git integration**.
 
-* **Production Domain:** `https://nova-tools-arpan-9160.vercel.app/`
+* **Production Domain:** `https://nova-tools-dun.vercel.app/`
 * **Build Command:** `npm run build`
 * **Build Output Directory:** `dist`
 * **Hosting:** Vercel
@@ -121,16 +121,16 @@ Once registered, the tool automatically appears in:
 
 ## 5. SEO & Search Console Readiness
 
-* **Canonical URLs:** All routes have dynamic canonical tags pointing to `https://nova-tools-arpan-9160.vercel.app/` or `https://nova-tools-arpan-9160.vercel.app/tools/{slug}`.
+* **Canonical URLs:** All routes have dynamic canonical tags pointing to `https://nova-tools-dun.vercel.app/` or `https://nova-tools-dun.vercel.app/tools/{slug}`.
 * **Open Graph & Twitter Cards:** Complete `og:title`, `og:description`, `og:image` (1200x630 banner), and `twitter:card`.
 * **Structured Data:** Schema.org `WebApplication` structured data embedded in `index.html`.
-* **Robots.txt:** Clean `public/robots.txt` allowing all legitimate crawlers and pointing to `https://nova-tools-arpan-9160.vercel.app/sitemap.xml`.
+* **Robots.txt:** Clean `public/robots.txt` allowing all legitimate crawlers and pointing to `https://nova-tools-dun.vercel.app/sitemap.xml`.
 * **Sitemap:** Automated generation via `generate-sitemap.ts` (`npm run sitemap`).
 
 ### Google Search Console Verification
-1. Add `nova-tools-arpan-9160.vercel.app` as a Domain or URL-prefix property in Google Search Console.
+1. Add `nova-tools-dun.vercel.app` as a Domain or URL-prefix property in Google Search Console.
 2. If using URL-prefix verification, follow Google's verification method shown for the property.
-3. Submit sitemap URL: `https://nova-tools-arpan-9160.vercel.app/sitemap.xml`.
+3. Submit sitemap URL: `https://nova-tools-dun.vercel.app/sitemap.xml`.
 
 ---
 
@@ -158,14 +158,14 @@ Once registered, the tool automatically appears in:
 * **Q: A calculation produces weird decimals like 0.30000000000000004?**  
   *A:* Tools use `Math.round((val + Number.EPSILON) * 1e8) / 1e8` for standard float precision normalization.
 * **Q: How to clear saved user data?**  
-  *A:* Click "Clear history" in Recently Used, reset ratings via the star rating reset button, or clear browser storage for `nova-tools-arpan-9160.vercel.app`.
+  *A:* Click "Clear history" in Recently Used, reset ratings via the star rating reset button, or clear browser storage for `nova-tools-dun.vercel.app`.
 
 ---
 
 ## 9. Copyright & License
 
 © 2026 Copyright **Arpan Goswami**. All rights reserved.  
-Official website: [https://nova-tools-arpan-9160.vercel.app/](https://nova-tools-arpan-9160.vercel.app/)
+Official website: [https://nova-tools-dun.vercel.app/](https://nova-tools-dun.vercel.app/)
 
 
 ## 10. NOVA 2.0 Design System
