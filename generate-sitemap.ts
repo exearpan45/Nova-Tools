@@ -6,7 +6,7 @@ import { TOOLS_DATA } from './src/data/toolsData';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const BASE_URL = 'https://nova-tools-arpan-9160.vercel.app';
+const BASE_URL = 'https://nova-tools-dun.vercel.app';
 
 const STATIC_ROUTES = [
   '/',
