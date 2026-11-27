@@ -39,6 +39,23 @@ const workflowSource = readFileSync(resolve('src/data/workflowsData.ts'), 'utf8'
 const dropZoneSource = readFileSync(resolve('src/components/SmartDropZone.tsx'), 'utf8');
 const homeSource = readFileSync(resolve('src/pages/HomePage.tsx'), 'utf8');
 const dispatcherSource = readFileSync(resolve('src/tools/ToolDispatcher.tsx'), 'utf8');
+
+const suiteSource = readFileSync(resolve('src/data/suitesData.ts'), 'utf8');
+const iconSource = readFileSync(resolve('src/components/ToolIcon.tsx'), 'utf8');
+const iconMapBlock = iconSource.match(/const ICONS:[\\s\\S]*?= \\{([\\s\\S]*?)\\n\\};/);
+if (!iconMapBlock) {
+  errors.push('ToolIcon registry map is missing.');
+} else {
+  const mappedIcons = new Set([...iconMapBlock[1].matchAll(/^\\s*([A-Z][A-Za-z0-9]*),?\\s*$/gm)].map((match) => match[1]));
+  const registryIcons = [
+    ...[...source.matchAll(/icon:\\s*['"]([^'"]+)['"]/g)].map((match) => match[1]),
+    ...[...suiteSource.matchAll(/icon:\\s*['"]([^'"]+)['"]/g)].map((match) => match[1]),
+  ];
+  for (const icon of new Set(registryIcons)) {
+    if (!mappedIcons.has(icon)) errors.push(`Icon is not mapped in ToolIcon: ${icon}`);
+  }
+}
+
 const typesSource = readFileSync(resolve('src/types.ts'), 'utf8');
 
 const workflowSlugs = [...workflowSource.matchAll(/toolSlug:\s*'([^']+)'/g)].map((match) => match[1]);
