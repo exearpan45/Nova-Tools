@@ -42,14 +42,18 @@ const dispatcherSource = readFileSync(resolve('src/tools/ToolDispatcher.tsx'), '
 
 const suiteSource = readFileSync(resolve('src/data/suitesData.ts'), 'utf8');
 const iconSource = readFileSync(resolve('src/components/ToolIcon.tsx'), 'utf8');
-const iconMapBlock = iconSource.match(/const ICONS:[\\s\\S]*?= \\{([\\s\\S]*?)\\n\\};/);
-if (!iconMapBlock) {
+const iconMapStart = iconSource.indexOf('const ICONS:');
+const iconMapOpen = iconSource.indexOf('{', iconMapStart);
+const iconMapEnd = iconSource.indexOf('\n};', iconMapOpen);
+if (iconMapStart < 0 || iconMapOpen < 0 || iconMapEnd < 0) {
   errors.push('ToolIcon registry map is missing.');
 } else {
-  const mappedIcons = new Set([...iconMapBlock[1].matchAll(/^\\s*([A-Z][A-Za-z0-9]*),?\\s*$/gm)].map((match) => match[1]));
+  const mappedIcons = new Set(
+    iconSource.slice(iconMapOpen + 1, iconMapEnd).split(',').map((name) => name.trim()).filter(Boolean)
+  );
   const registryIcons = [
-    ...[...source.matchAll(/icon:\\s*['"]([^'"]+)['"]/g)].map((match) => match[1]),
-    ...[...suiteSource.matchAll(/icon:\\s*['"]([^'"]+)['"]/g)].map((match) => match[1]),
+    ...[...source.matchAll(/icon:\s*['"]([^'"]+)['"]/g)].map((match) => match[1]),
+    ...[...suiteSource.matchAll(/icon:\s*['"]([^'"]+)['"]/g)].map((match) => match[1]),
   ];
   for (const icon of new Set(registryIcons)) {
     if (!mappedIcons.has(icon)) errors.push(`Icon is not mapped in ToolIcon: ${icon}`);
