@@ -64,7 +64,7 @@ export const ToolsPage: React.FC = () => {
   }, [selectedSuite, searchQuery]);
 
   return (
-    <div className="space-y-5 sm:space-y-8 animate-page-enter min-w-0">
+    <div className="nova-tools-directory space-y-5 sm:space-y-8 animate-page-enter min-w-0">
       {/* Header */}
       <div className="relative overflow-hidden rounded-3xl border border-violet-500/15 bg-gradient-to-br from-white via-violet-50/60 to-cyan-50/60 p-5 sm:p-7 dark:from-[#10182B] dark:via-[#11142B] dark:to-[#0B1B2A] shadow-lg shadow-violet-950/5"><div className="pointer-events-none absolute -right-10 -top-16 h-44 w-44 rounded-full bg-violet-500/10 blur-3xl" /><div className="relative flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
