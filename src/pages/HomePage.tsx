@@ -1,441 +1,196 @@
 import React from 'react';
 import {
-  Search, ArrowRight, Star, Sparkles, ChevronRight, GitFork, LayoutDashboard,
-  Layers, Code2, Palette, QrCode, Timer, BookOpen, Cpu, Clipboard, ShieldCheck, History
+  ArrowRight, ArrowUpRight, BookOpen, Braces, Calculator, Check, ChevronRight,
+  Clock3, Code2, Compass, Cpu, FileStack, GitBranch, Globe2, Image,
+  Layers3, LockKeyhole, Palette, QrCode, Search, ShieldCheck, Sparkles,
+  Star, Timer, Type, WandSparkles, Zap
 } from 'lucide-react';
 import { useNova } from '../context/NovaContext';
 import { SUITE_LIST, SUITES_DATA } from '../data/suitesData';
 import { FEATURED_TOOLS, TOOLS_BY_SLUG, TOOLS_DATA } from '../data/toolsData';
 
+const quickLaunch = [
+  { name: 'Calculator', slug: 'calculator', icon: Calculator, tint: '#9B8CFF' },
+  { name: 'Image tools', slug: 'image-compressor', icon: Image, tint: '#48C6D8' },
+  { name: 'JSON formatter', slug: 'json-formatter', icon: Braces, tint: '#F0B45B' },
+  { name: 'Word counter', slug: 'word-counter', icon: Type, tint: '#E58AB8' },
+  { name: 'QR generator', slug: 'qr-generator', icon: QrCode, tint: '#7DC79B' },
+  { name: 'Unit converter', slug: 'unit-converter', icon: Zap, tint: '#83A9FF' },
+];
+
+const studios = [
+  { title: 'File Studio', description: 'Inspect, convert and batch-process files in one calm workspace.', path: '/file-studio', icon: FileStack, tint: '#62B8FF', tag: 'FILES' },
+  { title: 'Developer Lab', description: 'Build, format, inspect and experiment with code.', path: '/developer-lab', icon: Code2, tint: '#75D6B0', tag: 'BUILD' },
+  { title: 'Design Studio', description: 'Explore palettes, gradients, contrast and visual assets.', path: '/design-studio', icon: Palette, tint: '#D69AFF', tag: 'CREATE' },
+  { title: 'QR Studio', description: 'Generate polished QR codes and useful barcodes.', path: '/qr-studio', icon: QrCode, tint: '#F2BD72', tag: 'SHARE' },
+  { title: 'Focus Studio', description: 'Make room for deep work with timers and simple goals.', path: '/focus', icon: Timer, tint: '#F08E9C', tag: 'FOCUS' },
+  { title: 'Learning Hub', description: 'Keep practical references and quick explanations close.', path: '/learning-hub', icon: BookOpen, tint: '#75B9E8', tag: 'LEARN' },
+  { title: 'NOVA Flow', description: 'Connect supported tools into repeatable local workflows.', path: '/workflows', icon: GitBranch, tint: '#A99AFF', tag: 'AUTOMATE' },
+  { title: 'Browser Utilities', description: 'Understand your browser, viewport and local storage.', path: '/browser-utilities', icon: Globe2, tint: '#76C9C1', tag: 'INSPECT' },
+];
+
 export const HomePage: React.FC = () => {
   const { navigate, setSearchOpen, isFavorite, toggleFavorite, recentTools, favorites } = useNova();
 
-  // Keep every shortcut aligned with a real tool slug in toolsData.
-  const quickActions = [
-    { name: 'Calculator', slug: 'calculator', icon: '🧮' },
-    { name: 'Percentage', slug: 'percentage-calculator', icon: '％' },
-    { name: 'Unit Convert', slug: 'unit-converter', icon: '📏' },
-    { name: 'Temperature', slug: 'temperature-converter', icon: '🌡️' },
-    { name: 'Format JSON', slug: 'json-formatter', icon: '🧩' },
-    { name: 'QR Code', slug: 'qr-generator', icon: '📱' },
-    { name: 'Password', slug: 'password-generator', icon: '🔒' },
-    { name: 'Word Counter', slug: 'word-counter', icon: '📝' },
-    { name: 'Base64', slug: 'base64', icon: '🔡' },
-    { name: 'UUID', slug: 'uuid-generator', icon: '🆔' },
-  ];
-
-  const ecosystemStudios = [
-    { title: 'File Studio', desc: 'Magic-byte inspection, batch image conversion & ZIP downloads', path: '/file-studio', icon: Layers, accent: '#3b82f6' },
-    { title: 'Developer Lab', desc: 'Multi-tab Code Playground, JSON, Regex, JWT & File Inspector', path: '/developer-lab', icon: Code2, accent: '#10b981' },
-    { title: 'Design Studio', desc: 'Palettes, WCAG Contrast, Gradients, Favicon & SVG Optimizer', path: '/design-studio', icon: Palette, accent: '#ec4899' },
-    { title: 'QR Studio', desc: 'Logo QR, Wi-Fi, vCard, Code 128 Barcode & Camera Scanner', path: '/qr-studio', icon: QrCode, accent: '#f59e0b' },
-    { title: 'Focus Studio', desc: 'Timestamp-accurate Pomodoro, Countdown presets & Zen Mode', path: '/focus', icon: Timer, accent: '#f43f5e' },
-    { title: 'Learning Hub', desc: 'Searchable references for HTML, CSS, JS, Python & Math', path: '/learning-hub', icon: BookOpen, accent: '#0ea5e9' },
-    { title: 'Snippets Vault', desc: 'Store reusable code blocks, links, prompts & templates', path: '/clipboard-vault', icon: Clipboard, accent: '#8b5cf6' },
-    { title: 'Browser Utilities', desc: 'Viewport DPR monitor, Storage Inspector & Key/Mouse tests', path: '/browser-utilities', icon: Cpu, accent: '#14b8a6' },
-  ];
-
   const recentPreview = recentTools
     .slice(0, 4)
-    .map((r) => TOOLS_BY_SLUG.get(r.slug))
-    .filter((t): t is NonNullable<typeof t> => Boolean(t));
+    .map((item) => TOOLS_BY_SLUG.get(item.slug))
+    .filter((tool): tool is NonNullable<typeof tool> => Boolean(tool));
+
+  const totalTools = TOOLS_DATA.length;
 
   return (
-    <div className="space-y-6 sm:space-y-8 md:space-y-12 animate-page-enter min-w-0">
-      {/* 1. Mobile Search Bar */}
-      <div className="md:hidden">
-        <button
-          type="button"
-          onClick={() => setSearchOpen(true)}
-          className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-slate-200/90 dark:border-slate-800/90 bg-white dark:bg-slate-900/80 text-slate-500 dark:text-slate-400 active:scale-[0.99] transition-all text-xs shadow-xs"
-          aria-label="Search tools"
-        >
-          <div className="flex items-center gap-2.5 truncate">
-            <Search className="w-4 h-4 text-cyan-500 shrink-0" />
-            <span className="font-medium text-slate-600 dark:text-slate-300">Search tools, studios, workflows...</span>
-          </div>
-          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 shrink-0">
-            Search
+    <div className="nova-home-v2 min-w-0 space-y-10 pb-8 sm:space-y-14">
+      <section className="relative isolate overflow-hidden rounded-[2rem] border border-white/10 bg-[#0B1020] px-5 py-8 text-white shadow-[0_28px_90px_-38px_rgba(69,75,190,.55)] sm:px-8 sm:py-11 lg:px-12 lg:py-14">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute -right-24 -top-36 h-[26rem] w-[26rem] rounded-full bg-violet-600/30 blur-[100px]" />
+          <div className="absolute -bottom-48 left-[28%] h-[25rem] w-[25rem] rounded-full bg-cyan-500/20 blur-[110px]" />
+          <div className="absolute inset-0 opacity-[0.12]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.18) 1px, transparent 1px)', backgroundSize: '42px 42px', maskImage: 'linear-gradient(to bottom, black, transparent 85%)' }} />
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-2 rounded-full border border-violet-300/25 bg-violet-300/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[.2em] text-violet-200">
+            <Sparkles className="h-3.5 w-3.5" /> NOVA TOOLS / YOUR DIGITAL WORKSPACE
           </span>
-        </button>
-      </div>
-
-      {/* 2. Hero Section */}
-      <section className="relative isolate overflow-hidden pt-6 pb-6 px-4 sm:px-6 md:pt-12 md:pb-10 text-left max-w-full mx-0 space-y-4 sm:space-y-5 md:space-y-6 nova-home-hero rounded-[1.75rem] border border-violet-500/20 bg-gradient-to-br from-white via-violet-50/70 to-cyan-50/70 dark:from-[#090E1D] dark:via-[#10132A] dark:to-[#071B2A] shadow-2xl shadow-violet-950/5 dark:shadow-black/20">
-        <div aria-hidden="true" className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-56 w-56 -translate-x-1/2 rounded-full bg-violet-500/15 blur-3xl" />
-        <div aria-hidden="true" className="pointer-events-none absolute -bottom-24 right-0 -z-10 h-48 w-48 rounded-full bg-cyan-400/10 blur-3xl" />
-
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 text-[10px] sm:text-xs font-bold tracking-wide">
-          <Sparkles className="w-3 h-3" />
-          <span>NOVA TOOLS 2.0 · ONE SPACE. INFINITE POSSIBILITIES.</span>
-        </div>
-
-        <h1 className="text-[2.2rem] min-[390px]:text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.03] text-balance max-w-4xl">
-          Everything You Need.{' '}
-          <span className="bg-gradient-to-r from-cyan-400 via-violet-400 to-pink-500 bg-clip-text text-transparent">
-            One Powerful Space.
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300/20 bg-emerald-300/10 px-2.5 py-1.5 text-[10px] font-semibold text-emerald-200">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" /> Browser-native
           </span>
-        </h1>
-
-        <p className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
-          Discover, create, organize and transform with a powerful collection of {TOOLS_DATA.length} browser-native utilities, 8 focused studios, and automated local workflows designed to make everyday work simpler.
-        </p>
-
-        <div className="flex flex-col min-[420px]:flex-row flex-wrap items-stretch min-[420px]:items-center justify-start gap-2.5 sm:gap-3 pt-2">
-          <button
-            type="button"
-            onClick={() => navigate('/tools')}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-4 sm:px-5 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-violet-600/20 hover:shadow-violet-500/30 hover:-translate-y-0.5"
-          >
-            <Sparkles className="h-4 w-4" /> Explore All Tools <ArrowRight className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate('/workspace')}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 hover:bg-cyan-500/20 px-4 sm:px-5 py-3 text-xs sm:text-sm font-bold text-cyan-700 dark:text-cyan-300"
-          >
-            <LayoutDashboard className="h-4 w-4" /> Open Workspace
-          </button>
-          <button
-            type="button"
-            onClick={() => setSearchOpen(true)}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300/80 bg-white/70 px-4 sm:px-5 py-3 text-xs sm:text-sm font-bold text-slate-700 hover:border-violet-400 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200"
-          >
-            <Search className="h-4 w-4" /> Smart Search
-          </button>
         </div>
 
-        {/* Desktop Search Trigger */}
-        <div className="hidden md:block pt-3 max-w-3xl">
-          <button
-            type="button"
-            onClick={() => setSearchOpen(true)}
-            className="w-full flex items-center justify-between p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 shadow-xl hover:border-cyan-500/50 hover:shadow-cyan-500/10 transition-all text-left group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-500 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                <Search className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="text-sm font-semibold text-slate-900 dark:text-white block">
-                  What do you want to accomplish?
-                </span>
-                <span className="text-xs text-slate-400">
-                  Try "compress image", "file studio", "developer lab", "qr studio", "format json"...
-                </span>
-              </div>
-            </div>
-            <kbd className="inline-flex items-center px-2.5 py-1 text-xs font-mono font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700">
-              ⌘K
-            </kbd>
-          </button>
-        </div>
-      </section>
-
-      {/* 3. Quick Actions Strip */}
-      <section className="rounded-2xl border border-slate-200/80 dark:border-violet-400/20 bg-white/70 dark:bg-slate-950/40 p-3 sm:p-4 shadow-sm space-y-3">
-        <div className="flex items-center justify-between px-0.5">
-          <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">
-            Quick Launch
-          </span>
-          <span className="text-[10px] text-slate-400">{TOOLS_DATA.length} local tools · {favorites.length} pinned</span>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
-          {quickActions.map((qa) => (
-            <button
-              key={qa.slug}
-              type="button"
-              onClick={() => navigate(`/tools/${qa.slug}`)}
-              className="inline-flex items-center gap-2 px-3 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 hover:border-cyan-500/50 hover:bg-slate-50 dark:hover:bg-slate-850 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-all shadow-xs active:scale-[0.98] cursor-pointer text-left"
-            >
-              <span>{qa.icon}</span>
-              <span className="whitespace-nowrap">{qa.name}</span>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* 4. Ecosystem Studios Showcase */}
-      <section className="space-y-3 sm:space-y-4">
-        <div className="flex items-center justify-between px-0.5">
+        <div className="mt-8 grid gap-9 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
           <div>
-            <h2 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-              NOVA Ecosystem Studios
-            </h2>
-            <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Unified workbenches built for batch processing, deep creation, and organized productivity
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[.24em] text-cyan-200/80">Less switching. More making.</p>
+            <h1 className="max-w-3xl text-[2.65rem] font-extrabold leading-[1.02] tracking-[-.055em] sm:text-6xl lg:text-[4.35rem]">
+              Your everyday
+              <span className="block bg-gradient-to-r from-[#AFA0FF] via-[#73D8E7] to-[#A2E5C1] bg-clip-text text-transparent">tools, in orbit.</span>
+            </h1>
+            <p className="mt-5 max-w-xl text-sm leading-7 text-slate-300 sm:text-base">
+              A thoughtfully organised collection of free utilities for creating, converting, calculating and getting things done. No account required.
             </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <button type="button" onClick={() => navigate('/tools')} className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-slate-950 shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:bg-cyan-50">
+                Explore all tools <ArrowUpRight className="h-4 w-4" />
+              </button>
+              <button type="button" onClick={() => navigate('/workspace')} className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/[.06] px-5 py-3 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/10">
+                Open workspace <Layers3 className="h-4 w-4" />
+              </button>
+            </div>
           </div>
-          <button
-            type="button"
-            onClick={() => navigate('/categories')}
-            className="text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-0.5 shrink-0"
-          >
-            <span>Categories</span>
-            <ChevronRight className="w-3.5 h-3.5" />
+
+          <button type="button" onClick={() => setSearchOpen(true)} className="group w-full rounded-2xl border border-white/15 bg-white/[.07] p-3 text-left shadow-2xl shadow-black/20 backdrop-blur-xl transition hover:border-cyan-200/40 hover:bg-white/[.10]">
+            <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-[#080D19]/70 px-4 py-4">
+              <Search className="h-5 w-5 text-cyan-200" />
+              <span className="flex-1 text-sm text-slate-300">What do you want to do?</span>
+              <kbd className="rounded-md border border-white/10 bg-white/10 px-2 py-1 text-[10px] font-semibold text-slate-300">⌘ K</kbd>
+            </div>
+            <div className="flex flex-wrap gap-2 px-1 pb-1 pt-3">
+              {['Compress an image', 'Format JSON', 'Create a QR code'].map((hint) => (
+                <span key={hint} className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] text-slate-400 transition group-hover:border-cyan-200/20 group-hover:text-slate-200">{hint}</span>
+              ))}
+            </div>
           </button>
         </div>
 
-        <div className="grid grid-cols-1 min-[520px]:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          {ecosystemStudios.map((studio) => {
-            const Icon = studio.icon;
-            return (
-              <button
-                key={studio.path}
-                type="button"
-                onClick={() => navigate(studio.path)}
-                className="nova-tool-card p-4 rounded-2xl border border-slate-200/90 dark:border-violet-400/20 bg-white dark:bg-gradient-to-br dark:from-[#141D35] dark:to-[#090F20] shadow-sm hover:border-cyan-500/60 hover:shadow-lg cursor-pointer transition-all text-left flex flex-col justify-between gap-3 group"
-              >
-                <div className="flex items-start gap-3">
-                  <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: `${studio.accent}18`, color: studio.accent }}
-                  >
-                    <Icon className="w-4 h-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white group-hover:text-cyan-500 transition-colors">
-                      {studio.title}
-                    </h3>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-2 leading-relaxed">
-                      {studio.desc}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800/60 text-[11px]">
-                  <span className="font-semibold" style={{ color: studio.accent }}>Launch Studio</span>
-                  <ArrowRight className="w-3 h-3 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-                </div>
-              </button>
-            );
+        <div className="mt-10 grid grid-cols-3 gap-3 border-t border-white/10 pt-6 sm:max-w-xl">
+          <div><div className="text-2xl font-extrabold tracking-tight sm:text-3xl">{totalTools}+</div><div className="mt-1 text-[10px] uppercase tracking-[.16em] text-slate-400">Utilities</div></div>
+          <div><div className="text-2xl font-extrabold tracking-tight sm:text-3xl">{SUITE_LIST.length}</div><div className="mt-1 text-[10px] uppercase tracking-[.16em] text-slate-400">Tool suites</div></div>
+          <div><div className="text-2xl font-extrabold tracking-tight sm:text-3xl">{studios.length}</div><div className="mt-1 text-[10px] uppercase tracking-[.16em] text-slate-400">Studios</div></div>
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <div className="flex items-end justify-between gap-4">
+          <div><p className="text-[10px] font-bold uppercase tracking-[.22em] text-violet-500">Start in one click</p><h2 className="mt-1 text-xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-2xl">Quick launch</h2></div>
+          <button type="button" onClick={() => navigate('/tools')} className="inline-flex items-center gap-1 text-xs font-bold text-violet-600 hover:text-violet-500 dark:text-violet-300">All tools <ArrowRight className="h-3.5 w-3.5" /></button>
+        </div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
+          {quickLaunch.map((item) => {
+            const Icon = item.icon;
+            return <button key={item.slug} type="button" onClick={() => navigate('/tools/' + item.slug)} className="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200/80 bg-white/80 p-3 text-left shadow-sm transition hover:-translate-y-1 hover:border-violet-300 hover:shadow-lg dark:border-white/10 dark:bg-slate-900/60 dark:hover:border-violet-400/40 sm:p-4">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: item.tint + '20', color: item.tint }}><Icon className="h-5 w-5" /></span>
+              <span className="min-w-0 text-xs font-bold text-slate-700 group-hover:text-violet-600 dark:text-slate-200 dark:group-hover:text-violet-300">{item.name}</span>
+              <ArrowUpRight className="ml-auto h-3.5 w-3.5 shrink-0 text-slate-300 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-violet-500" />
+            </button>;
           })}
         </div>
       </section>
 
-      {/* 5. Recent History Strip (only when user has history) */}
-      {recentPreview.length > 0 && (
-        <section className="space-y-3">
-          <div className="flex items-center justify-between px-0.5">
-            <h2 className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-              <History className="w-4 h-4 text-cyan-500" />
-              <span>Continue Where You Left Off</span>
-            </h2>
-            <button
-              type="button"
-              onClick={() => navigate('/recent')}
-              className="text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-0.5"
-            >
-              View History <ChevronRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-          <div className="grid grid-cols-1 min-[520px]:grid-cols-2 lg:grid-cols-4 gap-3">
-            {recentPreview.map((tool) => {
-              const suite = SUITES_DATA[tool.suite];
-              return (
-                <button
-                  key={tool.slug}
-                  type="button"
-                  onClick={() => navigate(`/tools/${tool.slug}`)}
-                  className="p-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-cyan-500/50 text-left flex items-center justify-between gap-2"
-                >
-                  <div className="min-w-0">
-                    <span className="text-[10px] font-bold uppercase tracking-wider block" style={{ color: suite.accentColor }}>
-                      {suite.name}
-                    </span>
-                    <span className="text-xs font-bold text-slate-900 dark:text-white truncate block">{tool.name}</span>
-                  </div>
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                </button>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* 6. Popular & Featured Tools */}
-      <section className="space-y-3 sm:space-y-4">
-        <div className="flex items-center justify-between px-0.5">
-          <div>
-            <h2 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-              Popular Tools
-            </h2>
-            <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Frequently used utilities by developers, creators, and students
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => navigate('/tools')}
-            className="text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-0.5 shrink-0"
-          >
-            <span>All {TOOLS_DATA.length} Tools</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
+      <section className="space-y-5">
+        <div className="flex items-end justify-between gap-4">
+          <div><p className="text-[10px] font-bold uppercase tracking-[.22em] text-cyan-600 dark:text-cyan-300">Purpose-built spaces</p><h2 className="mt-1 text-xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-2xl">Explore the NOVA ecosystem</h2><p className="mt-1 text-xs text-slate-500 dark:text-slate-400">A dedicated space for every kind of work.</p></div>
+          <button type="button" onClick={() => navigate('/categories')} className="hidden items-center gap-1 text-xs font-bold text-violet-600 dark:text-violet-300 sm:inline-flex">Explore categories <ArrowRight className="h-3.5 w-3.5" /></button>
         </div>
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {studios.map((studio, index) => {
+            const Icon = studio.icon;
+            return <button key={studio.path} type="button" onClick={() => navigate(studio.path)} className="group relative min-h-[176px] overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-violet-300 hover:shadow-xl dark:border-white/10 dark:bg-[#111827] dark:hover:border-white/20">
+              <div aria-hidden="true" className="absolute -right-10 -top-12 h-32 w-32 rounded-full opacity-[.12] blur-2xl transition group-hover:opacity-25" style={{ backgroundColor: studio.tint }} />
+              <div className="relative flex items-center justify-between">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl" style={{ backgroundColor: studio.tint + '1A', color: studio.tint }}><Icon className="h-5 w-5" /></span>
+                <span className="text-[9px] font-extrabold tracking-[.2em] text-slate-400">{studio.tag}</span>
+              </div>
+              <div className="relative mt-6"><h3 className="text-sm font-extrabold text-slate-900 dark:text-white">{studio.title}</h3><p className="mt-1.5 max-w-[17rem] text-xs leading-5 text-slate-500 dark:text-slate-400">{studio.description}</p></div>
+              <ArrowUpRight className="absolute bottom-5 right-5 h-4 w-4 text-slate-300 transition group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-violet-500" />
+              <span className="absolute bottom-5 left-5 h-px w-8 origin-left scale-x-0 transition duration-300 group-hover:scale-x-100" style={{ backgroundColor: studio.tint }} />
+              <span className="sr-only">Open {studio.title}</span>
+              <span className="sr-only">{index + 1}</span>
+            </button>;
+          })}
+        </div>
+      </section>
 
-        <div className="grid grid-cols-1 min-[520px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+      {recentPreview.length > 0 && <section className="space-y-4">
+        <div className="flex items-end justify-between gap-4"><div><p className="text-[10px] font-bold uppercase tracking-[.22em] text-emerald-600 dark:text-emerald-300">Pick up where you stopped</p><h2 className="mt-1 text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">Recently used</h2></div><button type="button" onClick={() => navigate('/recent')} className="text-xs font-bold text-violet-600 dark:text-violet-300">View history <ArrowRight className="ml-1 inline h-3.5 w-3.5" /></button></div>
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {recentPreview.map((tool) => <button key={tool.slug} type="button" onClick={() => navigate('/tools/' + tool.slug)} className="flex items-center justify-between gap-3 rounded-xl border border-slate-200/80 bg-white/80 p-4 text-left transition hover:border-emerald-300 dark:border-white/10 dark:bg-slate-900/60"><span className="min-w-0"><span className="block truncate text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-300">{SUITES_DATA[tool.suite].name}</span><span className="mt-1 block truncate text-sm font-bold text-slate-800 dark:text-white">{tool.name}</span></span><Clock3 className="h-4 w-4 shrink-0 text-slate-400" /></button>)}
+        </div>
+      </section>}
+
+      <section className="space-y-5">
+        <div className="flex items-end justify-between gap-4"><div><p className="text-[10px] font-bold uppercase tracking-[.22em] text-amber-600 dark:text-amber-300">A good place to begin</p><h2 className="mt-1 text-xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-2xl">Popular tools</h2></div><button type="button" onClick={() => navigate('/tools')} className="text-xs font-bold text-violet-600 dark:text-violet-300">Browse {totalTools} tools <ArrowRight className="ml-1 inline h-3.5 w-3.5" /></button></div>
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {FEATURED_TOOLS.slice(0, 8).map((tool) => {
             const suite = SUITES_DATA[tool.suite];
-            const isFav = isFavorite(tool.slug);
-
-            return (
-              <div
-                key={tool.slug}
-                onClick={() => navigate(`/tools/${tool.slug}`)}
-                className="nova-tool-card p-3 sm:p-4 rounded-2xl border border-slate-200/90 dark:border-violet-400/20 bg-white dark:bg-gradient-to-br dark:from-[#141D35] dark:to-[#090F20] shadow-sm hover:border-cyan-500/60 hover:shadow-lg cursor-pointer transition-all active:scale-[0.98] group flex flex-col justify-between"
-              >
-                <div className="space-y-1.5 sm:space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span
-                      className="px-1.5 py-0.5 rounded text-[9px] uppercase font-bold tracking-wider truncate max-w-[80px] sm:max-w-none"
-                      style={{ backgroundColor: `${suite.accentColor}18`, color: suite.accentColor }}
-                    >
-                      {suite.name}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleFavorite(tool.slug);
-                      }}
-                      className="p-1 rounded text-slate-400 hover:text-amber-500 transition-colors"
-                      title={isFav ? 'Remove from favorites' : 'Add to favorites'}
-                      aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
-                    >
-                      <Star className={`w-3.5 h-3.5 ${isFav ? 'fill-amber-500 text-amber-500' : ''}`} />
-                    </button>
-                  </div>
-                  <div>
-                    <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white group-hover:text-cyan-500 transition-colors line-clamp-1">
-                      {tool.name}
-                    </h3>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1 sm:line-clamp-2 mt-0.5 leading-tight">
-                      {tool.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="pt-2 mt-2 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between text-[10px] sm:text-[11px] text-slate-400">
-                  <span className="text-emerald-600 dark:text-emerald-400 font-medium">Local</span>
-                  <span className="group-hover:text-cyan-500 font-semibold flex items-center gap-0.5">
-                    Open <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-0.5 transition-transform" />
-                  </span>
-                </div>
-              </div>
-            );
+            const favorite = isFavorite(tool.slug);
+            return <div key={tool.slug} className="group rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:border-violet-300 hover:shadow-lg dark:border-white/10 dark:bg-[#111827]">
+              <div className="flex items-center justify-between"><span className="rounded-full px-2 py-1 text-[9px] font-bold uppercase tracking-wider" style={{ backgroundColor: suite.accentColor + '18', color: suite.accentColor }}>{suite.name}</span><button type="button" onClick={() => toggleFavorite(tool.slug)} aria-label={favorite ? 'Remove from favorites' : 'Add to favorites'} title={favorite ? 'Remove from favorites' : 'Add to favorites'} className="rounded-lg p-1.5 text-slate-400 transition hover:bg-amber-50 hover:text-amber-500 dark:hover:bg-amber-400/10"><Star className={favorite ? 'h-4 w-4 fill-amber-400 text-amber-400' : 'h-4 w-4'} /></button></div>
+              <button type="button" onClick={() => navigate('/tools/' + tool.slug)} className="mt-4 block w-full text-left"><h3 className="text-sm font-extrabold text-slate-900 transition group-hover:text-violet-600 dark:text-white dark:group-hover:text-violet-300">{tool.name}</h3><p className="mt-1 line-clamp-2 min-h-10 text-xs leading-5 text-slate-500 dark:text-slate-400">{tool.description}</p><span className="mt-4 inline-flex items-center gap-1 text-[11px] font-bold text-violet-600 dark:text-violet-300">Open tool <ArrowRight className="h-3 w-3 transition group-hover:translate-x-1" /></span></button>
+            </div>;
           })}
         </div>
       </section>
 
-      {/* 7. 12 Tool Suites */}
-      <section className="space-y-3 sm:space-y-4">
-        <div className="flex items-center justify-between px-0.5">
-          <div>
-            <h2 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-              Category Explorer
-            </h2>
-            <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              12 curated workspaces grouped by task type
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => navigate('/categories')}
-            className="text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-0.5 shrink-0"
-          >
-            <span>Explore Directory</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
+      <section className="grid gap-4 lg:grid-cols-[1.1fr_.9fr]">
+        <button type="button" onClick={() => navigate('/workflows')} className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#30205E] via-[#25204E] to-[#102C45] p-6 text-left text-white sm:p-8">
+          <div aria-hidden="true" className="absolute -right-10 -top-12 h-56 w-56 rounded-full bg-cyan-300/15 blur-3xl transition group-hover:bg-cyan-300/25" />
+          <div className="relative"><span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.2em] text-cyan-200"><GitBranch className="h-4 w-4" /> NOVA Flow</span><h3 className="mt-5 max-w-md text-2xl font-extrabold tracking-tight sm:text-3xl">Make repeat tasks flow.</h3><p className="mt-3 max-w-md text-sm leading-6 text-indigo-100/75">Connect supported steps into a repeatable workflow and keep processing close to your browser.</p><span className="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-extrabold text-slate-900">Explore workflows <ArrowUpRight className="h-4 w-4" /></span></div>
+        </button>
+        <div className="flex flex-col justify-between rounded-3xl border border-emerald-500/20 bg-emerald-50/70 p-6 dark:bg-emerald-400/[.06] sm:p-8">
+          <div><span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.2em] text-emerald-700 dark:text-emerald-300"><ShieldCheck className="h-4 w-4" /> Privacy by design</span><h3 className="mt-5 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">Your files stay yours.</h3><p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-400">Core utilities are designed to process data in your browser. Each tool should clearly explain when an external service is involved.</p></div>
+          <button type="button" onClick={() => navigate('/settings')} className="mt-6 inline-flex items-center gap-2 self-start text-xs font-extrabold text-emerald-700 dark:text-emerald-300">Review privacy settings <ArrowRight className="h-4 w-4" /></button>
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 min-[380px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-4">
+      <section className="rounded-3xl border border-slate-200/80 bg-white/70 p-5 dark:border-white/10 dark:bg-slate-900/50 sm:p-7">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div><p className="text-[10px] font-bold uppercase tracking-[.2em] text-slate-400">Find your lane</p><h2 className="mt-1 text-lg font-extrabold text-slate-900 dark:text-white">Browse by category</h2></div>
+          <span className="text-xs text-slate-500 dark:text-slate-400">{favorites.length} saved favorites</span>
+        </div>
+        <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
           {SUITE_LIST.map((suite) => {
-            const count = TOOLS_DATA.filter((t) => t.suite === suite.id).length;
-
-            return (
-              <div
-                key={suite.id}
-                onClick={() => navigate(`/tools?suite=${suite.id}`)}
-                className="nova-suite-card p-3 sm:p-5 rounded-2xl border border-slate-200/90 dark:border-violet-400/20 bg-white dark:bg-gradient-to-br dark:from-[#111B32] dark:to-[#090F20] shadow-sm hover:border-violet-400/60 hover:shadow-lg cursor-pointer transition-all active:scale-[0.98] group flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <div
-                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center font-bold"
-                      style={{ backgroundColor: `${suite.accentColor}18`, color: suite.accentColor }}
-                    >
-                      <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </div>
-                    <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
-                      {count}
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="text-xs sm:text-base font-bold text-slate-900 dark:text-white group-hover:text-cyan-500 transition-colors truncate">
-                      {suite.name}
-                    </h3>
-                    <p className="hidden sm:block text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5 leading-relaxed">
-                      {suite.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between pt-2 mt-2 border-t border-slate-100 dark:border-slate-800/60 text-[10px] sm:text-xs text-slate-400">
-                  <span className="text-cyan-600 dark:text-cyan-400 font-semibold">{count} tools</span>
-                  <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-                </div>
-              </div>
-            );
+            const count = TOOLS_DATA.filter((tool) => tool.suite === suite.id).length;
+            return <button key={suite.id} type="button" onClick={() => navigate('/tools?suite=' + suite.id)} className="flex items-center justify-between gap-2 rounded-xl border border-slate-200/70 bg-white px-3 py-3 text-left transition hover:border-violet-300 hover:bg-violet-50/50 dark:border-white/10 dark:bg-white/[.03] dark:hover:bg-violet-400/[.08]"><span className="min-w-0"><span className="block truncate text-xs font-bold text-slate-800 dark:text-slate-200">{suite.name}</span><span className="mt-0.5 block text-[10px] text-slate-400">{count} tools</span></span><ChevronRight className="h-3.5 w-3.5 shrink-0 text-slate-400" /></button>;
           })}
         </div>
       </section>
 
-      {/* 8. NOVA Flow & Privacy Architecture Banner */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="nova-workflow-banner p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-cyan-500/10 via-violet-600/10 to-pink-500/10 border border-cyan-500/25 flex flex-col justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider">
-              <GitFork className="w-3.5 h-3.5" />
-              <span>NOVA Flow Pipelines</span>
-            </div>
-            <h3 className="text-lg font-black text-slate-900 dark:text-white">
-              Sequential Automated Workflows
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Chain PDF, image, JSON, CSV, and text transformations with step retry, JSON export/import, and local outputs.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => navigate('/workflows')}
-            className="self-start px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-xs shadow-sm"
-          >
-            Open NOVA Flow
-          </button>
-        </div>
-
-        <div className="p-5 sm:p-6 rounded-3xl border border-emerald-500/25 bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-transparent flex flex-col justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Zero Server Uploads</span>
-            </div>
-            <h3 className="text-lg font-black text-slate-900 dark:text-white">
-              Private By Architecture
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Your documents, images, snippets, and calculations stay strictly in your browser. Inspect local storage or export a portable JSON backup anytime.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => navigate('/settings')}
-            className="self-start px-4 py-2.5 rounded-xl border border-emerald-500/30 bg-white/80 dark:bg-slate-900/80 text-emerald-700 dark:text-emerald-300 font-bold text-xs"
-          >
-            Privacy Center
-          </button>
-        </div>
-      </section>
+      <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 pb-2 text-[10px] font-semibold uppercase tracking-[.16em] text-slate-400">
+        <span className="inline-flex items-center gap-1.5"><LockKeyhole className="h-3 w-3" /> No account needed</span>
+        <span className="inline-flex items-center gap-1.5"><Check className="h-3 w-3" /> Free to use</span>
+        <span className="inline-flex items-center gap-1.5"><WandSparkles className="h-3 w-3" /> Made for everyday work</span>
+      </div>
     </div>
   );
 };
+
+export default HomePage;
