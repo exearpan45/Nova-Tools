@@ -116,3 +116,27 @@
     scroll-behavior:auto !important; transition:none !important; animation:none !important;
   }
 }
+
+/* Suite browser / directory */
+.nova-tools-directory > div:first-child {
+  border-radius:1.65rem !important; border-color:rgba(139,124,255,.22) !important;
+  box-shadow:0 22px 60px -44px rgba(70,70,160,.42),inset 0 1px 0 rgba(255,255,255,.8);
+}
+.dark .nova-tools-directory > div:first-child {
+  border-color:rgba(139,124,255,.28) !important;
+  box-shadow:0 24px 64px -48px rgba(80,90,220,.55),inset 0 1px 0 rgba(255,255,255,.05);
+}
+.nova-tools-directory input[type="text"],
+.nova-tools-directory select {
+  border-radius:.9rem !important; min-height:2.8rem;
+}
+.nova-tools-directory button { transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease; }
+.nova-tools-directory .grid > div[role="button"],
+.nova-tools-directory .grid > div.cursor-pointer {
+  border-radius:1.2rem !important; box-shadow:0 12px 34px -30px rgba(15,23,42,.55);
+}
+@media (hover:hover) and (pointer:fine) {
+  .nova-tools-directory .grid > div.cursor-pointer:hover {
+    transform:translateY(-3px); box-shadow:0 18px 40px -30px rgba(99,102,241,.58);
+  }
+}
