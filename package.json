@@ -1,21 +1,22 @@
 {
   "name": "nova-tools",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
     "sitemap": "tsx generate-sitemap.ts",
     "generate:sitemap": "tsx generate-sitemap.ts",
     "prerender": "tsx scripts/prerender.ts",
-    "build": "npm run lint && npm run audit:registry && npm run test:routing && npm run test:math && tsx generate-sitemap.ts && vite build && tsx scripts/prerender.ts && node scripts/verify-seo-build.mjs",
+    "build": "npm run lint && npm run audit:registry && npm run test:routing && npm run test:math && npm run test:theme && tsx generate-sitemap.ts && vite build && tsx scripts/prerender.ts && node scripts/verify-seo-build.mjs",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
     "verify:seo": "node scripts/verify-seo-build.mjs",
     "audit:registry": "node scripts/audit-tool-registry.mjs",
     "test:math": "tsx scripts/test-math-expression.ts",
-    "test:routing": "tsx scripts/test-routing.ts"
+    "test:routing": "tsx scripts/test-routing.ts",
+    "test:theme": "tsx scripts/test-theme.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
