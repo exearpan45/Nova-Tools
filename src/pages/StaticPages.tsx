@@ -15,7 +15,7 @@ interface StaticPageProps {
 
 const UPDATED = 'October 12, 2026';
 const EMAIL = 'exe.arpan45@gmail.com';
-const SITE = 'https://nova-tools2.pages.dev/';
+const SITE = 'https://nova-tools-arpan-9160.vercel.app/';
 
 const pageClass = 'max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-8 sm:space-y-10 animate-page-enter';
 const headingClass = 'text-3xl sm:text-4xl font-black tracking-tight text-slate-950 dark:text-white';
@@ -97,14 +97,14 @@ const PolicyText: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <p className={bodyClass}>{children}</p>
 );
 
-const UpdatedNote = () => <p className="text-xs text-slate-500 dark:text-slate-400">Last updated: {UPDATED} · NOVA TOOLS</p>;
+const UpdatedNote = () => <p className="text-xs text-slate-500 dark:text-slate-400">Last updated: {UPDATED} · NOVA Tools</p>;
 
 export const AboutPage: React.FC<StaticPageProps> = ({ onNavigate }) => (
   <div className={pageClass}>
-    <PageHero eyebrow="About the project" title="Useful online tools, without the unnecessary complexity." subtitle="NOVA TOOLS is an independent collection of browser-based utilities built to make everyday calculations, file tasks, text work, and developer workflows simpler." icon={<Sparkles className="h-5 w-5" />} />
+    <PageHero eyebrow="About the project" title="Useful online tools, without the unnecessary complexity." subtitle="NOVA Tools is an independent collection of browser-based utilities built to make everyday calculations, file tasks, text work, and developer workflows simpler." icon={<Sparkles className="h-5 w-5" />} />
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
       <Point title="Built for practical tasks">Focused utilities with clear inputs, understandable outputs, and straightforward workflows.</Point>
-      <Point title="Browser-first processing">Many tools process the data you enter directly in your browser instead of uploading it to a NOVA TOOLS application server.</Point>
+      <Point title="Browser-first processing">Many tools process the data you enter directly in your browser instead of uploading it to a NOVA Tools application server.</Point>
       <Point title="Made for different screens">Responsive layouts support phones, tablets, laptops, and desktop browsers.</Point>
     </div>
     <Section title="Explore the tool collection" description="Browse by purpose to find a tool for your task. Each tool page includes a description and, where available, usage steps, examples, and frequently asked questions.">
@@ -155,14 +155,14 @@ export const ContactPage: React.FC<StaticPageProps> = () => {
     }
   };
   const topics = [
-    { title: 'Report a bug', subject: '[Bug Report] NOVA TOOLS', description: 'Tell us which tool failed, what you expected, what happened instead, and your browser/device.' },
-    { title: 'Suggest a tool', subject: '[Tool Suggestion] NOVA TOOLS', description: 'Describe the task you want to complete and the inputs and outputs that would be useful.' },
-    { title: 'Share feedback', subject: '[Feedback] NOVA TOOLS', description: 'Help improve accessibility, clarity, mobile usability, and the overall experience.' },
-    { title: 'General enquiry', subject: '[General Enquiry] NOVA TOOLS', description: 'Questions about the website, content, technical behaviour, or intellectual property.' },
+    { title: 'Report a bug', subject: '[Bug Report] NOVA Tools', description: 'Tell us which tool failed, what you expected, what happened instead, and your browser/device.' },
+    { title: 'Suggest a tool', subject: '[Tool Suggestion] NOVA Tools', description: 'Describe the task you want to complete and the inputs and outputs that would be useful.' },
+    { title: 'Share feedback', subject: '[Feedback] NOVA Tools', description: 'Help improve accessibility, clarity, mobile usability, and the overall experience.' },
+    { title: 'General enquiry', subject: '[General Enquiry] NOVA Tools', description: 'Questions about the website, content, technical behaviour, or intellectual property.' },
   ];
   return (
     <div className={pageClass}>
-      <PageHero eyebrow="Support & feedback" title="Contact NOVA TOOLS" subtitle="Found a bug, have an idea, or need to ask a question? Choose a topic below or email the maintainer directly." icon={<Mail className="h-5 w-5" />} />
+      <PageHero eyebrow="Support & feedback" title="Contact NOVA Tools" subtitle="Found a bug, have an idea, or need to ask a question? Choose a topic below or email the maintainer directly." icon={<Mail className="h-5 w-5" />} />
       <section className={cardClass + ' flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'}>
         <div className="min-w-0">
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Email contact</p>
@@ -207,7 +207,7 @@ export const PrivacyPage: React.FC<StaticPageProps> = ({ onNavigate }) => {
       <PageHero
         eyebrow="Your information"
         title="Privacy Policy"
-        subtitle="This policy explains what NOVA TOOLS processes locally, what browser preferences may be saved, and how third-party services such as analytics and advertising fit into the experience."
+        subtitle="This policy explains what NOVA Tools processes locally, what browser preferences may be saved, and how third-party services such as analytics and advertising fit into the experience."
         icon={<ShieldCheck className="h-5 w-5" />}
         readTime="4 min read"
       />
@@ -228,17 +228,17 @@ export const PrivacyPage: React.FC<StaticPageProps> = ({ onNavigate }) => {
       </div>
 
       <Section id="data-in-tools" title="1. Information you enter into tools">
-        <PolicyText>For tools implemented to run in the browser, calculations and transformations are performed on your device and the entered content is not intentionally uploaded to a NOVA TOOLS application server. This can include numbers, text, JSON, and supported file operations. Processing details can differ by tool, so check the individual tool page and avoid using any online utility for highly confidential material unless you have verified its behaviour.</PolicyText>
+        <PolicyText>For tools implemented to run in the browser, calculations and transformations are performed on your device and the entered content is not intentionally uploaded to a NOVA Tools application server. This can include numbers, text, JSON, and supported file operations. Processing details can differ by tool, so check the individual tool page and avoid using any online utility for highly confidential material unless you have verified its behaviour.</PolicyText>
         <PolicyText>Normal website traffic still requires network requests to retrieve the site and its assets. Your hosting provider and network may process technical request information as part of delivering and securing the website.</PolicyText>
       </Section>
 
       <Section id="browser-storage" title="2. Preferences stored in your browser">
-        <PolicyText>NOVA TOOLS may use browser local storage to remember interface preferences such as theme, favourites, recently used tools, and local ratings. This information is stored in the browser profile on your device and is not automatically shared between devices. Clearing site data in your browser can remove these preferences.</PolicyText>
+        <PolicyText>NOVA Tools may use browser local storage to remember interface preferences such as theme, favourites, recently used tools, and local ratings. This information is stored in the browser profile on your device and is not automatically shared between devices. Clearing site data in your browser can remove these preferences.</PolicyText>
       </Section>
 
       <Section id="analytics-ads" title="3. Analytics, advertising, and third parties">
         <PolicyText>The website loads Google Analytics and Google AdSense scripts. These services may process information such as device/browser details, approximate location derived from network information, page visits, advertising interactions, identifiers, or cookie data, depending on the service configuration, your settings, and applicable consent requirements. Google and other providers process data under their own policies.</PolicyText>
-        <PolicyText>Third-party scripts may make requests directly to their providers. NOVA TOOLS does not control every data practice of those external services. Review the providers’ current privacy and advertising controls if you want more detail about their processing.</PolicyText>
+        <PolicyText>Third-party scripts may make requests directly to their providers. NOVA Tools does not control every data practice of those external services. Review the providers’ current privacy and advertising controls if you want more detail about their processing.</PolicyText>
       </Section>
 
       <Section id="cookies-tech" title="4. Cookies and similar technologies">
@@ -253,11 +253,11 @@ export const PrivacyPage: React.FC<StaticPageProps> = ({ onNavigate }) => {
       </Section>
 
       <Section id="children-sensitive" title="6. Children and sensitive information">
-        <PolicyText>NOVA TOOLS is a general-purpose utility website, not a service designed to collect sensitive personal information. Do not send passwords, confidential files, health records, or other sensitive data by email or through features unless you have independently confirmed that the feature is suitable for that data.</PolicyText>
+        <PolicyText>NOVA Tools is a general-purpose utility website, not a service designed to collect sensitive personal information. Do not send passwords, confidential files, health records, or other sensitive data by email or through features unless you have independently confirmed that the feature is suitable for that data.</PolicyText>
       </Section>
 
       <Section id="privacy-contact" title="7. Contact">
-        <PolicyText>For privacy questions, contact the site maintainer at <a className="font-semibold text-violet-600 hover:underline dark:text-violet-300" href={'mailto:' + EMAIL}>{EMAIL}</a>. NOVA TOOLS may update this policy when the site or its services change. The updated date above indicates the latest editorial revision.</PolicyText>
+        <PolicyText>For privacy questions, contact the site maintainer at <a className="font-semibold text-violet-600 hover:underline dark:text-violet-300" href={'mailto:' + EMAIL}>{EMAIL}</a>. NOVA Tools may update this policy when the site or its services change. The updated date above indicates the latest editorial revision.</PolicyText>
       </Section>
     </div>
   );
@@ -275,7 +275,7 @@ export const CookiePolicyPage: React.FC<StaticPageProps> = ({ onNavigate }) => {
       <PageHero
         eyebrow="Browser storage explained"
         title="Cookie Policy"
-        subtitle="Learn the difference between cookies, local storage, and third-party scripts that may be used while visiting NOVA TOOLS."
+        subtitle="Learn the difference between cookies, local storage, and third-party scripts that may be used while visiting NOVA Tools."
         icon={<Cookie className="h-5 w-5" />}
         readTime="2 min read"
       />
@@ -289,12 +289,12 @@ export const CookiePolicyPage: React.FC<StaticPageProps> = ({ onNavigate }) => {
       <Section id="what-technologies" title="What these technologies do">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <Point title="Cookies">Small pieces of data a website or third-party service may store in your browser. They can support functionality, measurement, advertising, or preferences.</Point>
-          <Point title="Local storage">NOVA TOOLS uses browser local storage for selected preferences such as theme, favourites, recent tools, and local ratings. It is separate from cookies and usually remains until cleared.</Point>
+          <Point title="Local storage">NOVA Tools uses browser local storage for selected preferences such as theme, favourites, recent tools, and local ratings. It is separate from cookies and usually remains until cleared.</Point>
           <Point title="Third-party scripts">Google Analytics and Google AdSense are loaded by the site. Depending on their settings and your consent choices, these services may use cookies or similar identifiers.</Point>
         </div>
       </Section>
 
-      <Section id="does-nova-use" title="Does NOVA TOOLS use cookies?">
+      <Section id="does-nova-use" title="Does NOVA Tools use cookies?">
         <PolicyText>The application’s own preferences are primarily saved through local storage, rather than a first-party tracking cookie. However, third-party analytics and advertising scripts are present and may use cookies or similar technologies. For that reason, we do not claim that no cookies or tracking technologies can ever be used on the site.</PolicyText>
       </Section>
 
@@ -326,7 +326,7 @@ export const TermsPage: React.FC<StaticPageProps> = () => {
       <PageHero
         eyebrow="Using the website"
         title="Terms of Service"
-        subtitle="These terms describe the basic conditions for accessing and using the free utilities provided by NOVA TOOLS."
+        subtitle="These terms describe the basic conditions for accessing and using the free utilities provided by NOVA Tools."
         icon={<FileText className="h-5 w-5" />}
         readTime="3 min read"
       />
@@ -338,7 +338,7 @@ export const TermsPage: React.FC<StaticPageProps> = () => {
       <QuickNav items={navItems} />
 
       <Section id="use-of-tools" title="1. Use of the tools">
-        <PolicyText>NOVA TOOLS provides general-purpose browser utilities for everyday, educational, and productivity tasks. You are responsible for how you use the results and for ensuring that your use complies with applicable laws and third-party rights.</PolicyText>
+        <PolicyText>NOVA Tools provides general-purpose browser utilities for everyday, educational, and productivity tasks. You are responsible for how you use the results and for ensuring that your use complies with applicable laws and third-party rights.</PolicyText>
       </Section>
 
       <Section id="accuracy-avail" title="2. Accuracy and availability">
@@ -346,7 +346,7 @@ export const TermsPage: React.FC<StaticPageProps> = () => {
       </Section>
 
       <Section id="intellectual-prop" title="3. Intellectual property">
-        <PolicyText>Unless otherwise stated, NOVA TOOLS branding, original site content, interface design, and original software are maintained by Arpan Goswami. Do not misrepresent the site or remove applicable notices. Third-party libraries and assets remain subject to their respective licenses.</PolicyText>
+        <PolicyText>Unless otherwise stated, NOVA Tools branding, original site content, interface design, and original software are maintained by Arpan Goswami. Do not misrepresent the site or remove applicable notices. Third-party libraries and assets remain subject to their respective licenses.</PolicyText>
       </Section>
 
       <Section id="no-warranty" title="4. No warranty">
@@ -354,7 +354,7 @@ export const TermsPage: React.FC<StaticPageProps> = () => {
       </Section>
 
       <Section id="limitations" title="5. Limitation and changes">
-        <PolicyText>To the extent permitted by applicable law, NOVA TOOLS is not responsible for losses arising from reliance on unverified outputs or temporary service interruptions. Nothing in these terms excludes liability that cannot legally be excluded. These terms may be updated as the project evolves.</PolicyText>
+        <PolicyText>To the extent permitted by applicable law, NOVA Tools is not responsible for losses arising from reliance on unverified outputs or temporary service interruptions. Nothing in these terms excludes liability that cannot legally be excluded. These terms may be updated as the project evolves.</PolicyText>
       </Section>
 
       <p className={bodyClass}>
@@ -378,7 +378,7 @@ export const DisclaimerPage: React.FC<StaticPageProps> = () => {
       <PageHero
         eyebrow="Important information"
         title="Disclaimer"
-        subtitle="NOVA TOOLS provides general-purpose calculations and utilities. Review these limitations before relying on any output for a consequential decision."
+        subtitle="NOVA Tools provides general-purpose calculations and utilities. Review these limitations before relying on any output for a consequential decision."
         icon={<AlertTriangle className="h-5 w-5" />}
         readTime="2 min read"
       />
@@ -419,7 +419,7 @@ export const DisclaimerPage: React.FC<StaticPageProps> = () => {
       </Section>
 
       <Section title="External services and links">
-        <PolicyText>The website may load third-party analytics and advertising services or link to external websites. NOVA TOOLS does not control all external content, availability, or privacy practices. Review the relevant provider’s terms and policies when using those services.</PolicyText>
+        <PolicyText>The website may load third-party analytics and advertising services or link to external websites. NOVA Tools does not control all external content, availability, or privacy practices. Review the relevant provider’s terms and policies when using those services.</PolicyText>
       </Section>
     </div>
   );
