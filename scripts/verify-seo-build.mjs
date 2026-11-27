@@ -29,13 +29,13 @@ const sitemap = read('sitemap.xml');
 const robots = read('robots.txt');
 
 if (!indexHtml.includes(`<link rel="canonical" href="${BASE_URL}/"`)) {
-  fail('dist/index.html does not have the expected pages.dev canonical.');
+  fail('dist/index.html does not have the expected production Vercel canonical.');
 }
 if (!sitemap.includes('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')) {
   fail('Sitemap namespace is invalid or missing.');
 }
 if (!robots.includes(`Sitemap: ${BASE_URL}/sitemap.xml`)) {
-  fail('robots.txt does not point to the pages.dev sitemap.');
+  fail('robots.txt does not point to the production Vercel sitemap.');
 }
 
 const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
@@ -43,7 +43,7 @@ const unique = new Set(locs);
 if (locs.length === 0) fail('Sitemap contains no URLs.');
 if (locs.length !== unique.size) fail('Sitemap contains duplicate URLs.');
 if (locs.some((url) => !url.startsWith(`${BASE_URL}/`))) {
-  fail('Sitemap contains a URL outside the production pages.dev origin.');
+  fail('Sitemap contains a URL outside the production Vercel origin.');
 }
 
 // Verify every sitemap URL has a matching prerendered page and canonical.
