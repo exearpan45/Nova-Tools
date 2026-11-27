@@ -67,7 +67,9 @@ export const ToolDispatcher: React.FC<ToolDispatcherProps> = ({ tool }) => {
 
   return (
     <Suspense fallback={<ToolLoadingFallback />}>
-      {renderSuite()}
+      <div className={`nova-suite-workspace nova-suite-${suite}`} data-tool-slug={slug}>
+        {renderSuite()}
+      </div>
     </Suspense>
   );
 };
