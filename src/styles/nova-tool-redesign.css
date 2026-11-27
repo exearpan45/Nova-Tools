@@ -140,3 +140,27 @@
     transform:translateY(-3px); box-shadow:0 18px 40px -30px rgba(99,102,241,.58);
   }
 }
+
+/* Actual suite renderers are mounted here by ToolDispatcher. */
+.nova-suite-workspace{--suite-accent:#8b7cff;min-width:0;color:inherit}
+.nova-suite-image{--suite-accent:#06b6d4}.nova-suite-pdf{--suite-accent:#f43f5e}
+.nova-suite-text{--suite-accent:#f59e0b}.nova-suite-developer{--suite-accent:#10b981}
+.nova-suite-student{--suite-accent:#8b5cf6}.nova-suite-calculators{--suite-accent:#3b82f6}
+.nova-suite-web{--suite-accent:#14b8a6}.nova-suite-design{--suite-accent:#d946ef}
+.nova-suite-security{--suite-accent:#ef4444}.nova-suite-data{--suite-accent:#a855f7}
+.nova-suite-writing{--suite-accent:#0284c7}.nova-suite-utility{--suite-accent:#84cc16}
+.nova-suite-workspace input:not([type=checkbox]):not([type=radio]):not([type=range]),
+.nova-suite-workspace select,.nova-suite-workspace textarea{border-radius:.85rem!important;transition:border-color .18s ease,box-shadow .18s ease}
+.nova-suite-workspace input:focus,.nova-suite-workspace select:focus,.nova-suite-workspace textarea:focus{border-color:var(--suite-accent)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--suite-accent) 17%,transparent)!important;outline:none}
+.nova-suite-workspace button{transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.nova-suite-workspace button:focus-visible,.nova-tools-directory button:focus-visible{outline:2px solid var(--suite-accent,#8b7cff);outline-offset:2px}
+.nova-suite-workspace [class*="rounded"][class*="border"]{border-color:rgba(148,163,184,.25)}
+.dark .nova-suite-workspace [class*="rounded"][class*="border"]{border-color:rgba(148,163,184,.17)}
+.nova-suite-card{border-color:rgba(148,163,184,.25);background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(247,248,255,.9));box-shadow:0 14px 36px -32px rgba(15,23,42,.45)}
+.dark .nova-suite-card{border-color:rgba(148,163,184,.18);background:linear-gradient(145deg,rgba(19,28,49,.96),rgba(13,21,38,.92))}
+.nova-suite-card:hover,.nova-suite-card.is-active{border-color:var(--suite-accent);box-shadow:0 16px 36px -28px var(--suite-accent);transform:translateY(-2px)}
+.nova-suite-card.is-active{background:linear-gradient(145deg,color-mix(in srgb,var(--suite-accent) 9%,white),rgba(255,255,255,.95))}
+.dark .nova-suite-card.is-active{background:linear-gradient(145deg,color-mix(in srgb,var(--suite-accent) 15%,#111827),rgba(13,21,38,.96))}
+.nova-tools-directory .grid>div.cursor-pointer{border-radius:1.2rem!important;background:linear-gradient(145deg,rgba(255,255,255,.97),rgba(247,249,255,.92));box-shadow:0 14px 36px -32px rgba(15,23,42,.5)}
+.dark .nova-tools-directory .grid>div.cursor-pointer{background:linear-gradient(145deg,rgba(19,28,49,.96),rgba(13,21,38,.92))}
+@media(max-width:640px){.nova-suite-workspace{font-size:14px}.nova-suite-workspace input:not([type=checkbox]):not([type=radio]):not([type=range]),.nova-suite-workspace select,.nova-suite-workspace textarea{font-size:16px}}
