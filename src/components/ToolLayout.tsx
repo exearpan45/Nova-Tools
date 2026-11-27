@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import '../styles/nova-tool-redesign.css';
 import { ToolDefinition } from '../types';
 import { TOOLS_DATA } from '../data/toolsData';
 import { AdSlot } from './AdSlot';
@@ -124,7 +125,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
   };
 
   const handleShare = async () => {
-    const toolUrl = window.location.href || `https://nova-tools2.pages.dev/tools/${tool.slug}`;
+    const toolUrl = window.location.href || `https://nova-tools-arpan-9160.vercel.app/tools/${tool.slug}`;
     if (navigator.share) {
       try {
         await navigator.share({
@@ -209,7 +210,7 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
         />
       </div>
 
-      <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8">
+      <div className="nova-tool-page w-full max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8" data-suite={tool.suite}>
       {/* Breadcrumb Navigation */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400 no-print">
         <button
@@ -371,8 +372,8 @@ export const ToolLayout: React.FC<ToolLayoutProps> = ({
       </header>
 
       {/* PRIMARY TOOL INTERFACE */}
-      <main id={`tool-interface-${tool.slug}`} className="space-y-3">
-        <div className="bg-white dark:bg-[#18181b] border border-neutral-200/90 dark:border-neutral-800/90 rounded-xl p-4 sm:p-6 shadow-2xs print-clean">
+      <main id={`tool-interface-${tool.slug}`} className="nova-tool-interface space-y-4">
+        <div className="nova-tool-workbench print-clean">
           <div key={tool.slug} className="animate-tool-enter">
             {children}
           </div>
