@@ -122,14 +122,13 @@ export const ToolsPage: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-3">
           {SUITE_LIST.map((suite) => {
             const count = TOOLS_DATA.filter((tool) => tool.suite === suite.id).length;
-            const active = selectedSuite === suite.id;
             return (
               <button
                 key={suite.id}
                 type="button"
                 onClick={() => handleSelectSuite(suite.id)}
                 aria-pressed={active}
-                className={`nova-suite-card group relative min-w-0 overflow-hidden rounded-2xl border p-3.5 sm:p-4 text-left transition-all ${active ? 'is-active' : ''}`}
+                className="nova-suite-card group relative min-w-0 overflow-hidden rounded-2xl border p-3.5 sm:p-4 text-left transition-all"
                 style={{ '--suite-accent': suite.accentColor } as React.CSSProperties}
               >
                 <span className="pointer-events-none absolute -right-7 -top-8 h-20 w-20 rounded-full opacity-10 blur-2xl" style={{ backgroundColor: suite.accentColor }} />
@@ -141,7 +140,7 @@ export const ToolsPage: React.FC = () => {
                 </span>
                 <span className="relative mt-3 block text-xs sm:text-sm font-bold text-slate-900 dark:text-white">{suite.name}</span>
                 <span className="relative mt-1 block text-[10px] sm:text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-2">{suite.description}</span>
-                <span className="relative mt-3 flex items-center gap-1 text-[10px] font-bold" style={{ color: suite.accentColor }}>{active ? 'Currently viewing' : 'Explore suite'} <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" /></span>
+                <span className="relative mt-3 flex items-center gap-1 text-[10px] font-bold" style={{ color: suite.accentColor }}>Explore suite <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" /></span>
               </button>
             );
           })}
@@ -186,18 +185,12 @@ export const ToolsPage: React.FC = () => {
         </button>
         {SUITE_LIST.map((suite) => {
           const count = TOOLS_DATA.filter((t) => t.suite === suite.id).length;
-          const isSelected = selectedSuite === suite.id;
 
           return (
             <button
               key={suite.id}
               onClick={() => handleSelectSuite(suite.id)}
-              className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
-                isSelected
-                  ? 'text-white shadow-sm'
-                  : 'bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-cyan-500/50'
-              }`}
-              style={isSelected ? { backgroundColor: suite.accentColor } : {}}
+              className="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-cyan-500/50"
             >
               <span>{suite.name}</span>
               <span
