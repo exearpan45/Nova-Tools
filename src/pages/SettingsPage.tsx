@@ -384,7 +384,7 @@ export const SettingsPage: React.FC = () => {
 
         <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/40 space-y-3">
           <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            NOVA TOOLS never uploads files or personal workspace records to an external database. Export everything ({favorites.length} favorites, {collections.length} collections, {snippets.length} snippets, settings & notes) to JSON for cross-device migration.
+            NOVA Tools never uploads files or personal workspace records to an external database. Export everything ({favorites.length} favorites, {collections.length} collections, {snippets.length} snippets, settings & notes) to JSON for cross-device migration.
           </p>
 
           <div className="flex flex-wrap items-center gap-3 pt-1">
@@ -480,7 +480,7 @@ export const SettingsPage: React.FC = () => {
           </div>
           <div>
             <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">Install App (Offline PWA)</h2>
-            <p className="text-[11px] sm:text-xs text-slate-400">Run NOVA TOOLS as a standalone desktop or mobile app</p>
+            <p className="text-[11px] sm:text-xs text-slate-400">Run NOVA Tools as a standalone desktop or mobile app</p>
           </div>
         </div>
 
@@ -496,7 +496,7 @@ export const SettingsPage: React.FC = () => {
                 className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold shadow-sm shrink-0"
               >
                 <Download className="w-4 h-4" />
-                <span>Install NOVA TOOLS</span>
+                <span>Install NOVA Tools</span>
               </button>
             </div>
           ) : (
@@ -520,7 +520,7 @@ export const SettingsPage: React.FC = () => {
             <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div>
-            <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">About NOVA TOOLS</h2>
+            <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">About NOVA Tools</h2>
             <p className="text-[11px] sm:text-xs text-slate-400">One Space. Infinite Possibilities.</p>
           </div>
         </div>
@@ -530,7 +530,7 @@ export const SettingsPage: React.FC = () => {
             Created by <span className="text-cyan-500 font-bold">Arpan Goswami</span>
           </p>
           <p className="text-slate-500 leading-relaxed">
-            NOVA TOOLS is an all-in-one workstation where every utility runs directly in your browser. All calculations, image transformations, and PDF edits happen in memory on your device without server latency.
+            NOVA Tools is an all-in-one workstation where every utility runs directly in your browser. All calculations, image transformations, and PDF edits happen in memory on your device without server latency.
           </p>
           <div className="pt-2 text-[11px] text-slate-400">
             © 2026 Copyright Arpan Goswami. All rights reserved.
