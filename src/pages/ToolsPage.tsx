@@ -39,6 +39,13 @@ export const ToolsPage: React.FC = () => {
     }
   }, [currentSuiteParam, currentPath, settings.defaultSuite]);
 
+  const handleToolCardKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, slug: string) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      navigate('/tools/' + slug);
+    }
+  };
+
   const handleSelectSuite = (suiteId: ToolSuite | 'all') => {
     setSelectedSuite(suiteId);
     if (suiteId === 'all') {
@@ -127,7 +134,7 @@ export const ToolsPage: React.FC = () => {
                 key={suite.id}
                 type="button"
                 onClick={() => handleSelectSuite(suite.id)}
-                aria-pressed={false}
+                aria-label={suite.name + " suite"}
                 className="nova-suite-card group relative min-w-0 overflow-hidden rounded-2xl border p-3.5 sm:p-4 text-left transition-all"
                 style={{ '--suite-accent': suite.accentColor } as React.CSSProperties}
               >
@@ -238,6 +245,10 @@ export const ToolsPage: React.FC = () => {
               <div
                 key={tool.slug}
                 onClick={() => navigate(`/tools/${tool.slug}`)}
+                onKeyDown={(event) => handleToolCardKeyDown(event, tool.slug)}
+                role="link"
+                tabIndex={0}
+                aria-label={tool.name + " tool"}
                 className="p-4 sm:p-5 min-w-0 rounded-2xl border border-slate-200/90 dark:border-slate-800/90 bg-white dark:bg-slate-900/50 hover:border-cyan-500/40 hover:shadow-lg dark:hover:shadow-cyan-950/20 cursor-pointer transition-all active:scale-[0.98] group flex flex-col justify-between"
               >
                 <div className="space-y-1.5 sm:space-y-2">
@@ -289,6 +300,10 @@ export const ToolsPage: React.FC = () => {
               <div
                 key={tool.slug}
                 onClick={() => navigate(`/tools/${tool.slug}`)}
+                onKeyDown={(event) => handleToolCardKeyDown(event, tool.slug)}
+                role="link"
+                tabIndex={0}
+                aria-label={tool.name + " tool"}
                 className="p-4 flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-850 cursor-pointer transition-colors group"
               >
                 <div className="flex items-center gap-3 truncate">
