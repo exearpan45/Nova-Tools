@@ -6,6 +6,35 @@ import {
 export const ChangelogPage: React.FC = () => {
   const releases = [
     {
+      version: 'NOVA 2.0',
+      date: 'Major Release',
+      title: 'A more polished, accessible and dependable NOVA Tools experience',
+      badge: 'Current Release',
+      badgeColor: 'bg-violet-500/10 text-violet-500 border-violet-500/30',
+      items: [
+        {
+          category: 'Design & Appearance',
+          icon: Palette,
+          color: 'text-violet-400',
+          points: [
+            'Introduced a shared design foundation with consistent spacing, focus states, responsive controls and restrained motion.',
+            'Added System, Light and Dark appearance modes, including automatic updates when the operating-system preference changes.',
+            'Refined suite and tool workspaces with a unified violet-and-cyan visual language.',
+          ],
+        },
+        {
+          category: 'Quality & Reliability',
+          icon: CheckCircle2,
+          color: 'text-emerald-400',
+          points: [
+            'Expanded the production build gate with dedicated appearance-mode tests.',
+            'Retained registry checks for all 107 tools, suite routing, related links, workflow references and homepage shortcuts.',
+            'Improved mobile input sizing, keyboard focus visibility and reduced-motion handling.',
+          ],
+        },
+      ],
+    },
+    {
       version: 'v2.2.0',
       date: 'NOVA REBORN Release',
       title: '16-Module Ecosystem Architecture & Studio Workbenches',
@@ -100,7 +129,7 @@ export const ChangelogPage: React.FC = () => {
           Changelog & Platform Evolution
         </h1>
         <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-          Explore the latest NOVA 2.0 ("NOVA REBORN") ecosystem studios, utilities, and architectural improvements.
+          Explore what is new in NOVA Tools 2.0, including its refreshed design system, appearance controls and reliability improvements.
         </p>
       </div>
 
