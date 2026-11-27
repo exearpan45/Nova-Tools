@@ -3,7 +3,7 @@ import path from 'path';
 
 const root = process.cwd();
 const dist = path.join(root, 'dist');
-const BASE_URL = 'https://nova-tools2.pages.dev';
+const BASE_URL = 'https://nova-tools-arpan-9160.vercel.app';
 
 function fail(message) {
   console.error('[SEO VERIFY] FAIL:', message);
