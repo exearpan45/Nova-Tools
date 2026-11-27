@@ -128,7 +128,7 @@ interface NovaContextType {
 }
 
 const DEFAULT_SETTINGS: UserSettings = {
-  theme: 'dark',
+  theme: 'system',
   accentColor: '#06b6d4',
   animations: true,
   compactMode: false,
@@ -154,9 +154,10 @@ export const NovaProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const stored = localStorage.getItem('nova_v2_settings');
       const directTheme = localStorage.getItem('novatools_theme');
       const parsed = stored ? { ...DEFAULT_SETTINGS, ...JSON.parse(stored) } : DEFAULT_SETTINGS;
-      if (directTheme === 'light' || directTheme === 'dark') {
+      if (!stored && (directTheme === 'light' || directTheme === 'dark')) {
         parsed.theme = directTheme;
       }
+      if (!['dark', 'light', 'system'].includes(parsed.theme)) parsed.theme = 'system';
       return parsed;
     } catch {
       return DEFAULT_SETTINGS;
@@ -313,34 +314,27 @@ export const NovaProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch {}
 
     const doc = document.documentElement;
-    doc.classList.remove('dark', 'light');
-
-    const themeMode = settings.theme === 'light' ? 'light' : 'dark';
-    try {
-      localStorage.setItem('novatools_theme', themeMode);
-    } catch {}
-
-    if (themeMode === 'light') {
-      doc.classList.add('light');
-      doc.classList.remove('dark');
-      doc.style.setProperty('background-color', '#ffffff', 'important');
-      doc.style.setProperty('color-scheme', 'light', 'important');
-    } else {
-      doc.classList.add('dark');
-      doc.classList.remove('light');
-      doc.style.setProperty('background-color', '#070b14', 'important');
-      doc.style.setProperty('color-scheme', 'dark', 'important');
-    }
-
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-    if (metaThemeColor) {
-      metaThemeColor.setAttribute('content', themeMode === 'light' ? '#ffffff' : '#070b14');
-    }
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const applyTheme = () => {
+      const themeMode = settings.theme === 'system'
+        ? (media.matches ? 'dark' : 'light')
+        : settings.theme;
+      doc.classList.toggle('dark', themeMode === 'dark');
+      doc.classList.toggle('light', themeMode === 'light');
+      doc.style.setProperty('background-color', themeMode === 'light' ? '#f8fafc' : '#080D1C', 'important');
+      doc.style.setProperty('color-scheme', themeMode, 'important');
+      try { localStorage.setItem('novatools_theme', themeMode); } catch {}
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+      if (metaThemeColor) metaThemeColor.setAttribute('content', themeMode === 'light' ? '#f8fafc' : '#080D1C');
+    };
+    applyTheme();
+    if (settings.theme === 'system') media.addEventListener('change', applyTheme);
 
     doc.classList.toggle('compact-mode', !!settings.compactMode);
     doc.classList.toggle('reduced-motion', !!settings.reducedMotion);
     doc.classList.toggle('high-contrast', !!settings.highContrast);
     doc.style.setProperty('--nova-accent', settings.accentColor);
+    return () => media.removeEventListener('change', applyTheme);
   }, [settings]);
 
   const toggleFavorite = (slug: string) => {
