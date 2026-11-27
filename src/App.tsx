@@ -11,25 +11,25 @@ import { SmartDropZone } from './components/SmartDropZone';
 import { MiniAppsManager } from './components/MiniAppsManager';
 import { ExperienceModals } from './components/ExperienceModals';
 
-// Pages
-import { HomePage } from './pages/HomePage';
-import { DashboardPage } from './pages/DashboardPage';
-import { WorkspacePage } from './pages/WorkspacePage';
-import { CategoriesPage } from './pages/CategoriesPage';
-import { FileStudioPage } from './pages/FileStudioPage';
-import { DeveloperLabPage } from './pages/DeveloperLabPage';
-import { DesignStudioPage } from './pages/DesignStudioPage';
-import { QrStudioPage } from './pages/QrStudioPage';
-import { FocusPage } from './pages/FocusPage';
-import { LearningHubPage } from './pages/LearningHubPage';
-import { BrowserUtilitiesPage } from './pages/BrowserUtilitiesPage';
-import { ChangelogPage } from './pages/ChangelogPage';
-import { ToolsPage } from './pages/ToolsPage';
-import { ToolDetailPage } from './pages/ToolDetailPage';
-import { WorkflowsPage } from './pages/WorkflowsPage';
-import { FavoritesPage } from './pages/FavoritesPage';
-import { RecentPage } from './pages/RecentPage';
-import { SettingsPage } from './pages/SettingsPage';
+// Route-level code splitting keeps the initial workspace small on slower devices.
+const HomePage = React.lazy(() => import('./pages/HomePage').then((module) => ({ default: module.HomePage })));
+const DashboardPage = React.lazy(() => import('./pages/DashboardPage').then((module) => ({ default: module.DashboardPage })));
+const WorkspacePage = React.lazy(() => import('./pages/WorkspacePage').then((module) => ({ default: module.WorkspacePage })));
+const CategoriesPage = React.lazy(() => import('./pages/CategoriesPage').then((module) => ({ default: module.CategoriesPage })));
+const FileStudioPage = React.lazy(() => import('./pages/FileStudioPage').then((module) => ({ default: module.FileStudioPage })));
+const DeveloperLabPage = React.lazy(() => import('./pages/DeveloperLabPage').then((module) => ({ default: module.DeveloperLabPage })));
+const DesignStudioPage = React.lazy(() => import('./pages/DesignStudioPage').then((module) => ({ default: module.DesignStudioPage })));
+const QrStudioPage = React.lazy(() => import('./pages/QrStudioPage').then((module) => ({ default: module.QrStudioPage })));
+const FocusPage = React.lazy(() => import('./pages/FocusPage').then((module) => ({ default: module.FocusPage })));
+const LearningHubPage = React.lazy(() => import('./pages/LearningHubPage').then((module) => ({ default: module.LearningHubPage })));
+const BrowserUtilitiesPage = React.lazy(() => import('./pages/BrowserUtilitiesPage').then((module) => ({ default: module.BrowserUtilitiesPage })));
+const ChangelogPage = React.lazy(() => import('./pages/ChangelogPage').then((module) => ({ default: module.ChangelogPage })));
+const ToolsPage = React.lazy(() => import('./pages/ToolsPage').then((module) => ({ default: module.ToolsPage })));
+const ToolDetailPage = React.lazy(() => import('./pages/ToolDetailPage').then((module) => ({ default: module.ToolDetailPage })));
+const WorkflowsPage = React.lazy(() => import('./pages/WorkflowsPage').then((module) => ({ default: module.WorkflowsPage })));
+const FavoritesPage = React.lazy(() => import('./pages/FavoritesPage').then((module) => ({ default: module.FavoritesPage })));
+const RecentPage = React.lazy(() => import('./pages/RecentPage').then((module) => ({ default: module.RecentPage })));
+const SettingsPage = React.lazy(() => import('./pages/SettingsPage').then((module) => ({ default: module.SettingsPage })));
 import {
   AboutPage, ContactPage, PrivacyPage, TermsPage, DisclaimerPage, CookiePolicyPage
 } from './pages/StaticPages';
@@ -38,6 +38,15 @@ import { OfflineIndicator } from './components/OfflineIndicator';
 // Data
 import { TOOLS_BY_SLUG } from './data/toolsData';
 import { normalizeRoutePath } from './utils/routing';
+
+const RouteLoadingFallback: React.FC = () => (
+  <div className="flex min-h-[42vh] items-center justify-center" role="status" aria-live="polite">
+    <div className="flex flex-col items-center gap-3 rounded-2xl border border-slate-200/70 bg-white/80 px-6 py-7 text-center shadow-sm dark:border-slate-800/80 dark:bg-slate-900/60">
+      <span className="h-9 w-9 animate-spin rounded-full border-2 border-violet-500/20 border-t-violet-500" aria-hidden="true" />
+      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Opening NOVA workspace…</span>
+    </div>
+  </div>
+);
 
 const AppContent: React.FC = () => {
   const { currentPath, navigate, sidebarCollapsed } = useNova();
@@ -131,7 +140,7 @@ const AppContent: React.FC = () => {
           className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-6 md:py-10"
           style={{ paddingBottom: 'calc(76px + env(safe-area-inset-bottom, 0px))' }}
         >
-          {renderCurrentView()}
+          <React.Suspense fallback={<RouteLoadingFallback />}>{renderCurrentView()}</React.Suspense>
         </main>
 
         <Footer />
