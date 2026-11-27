@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import '../styles/nova-tool-redesign.css';
 import {
   ArrowLeft, Star, ShieldCheck, Share2, Sparkles, ChevronRight
 } from 'lucide-react';
