@@ -128,7 +128,7 @@ Once registered, the tool automatically appears in:
 * **Sitemap:** Automated generation via `generate-sitemap.ts` (`npm run sitemap`).
 
 ### Google Search Console Verification
-1. Add `nova-tools-arpan-9160.vercel.app` as a Domain property in Google Search Console.
+1. Add `nova-tools-arpan-9160.vercel.app` as a Domain or URL-prefix property in Google Search Console.
 2. If using URL-prefix verification, follow Google's verification method shown for the property.
 3. Submit sitemap URL: `https://nova-tools-arpan-9160.vercel.app/sitemap.xml`.
 
