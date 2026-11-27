@@ -46,7 +46,7 @@ export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
   };
 
   return (
-    <div className="space-y-8 animate-tool-enter">
+    <div className="nova-tool-page space-y-7 sm:space-y-9 animate-tool-enter" data-suite={tool.suite}>
       {/* Top Breadcrumb & Action Row */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-2 text-xs">
@@ -88,7 +88,7 @@ export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
       </div>
 
       {/* Hero Header for Tool */}
-      <div className="relative isolate overflow-hidden p-5 sm:p-7 md:p-8 rounded-2xl sm:rounded-3xl border border-violet-500/15 bg-gradient-to-br from-white via-violet-50/60 to-cyan-50/50 dark:from-[#10182B] dark:via-[#11142B] dark:to-[#0B1B2A] shadow-lg shadow-violet-950/5 dark:shadow-black/20 flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6"><div aria-hidden="true" className="pointer-events-none absolute -right-10 -top-12 -z-10 h-40 w-40 rounded-full bg-violet-500/10 blur-3xl" />
+      <div className="tool-print-header relative isolate overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6"><div aria-hidden="true" className="pointer-events-none absolute -right-10 -top-12 -z-10 h-40 w-40 rounded-full bg-violet-500/10 blur-3xl" />
         <div className="space-y-1.5 sm:space-y-2">
           <div className="flex items-center gap-2">
             <span
