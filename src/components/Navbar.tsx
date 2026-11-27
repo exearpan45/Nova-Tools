@@ -62,7 +62,7 @@ export const Navbar: React.FC = () => {
             type="button"
             onClick={() => navigate('/')}
             className="focus:outline-none flex items-center text-left"
-            aria-label="NOVA TOOLS Home"
+            aria-label="NOVA Tools Home"
           >
             <NovaLogo size="xs" showText={true} />
           </button>
@@ -97,7 +97,7 @@ export const Navbar: React.FC = () => {
               onClick={installPwa}
               className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs font-semibold shadow-xs transition-all"
               aria-label="Install App"
-              title="Install NOVA TOOLS"
+              title="Install NOVA Tools"
             >
               <Download className="w-3.5 h-3.5 shrink-0" />
               <span>Install</span>
