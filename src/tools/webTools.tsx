@@ -12,7 +12,7 @@ interface WebProps {
 
 export const WebTools: React.FC<WebProps> = ({ toolSlug }) => {
   // QR Code states
-  const [qrContent, setQrContent] = useState<string>('https://nova-tools-arpan-9160.vercel.app');
+  const [qrContent, setQrContent] = useState<string>('https://nova-tools-dun.vercel.app');
   const [qrSize, setQrSize] = useState<number>(300);
   const [qrDarkColor, setQrDarkColor] = useState<string>('#0f172a');
   const [qrLightColor, setQrLightColor] = useState<string>('#ffffff');
@@ -29,13 +29,13 @@ export const WebTools: React.FC<WebProps> = ({ toolSlug }) => {
   // Meta Tags Builder
   const [metaTitle, setMetaTitle] = useState<string>('NOVA TOOLS — Production-Ready Toolbox');
   const [metaDesc, setMetaDesc] = useState<string>('100+ fast, private browser-based utilities for everyday productivity.');
-  const [metaUrl, setMetaUrl] = useState<string>('https://nova-tools-arpan-9160.vercel.app');
-  const [metaImage, setMetaImage] = useState<string>('https://nova-tools-arpan-9160.vercel.app/og-image.png');
+  const [metaUrl, setMetaUrl] = useState<string>('https://nova-tools-dun.vercel.app');
+  const [metaImage, setMetaImage] = useState<string>('https://nova-tools-dun.vercel.app/og-image.png');
 
   // Robots.txt states
   const [robotAgent, setRobotAgent] = useState<string>('*');
   const [robotDisallow, setRobotDisallow] = useState<string>('/admin/\n/api/\n/private/');
-  const [robotSitemap, setRobotSitemap] = useState<string>('https://nova-tools-arpan-9160.vercel.app/sitemap.xml');
+  const [robotSitemap, setRobotSitemap] = useState<string>('https://nova-tools-dun.vercel.app/sitemap.xml');
 
   // Contrast Checker states
   const [fgColor, setFgColor] = useState<string>('#ffffff');
@@ -165,7 +165,7 @@ Sitemap: ${robotSitemap}`;
               </label>
               <div className="flex flex-wrap gap-1.5">
                 {[
-                  { label: 'URL', val: 'https://nova-tools-arpan-9160.vercel.app' },
+                  { label: 'URL', val: 'https://nova-tools-dun.vercel.app' },
                   { label: 'Wi-Fi', val: 'WIFI:T:WPA;S:MyNetwork;P:MyPassword;;' },
                   { label: 'Email', val: 'mailto:hello@example.com?subject=Hello' },
                 ].map((preset) => (
