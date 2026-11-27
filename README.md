@@ -1,4 +1,4 @@
-# NOVA TOOLS — Production Documentation
+# NOVA Tools — Production Documentation
 
 > **Simple tools. Done well.**  
 > Free, fast tools for everyday tasks.
@@ -11,7 +11,7 @@
 
 ## 1. Overview & Architecture
 
-NOVA TOOLS is a clean, modern, and private collection of browser-based utilities. All tools execute **100% client-side** in the user's browser:
+NOVA Tools is a clean, modern collection of browser-based utilities. All tools execute **100% client-side** in the user's browser:
 * Tool calculations and transformations run locally in the browser; the site also loads third-party analytics/advertising services.
 * No user accounts or mandatory sign-ins; Google Analytics and Google AdSense are loaded on the site.
 * User preferences (System/Light/Dark theme, accent color, Favorites, Recent tools and ratings) are saved solely in the browser's `localStorage`.
@@ -51,7 +51,7 @@ npm run lint
 ```bash
 npm run build
 ```
-This automatically executes `tsx generate-sitemap.ts` followed by `vite build`. Output assets are placed in the `dist` directory.
+This runs type checking, registry integrity, routing, math and theme tests, sitemap generation, Vite production build, prerendering and SEO verification. Output assets are placed in the `dist` directory.
 
 ### Local Production Preview
 ```bash
@@ -62,7 +62,7 @@ npm run preview
 
 ## 3. Deployment (Vercel)
 
-NOVA TOOLS is currently deployed through **Vercel with Git integration**.
+NOVA Tools is currently deployed through **Vercel with Git integration**.
 
 * **Production Domain:** `https://nova-tools-arpan-9160.vercel.app/`
 * **Build Command:** `npm run build`
@@ -74,7 +74,7 @@ Vercel handles the public static deployment. The build creates prerendered route
 
 ## 4. Centralized Tool Registry & Adding a Tool
 
-NOVA TOOLS uses **ONE centralized registry** in `src/data/toolsData.ts`. Adding a new utility requires just two clear steps:
+NOVA Tools uses **ONE centralized registry** in `src/data/toolsData.ts`. Adding a new utility requires just two clear steps:
 
 ### Step 1: Create the Tool Component
 Create your tool component in `src/tools/` (e.g. `src/tools/DiscountCalculatorTool.tsx`). Ensure it uses clean state, clear user feedback, and safe evaluation (no `eval()` or `new Function()`).
@@ -128,7 +128,7 @@ Once registered, the tool automatically appears in:
 * **Sitemap:** Automated generation via `generate-sitemap.ts` (`npm run sitemap`).
 
 ### Google Search Console Verification
-1. Add `nova-tools2.pages.dev` as a Domain property in Google Search Console.
+1. Add `nova-tools-arpan-9160.vercel.app` as a Domain property in Google Search Console.
 2. If using URL-prefix verification, follow Google's verification method shown for the property.
 3. Submit sitemap URL: `https://nova-tools-arpan-9160.vercel.app/sitemap.xml`.
 
@@ -158,7 +158,7 @@ Once registered, the tool automatically appears in:
 * **Q: A calculation produces weird decimals like 0.30000000000000004?**  
   *A:* Tools use `Math.round((val + Number.EPSILON) * 1e8) / 1e8` for standard float precision normalization.
 * **Q: How to clear saved user data?**  
-  *A:* Click "Clear history" in Recently Used, reset ratings via the star rating reset button, or clear browser storage for `nova-tools2.pages.dev`.
+  *A:* Click "Clear history" in Recently Used, reset ratings via the star rating reset button, or clear browser storage for `nova-tools-arpan-9160.vercel.app`.
 
 ---
 
@@ -181,3 +181,8 @@ The selected preference is stored in `nova_v2_settings`; the resolved appearance
 
 ### Release verification
 Run `npm run build` before publishing. This includes TypeScript checking, the 107-entry registry audit, route and math tests, sitemap generation, prerendering, and SEO output verification.
+
+
+## 11. Release Version
+
+The current product release is **NOVA Tools 2.0**. The public product and installable app name remains **NOVA Tools**. Release identity is shown in the Changelog, not appended to the application name.
