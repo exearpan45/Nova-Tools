@@ -71,10 +71,12 @@ export const ToolsPage: React.FC = () => {
       <div className="relative overflow-hidden rounded-3xl border border-violet-500/15 bg-gradient-to-br from-white via-violet-50/60 to-cyan-50/60 p-5 sm:p-7 dark:from-[#10182B] dark:via-[#11142B] dark:to-[#0B1B2A] shadow-lg shadow-violet-950/5"><div className="pointer-events-none absolute -right-10 -top-16 h-44 w-44 rounded-full bg-violet-500/10 blur-3xl" /><div className="relative flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-            Tools Directory
+            {selectedSuite === 'all' ? 'Tools Directory' : SUITES_DATA[selectedSuite].name}
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Browse all {TOOLS_DATA.length} client-side utilities across 12 suites
+            {selectedSuite === 'all'
+              ? `Browse all ${TOOLS_DATA.length} client-side utilities across 12 suites`
+              : SUITES_DATA[selectedSuite].description}
           </p>
         </div>
 
@@ -107,7 +109,8 @@ export const ToolsPage: React.FC = () => {
         </div>
       </div></div>
 
-      {/* Visual suite explorer: all 12 suites are first-class destinations. */}
+      {/* The suite chooser is shown on the directory; a selected suite gets a focused workspace. */}
+      {selectedSuite === 'all' && (
       <section className="nova-suite-explorer space-y-3" aria-labelledby="suite-explorer-title">
         <div className="flex items-end justify-between gap-3">
           <div>
@@ -144,7 +147,11 @@ export const ToolsPage: React.FC = () => {
           })}
         </div>
       </section>
+      )}
 
+      {/* Suite filters remain available from the directory view. */}
+      {selectedSuite === 'all' && (
+      <>
       {/* Mobile suite picker: avoids a tiny 12-tab strip on phones. */}
       <div className="sm:hidden">
         <label htmlFor="mobile-suite-filter" className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">
@@ -204,6 +211,18 @@ export const ToolsPage: React.FC = () => {
           );
         })}
       </div>
+      </>
+      )}
+
+      {selectedSuite !== 'all' && (
+        <div className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/50 px-4 py-3">
+          <div className="min-w-0">
+            <p className="text-sm font-bold text-slate-900 dark:text-white">{SUITES_DATA[selectedSuite].name} workspace</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{filteredTools.length} tools available in this suite</p>
+          </div>
+          <button type="button" onClick={() => handleSelectSuite('all')} className="shrink-0 rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:border-cyan-500 hover:text-cyan-600 dark:hover:text-cyan-300 transition-colors">All suites</button>
+        </div>
+      )}
 
       {/* Search Input Filter */}
       <div className="relative">
