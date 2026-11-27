@@ -123,9 +123,16 @@ export const ToolDetailPage: React.FC<ToolDetailPageProps> = ({ tool }) => {
       </div>
 
       {/* Main Tool Interface */}
-      <div className="p-3.5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-slate-200/90 dark:border-slate-800/90 bg-white dark:bg-slate-900/40 shadow-sm">
+      <section className="nova-tool-workbench" aria-label={`${tool.name} workspace`}>
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/70 dark:border-slate-700/60 pb-4">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[.18em] text-violet-600 dark:text-violet-300">NOVA WORKSPACE</p>
+            <p className="mt-1 text-sm font-semibold text-slate-800 dark:text-slate-100">Your tools, in one focused workspace</p>
+          </div>
+          <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300">Runs in your browser</span>
+        </div>
         <ToolDispatcher tool={tool} />
-      </div>
+      </section>
 
       {/* Search-friendly, practical guide for this specific tool */}
       <article className="space-y-6 sm:space-y-8" aria-labelledby="tool-guide-title">
