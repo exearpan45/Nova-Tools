@@ -3,7 +3,7 @@
 > **Simple tools. Done well.**  
 > Free, fast tools for everyday tasks.
 
-* **Domain:** [https://nova-tools2.pages.dev/](https://nova-tools2.pages.dev/)
+* **Domain:** [https://nova-tools-arpan-9160.vercel.app/](https://nova-tools-arpan-9160.vercel.app/)
 * **Creator:** Arpan Goswami
 * **Copyright:** © 2026 Copyright Arpan Goswami. All rights reserved.
 
@@ -14,7 +14,7 @@
 NOVA TOOLS is a clean, modern, and private collection of browser-based utilities. All tools execute **100% client-side** in the user's browser:
 * Tool calculations and transformations run locally in the browser; the site also loads third-party analytics/advertising services.
 * No user accounts or mandatory sign-ins; Google Analytics and Google AdSense are loaded on the site.
-* User preferences (Theme, Favorites, Recent tools, 5-Star Ratings) are saved solely in the browser's `localStorage`.
+* User preferences (System/Light/Dark theme, accent color, Favorites, Recent tools and ratings) are saved solely in the browser's `localStorage`.
 
 ### Technology Stack
 * **Framework:** React 19 + TypeScript
@@ -60,17 +60,17 @@ npm run preview
 
 ---
 
-## 3. Deployment (Cloudflare Pages)
+## 3. Deployment (Vercel)
 
-NOVA TOOLS is currently deployed through **Cloudflare Pages with Git integration**.
+NOVA TOOLS is currently deployed through **Vercel with Git integration**.
 
-* **Production Domain:** `https://nova-tools2.pages.dev/`
+* **Production Domain:** `https://nova-tools-arpan-9160.vercel.app/`
 * **Build Command:** `npm run build`
 * **Build Output Directory:** `dist`
-* **Hosting:** Cloudflare Pages
+* **Hosting:** Vercel
 * **Deployment:** Automatic deployment from the `main` branch
 
-Cloudflare Pages handles the public static deployment. The build creates prerendered route directories and a `404.html` fallback for direct navigation and refreshes on deep routes.
+Vercel handles the public static deployment. The build creates prerendered route directories and a `404.html` fallback for direct navigation and refreshes on deep routes.
 
 ## 4. Centralized Tool Registry & Adding a Tool
 
@@ -121,16 +121,16 @@ Once registered, the tool automatically appears in:
 
 ## 5. SEO & Search Console Readiness
 
-* **Canonical URLs:** All routes have dynamic canonical tags pointing to `https://nova-tools2.pages.dev/` or `https://nova-tools2.pages.dev/tools/{slug}`.
+* **Canonical URLs:** All routes have dynamic canonical tags pointing to `https://nova-tools-arpan-9160.vercel.app/` or `https://nova-tools-arpan-9160.vercel.app/tools/{slug}`.
 * **Open Graph & Twitter Cards:** Complete `og:title`, `og:description`, `og:image` (1200x630 banner), and `twitter:card`.
 * **Structured Data:** Schema.org `WebApplication` structured data embedded in `index.html`.
-* **Robots.txt:** Clean `public/robots.txt` allowing all legitimate crawlers and pointing to `https://nova-tools2.pages.dev/sitemap.xml`.
+* **Robots.txt:** Clean `public/robots.txt` allowing all legitimate crawlers and pointing to `https://nova-tools-arpan-9160.vercel.app/sitemap.xml`.
 * **Sitemap:** Automated generation via `generate-sitemap.ts` (`npm run sitemap`).
 
 ### Google Search Console Verification
 1. Add `nova-tools2.pages.dev` as a Domain property in Google Search Console.
 2. If using URL-prefix verification, follow Google's verification method shown for the property.
-3. Submit sitemap URL: `https://nova-tools2.pages.dev/sitemap.xml`.
+3. Submit sitemap URL: `https://nova-tools-arpan-9160.vercel.app/sitemap.xml`.
 
 ---
 
@@ -153,7 +153,7 @@ Once registered, the tool automatically appears in:
 
 ## 8. Troubleshooting & FAQ
 
-* **Q: Route returns 404 when refreshed on Cloudflare Pages?**  
+* **Q: Route returns 404 when refreshed on Vercel?**  
   *A:* Ensure `public/_redirects` is deployed with `/* /index.html 200`.
 * **Q: A calculation produces weird decimals like 0.30000000000000004?**  
   *A:* Tools use `Math.round((val + Number.EPSILON) * 1e8) / 1e8` for standard float precision normalization.
@@ -165,4 +165,19 @@ Once registered, the tool automatically appears in:
 ## 9. Copyright & License
 
 © 2026 Copyright **Arpan Goswami**. All rights reserved.  
-Official website: [https://nova-tools2.pages.dev/](https://nova-tools2.pages.dev/)
+Official website: [https://nova-tools-arpan-9160.vercel.app/](https://nova-tools-arpan-9160.vercel.app/)
+
+
+## 10. NOVA 2.0 Design System
+
+The shared visual foundation lives in `src/styles/nova-design-system.css` and is loaded once from `src/main.tsx`. It provides consistent focus states, responsive input sizing, readable content wrapping, restrained motion, and shared design tokens across routes and tool suites.
+
+### Appearance modes
+- **System:** follows the operating system's light/dark preference and updates when that preference changes.
+- **Light:** clean light surfaces.
+- **Dark:** midnight surfaces with violet/cyan accents.
+
+The selected preference is stored in `nova_v2_settings`; the resolved appearance is mirrored to `novatools_theme` for the early page bootstrap. All tool processing remains browser-side unless a tool's description explicitly says otherwise.
+
+### Release verification
+Run `npm run build` before publishing. This includes TypeScript checking, the 107-entry registry audit, route and math tests, sitemap generation, prerendering, and SEO output verification.
