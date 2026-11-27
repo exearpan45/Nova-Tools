@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Palette, Sliders, Shield, Eye, Trash2, Heart, Moon, Sun, Smartphone,
+  Palette, Sliders, Shield, Eye, Trash2, Heart, Moon, Sun, Monitor, Smartphone,
   Download, Share, Check, Keyboard, Compass, Database, Cpu
 } from 'lucide-react';
 import { useNova } from '../context/NovaContext';
@@ -36,8 +36,9 @@ export const SettingsPage: React.FC = () => {
   const [pendingClear, setPendingClear] = useState<string | null>(null);
 
   const themes: { id: ThemeId; name: string; desc: string; icon: React.ElementType }[] = [
-    { id: 'dark', name: 'Dark Mode', desc: 'Midnight deep background, easy on the eyes', icon: Moon },
-    { id: 'light', name: 'Light Mode', desc: 'Clean, crisp daylight contrast', icon: Sun },
+    { id: 'system', name: 'System', desc: 'Follow your device appearance', icon: Monitor },
+    { id: 'light', name: 'Light', desc: 'Clean, crisp daylight contrast', icon: Sun },
+    { id: 'dark', name: 'Dark', desc: 'Midnight with violet and cyan accents', icon: Moon },
   ];
 
   const accentColors = [
@@ -122,13 +123,13 @@ export const SettingsPage: React.FC = () => {
           </div>
           <div>
             <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">Appearance & Theme</h2>
-            <p className="text-[11px] sm:text-xs text-slate-400">Choose between dark and light mode and custom accent styling</p>
+            <p className="text-[11px] sm:text-xs text-slate-400">Choose system, light or dark appearance and personalize your accent color</p>
           </div>
         </div>
 
         <div className="space-y-2.5">
           <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400">Theme Mode</span>
-          <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
             {themes.map((t) => {
               const isSelected = settings.theme === t.id;
               const Icon = t.icon;
