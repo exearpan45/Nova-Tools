@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { ToolDefinition } from '../types';
-import { Sparkles, RefreshCw } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 
 // Lazy-loaded suite components for optimal code-splitting & performance
 const ImageTools = React.lazy(() => import('./imageTools').then((m) => ({ default: m.ImageTools })));
@@ -66,10 +67,12 @@ export const ToolDispatcher: React.FC<ToolDispatcherProps> = ({ tool }) => {
   };
 
   return (
-    <Suspense fallback={<ToolLoadingFallback />}>
-      <div className={`nova-suite-workspace nova-suite-${suite}`} data-tool-slug={slug}>
-        {renderSuite()}
-      </div>
-    </Suspense>
+    <ErrorBoundary key={`${suite}:${slug}`} inline toolName={tool.name}>
+      <Suspense fallback={<ToolLoadingFallback />}>
+        <div className={`nova-suite-workspace nova-suite-${suite}`} data-tool-slug={slug}>
+          {renderSuite()}
+        </div>
+      </Suspense>
+    </ErrorBoundary>
   );
 };
