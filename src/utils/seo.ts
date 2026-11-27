@@ -7,7 +7,7 @@ interface RouteSeoOptions {
   tool?: ToolDefinition;
 }
 
-const BASE_URL = 'https://nova-tools2.pages.dev';
+const BASE_URL = 'https://nova-tools-dun.vercel.app';
 
 /**
  * Updates DOM head elements (title, meta description, canonical, OG tags, Twitter tags, JSON-LD)
