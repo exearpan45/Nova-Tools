@@ -127,7 +127,7 @@ export const ToolsPage: React.FC = () => {
                 key={suite.id}
                 type="button"
                 onClick={() => handleSelectSuite(suite.id)}
-                aria-pressed={active}
+                aria-pressed={false}
                 className="nova-suite-card group relative min-w-0 overflow-hidden rounded-2xl border p-3.5 sm:p-4 text-left transition-all"
                 style={{ '--suite-accent': suite.accentColor } as React.CSSProperties}
               >
@@ -194,9 +194,7 @@ export const ToolsPage: React.FC = () => {
             >
               <span>{suite.name}</span>
               <span
-                className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
-                  isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
-                }`}
+                className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400"
               >
                 {count}
               </span>
